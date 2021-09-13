@@ -3,14 +3,10 @@ import type { RouteType } from './type';
 
 const routes: RouteType[] = [
   {
-    path: '/test',
-    meta: {
-      title: '登录',
-    },
-    component: lazy(() => import('@/pages/test')),
+    path: '/',
+    component: lazy(() => import('@/layouts/BasicLayout')),
     routes: [
-      { path: '/test', redirect: '/test/my' },
-      { path: '/test/my', component: lazy(() => import('@/pages/home')) },
+      { path: '/test', component: lazy(() => import('@/pages/home')) },
     ],
   },
   {

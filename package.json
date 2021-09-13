@@ -9,6 +9,8 @@
     "lint:create": "eslint --init"
   },
   "dependencies": {
+    "@ant-design/pro-layout": "^6.9.0",
+    "antd": "^4.16.13",
     "less": "^4.1.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",

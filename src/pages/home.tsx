@@ -1,9 +1,11 @@
 import React from 'react';
+import { Button } from 'antd'
 
-const Test: React.FC = (props) => {
+const Test: React.FC = () => {
   return (
     <div>
       home
+      <Button>hoe</Button>
     </div>
   );
 };

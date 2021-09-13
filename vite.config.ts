@@ -6,11 +6,31 @@ import path from 'path';
 export default defineConfig({
   plugins: [reactRefresh()],
   resolve: {
-    extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json', '.sass', '.scss'], // 忽略输入的扩展名
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
-      '@components': path.resolve(__dirname, 'src/components'),
-      '@config': path.resolve(__dirname, 'config'),
+    extensions: [
+      '.mjs',
+      '.js',
+      '.jsx',
+      '.ts',
+      '.tsx',
+      '.json',
+      '.sass',
+      '.scss',
+    ], // 忽略输入的扩展名
+    alias: [
+      { find: /^~/, replacement: '' },
+      { find: '@', replacement: path.resolve(__dirname, 'src') },
+      {
+        find: '@components',
+        replacement: path.resolve(__dirname, 'src/components'),
+      },
+      { find: '@config', replacement: path.resolve(__dirname, 'config') },
+    ],
+  },
+  css: {
+    preprocessorOptions: {
+      less: {
+        javascriptEnabled: true,
+      },
     },
   },
 });
