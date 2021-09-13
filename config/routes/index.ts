@@ -9,6 +9,7 @@ const routes: RouteType[] = [
     },
     component: lazy(() => import('@/pages/test')),
     routes: [
+      { path: '/test', redirect: '/test/my' },
       { path: '/test/my', component: lazy(() => import('@/pages/home')) },
     ],
   },
@@ -17,7 +18,7 @@ const routes: RouteType[] = [
     meta: {
       title: '首页',
     },
-    component: lazy(() => import('@/pages/test')),
+    component: lazy(() => import('@/pages/home')),
   },
 ];
 

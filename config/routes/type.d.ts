@@ -1,9 +1,10 @@
 import type { ComponentType, FC, LazyExoticComponent } from "react";
 
 export type RouteType = {
-  path: string;
-  component: LazyExoticComponent<FC | ComponentType | any>;
+  component?: LazyExoticComponent<FC | ComponentType | any>;
+  path?: string;
   exact?: boolean;
+  redirect?: string;
   meta?: {
     [key: string]: any;
   },
