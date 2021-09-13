@@ -11,11 +11,11 @@ const RouterView = () => {
       <HashRouter>
         <Switch>
           {routes.map(
-            ({ path, component: ComponentName, exact = true, routes = [] }) => {
+            ({ path, component: ComponentName, exact = true, routes = [] }, key) => {
               return (
                 <Route
                   exact={routes.length === 0 && exact}
-                  key={path}
+                  key={key}
                   path={path}
                   render={(props: any) => {
                     //登录情况下

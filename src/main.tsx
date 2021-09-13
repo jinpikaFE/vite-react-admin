@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import RouterView from '@/components/Route'
+import RouterView from '@/components/RouterView'
 import 'antd/dist/antd.less';
 import './index.less'
 

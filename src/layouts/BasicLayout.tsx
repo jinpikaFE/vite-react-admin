@@ -8,10 +8,8 @@ import { RouteType } from '@config/routes/type';
 
 const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
   const { routes } = props;
-  console.log(routes);
   return (
     <ProLayout>
-      home
       <UseRouteChild routes={routes} />
     </ProLayout>
   );

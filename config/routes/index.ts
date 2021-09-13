@@ -3,18 +3,38 @@ import type { RouteType } from './type';
 
 const routes: RouteType[] = [
   {
-    path: '/',
-    component: lazy(() => import('@/layouts/BasicLayout')),
-    routes: [
-      { path: '/test', component: lazy(() => import('@/pages/home')) },
-    ],
-  },
-  {
-    path: '/home',
+    path: '/test',
     meta: {
       title: '首页',
     },
-    component: lazy(() => import('@/pages/home')),
+    component: lazy(() => import('@/pages/test')),
+  },
+  {
+    path: '/',
+    component: lazy(() => import('@/layouts/BlankLayout')),
+    routes: [
+      // { path: '/', redirect: '/home' },
+      {
+        path: '/',
+        component: lazy(() => import('@/layouts/BasicLayout')),
+        routes: [
+          {
+            path: '/home',
+            component: lazy(() => import('@/pages/test')),
+            routes: [
+              {
+                path: '/home/s',
+                component: lazy(() => import('@/pages/home')),
+              },
+            ],
+          },
+          
+        ],
+      },
+    ],
+  },
+  {
+    component: lazy(() => import('@/pages/test')),
   },
 ];
 

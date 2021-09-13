@@ -4,20 +4,27 @@ import type { RouteType } from '@config/routes/type';
 
 const UseRouteChild: React.FC<{ routes: RouteType[] }> = (props) => {
   const { routes } = props;
-  return (
+  console.log(routes, 'ssss');
+  const renderRoute = (val: RouteType[]) => (
     <>
-      {routes?.map(
-        ({ path, component: ComponentName, exact = true, redirect }) => {
+      {val?.map(
+        ({
+          path,
+          component: ComponentName,
+          exact = true,
+          redirect,
+          routes: cRoutes,
+        }) => {
           if (redirect) {
             return <Redirect exact from={path} to={redirect} key={path} />;
           }
           return (
             <Route
-              exact={routes.length === 0 && exact}
+              exact={val.length === 0 && exact}
               key={path}
               path={path}
               render={(props) =>
-                ComponentName && <ComponentName {...props} routes={routes} />
+                ComponentName && <ComponentName {...props} routes={cRoutes} />
               }
             />
           );
@@ -25,6 +32,8 @@ const UseRouteChild: React.FC<{ routes: RouteType[] }> = (props) => {
       )}
     </>
   );
+
+  return <>{renderRoute(routes)}</>;
 };
 
 export default UseRouteChild;
