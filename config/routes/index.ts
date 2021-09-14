@@ -11,26 +11,23 @@ const routes: RouteType[] = [
   },
   {
     path: '/',
-    component: lazy(() => import('@/layouts/BlankLayout')),
+    component: lazy(() => import('@/layouts/BasicLayout')),
     routes: [
-      // { path: '/', redirect: '/home' },
+      { path: '/', redirect: '/home' },
       {
-        path: '/',
-        component: lazy(() => import('@/layouts/BasicLayout')),
+        path: '/home',
+        component: lazy(() => import('@/pages/home')),
         routes: [
           {
-            path: '/home',
+            path: '/home/s',
             component: lazy(() => import('@/pages/test')),
-            routes: [
-              {
-                path: '/home/s',
-                component: lazy(() => import('@/pages/home')),
-              },
-            ],
           },
-          
         ],
       },
+      // {
+      //   path: '/home/s',
+      //   component: lazy(() => import('@/pages/test')),
+      // },
     ],
   },
   {

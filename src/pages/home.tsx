@@ -5,12 +5,11 @@ import { Route } from 'react-router-dom';
 const Component = lazy(() => import('@/pages/test'));
 
 const Test: React.FC = (props) => {
+  console.log(props,'fw');
+  
   return (
     <div>
       home
-      {/* <Route path="/home/test" render={(props) => <Component />} /> */}
-      <UseRouteChild routes={props.routes} />
-      <Button>hoe</Button>
     </div>
   );
 };

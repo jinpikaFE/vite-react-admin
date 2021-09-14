@@ -10,7 +10,7 @@ const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
   const { routes } = props;
   return (
     <ProLayout>
-      <UseRouteChild routes={routes} />
+      {UseRouteChild({routes})}
     </ProLayout>
   );
 };

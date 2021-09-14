@@ -4,7 +4,6 @@ import type { RouteType } from '@config/routes/type';
 
 const UseRouteChild: React.FC<{ routes: RouteType[] }> = (props) => {
   const { routes } = props;
-  console.log(routes, 'ssss');
   const renderRoute = (val: RouteType[]) => (
     <>
       {val?.map(
@@ -15,16 +14,19 @@ const UseRouteChild: React.FC<{ routes: RouteType[] }> = (props) => {
           redirect,
           routes: cRoutes,
         }) => {
-          if (redirect) {
-            return <Redirect exact from={path} to={redirect} key={path} />;
-          }
           return (
             <Route
               exact={val.length === 0 && exact}
               key={path}
               path={path}
-              render={(props) =>
-                ComponentName && <ComponentName {...props} routes={cRoutes} />
+              render={(props) =>{
+                if (redirect) {
+                  return <Redirect to={redirect} key={path} />;
+                }
+                if (ComponentName) {
+                  return <ComponentName {...props} routes={cRoutes} />
+                }
+              }
               }
             />
           );
