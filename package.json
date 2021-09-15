@@ -1,8 +1,10 @@
 {
   "name": "vite-react-ts-admin",
   "version": "0.0.0",
+  "module": "es2020",
   "scripts": {
     "start": "vite",
+    "start:mock": "vite --mode mock",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "lint": "eslint src",
@@ -15,7 +17,8 @@
     "mockjs": "^1.1.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
-    "react-router-dom": "^5.3.0"
+    "react-router-dom": "^5.3.0",
+    "umi-request": "^1.4.0"
   },
   "devDependencies": {
     "@types/node": "^16.9.1",

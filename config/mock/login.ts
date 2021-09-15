@@ -1,6 +1,6 @@
 export default [
   {
-    url: '/api/get',
+    url: '/api/datauser',
     method: 'get',
     response: () => {
       return {
