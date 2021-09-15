@@ -9,7 +9,7 @@ import { RouteType } from '@config/routes/type';
 const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
   const { routes } = props;
   return (
-    <ProLayout>
+    <ProLayout style={{height: '100vh'}}>
       {UseRouteChild({routes})}
     </ProLayout>
   );
