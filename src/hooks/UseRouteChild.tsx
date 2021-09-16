@@ -19,15 +19,14 @@ const UseRouteChild: React.FC<{ routes: RouteType[] }> = (props) => {
               exact={val.length === 0 && exact}
               key={path}
               path={path}
-              render={(props) =>{
+              render={(props) => {
                 if (redirect) {
                   return <Redirect to={redirect} key={path} />;
                 }
                 if (ComponentName) {
-                  return <ComponentName {...props} routes={cRoutes} />
+                  return <ComponentName {...props} routes={cRoutes} />;
                 }
-              }
-              }
+              }}
             />
           );
         },
