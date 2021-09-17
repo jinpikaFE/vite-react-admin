@@ -1,0 +1,236 @@
+/* 全局自定义类名-文字对齐方式 */
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-justify {
+  text-align: justify
+}
+
+/* 全局自定义类名-文字排版及颜色 */
+.text-nowrap {
+  white-space: nowrap
+}
+
+.word-break {
+  word-break: break-all;
+}
+
+.text-lowercase {
+  text-transform: lowercase
+}
+
+.text-uppercase {
+  text-transform: uppercase
+}
+
+.text-capitalize {
+  text-transform: capitalize
+}
+
+.text-primary {
+  color: @theme-color-primary;
+}
+
+.text-secondary {
+  color: @theme-color-secondary;
+}
+
+.text-info {
+  color: @theme-functional-info;
+}
+
+.text-success {
+  color: @theme-functional-positive;
+}
+
+.text-warning {
+  color: @theme-functional-warning;
+}
+
+.text-danger {
+  color: @theme-functional-negative;
+}
+
+.text-error {
+  color: @theme-functional-negative;
+}
+
+/* 全局自定义类名-布局 */
+.hide {
+  display: none !important;
+}
+
+.show {
+  display: block !important;
+}
+
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
+}
+
+/* 全局自定义类名-盒模型 */
+.clearfix:after {
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
+}
+
+.clearfix {
+  zoom: 1;
+}
+
+.padding-small {
+  padding: @padding-small;
+}
+
+.padding-tb-small {
+  padding: @padding-small 0;
+}
+
+.padding-lr-small {
+  padding: 0 @padding-small;
+}
+
+.padding-base {
+  padding: @padding-base;
+}
+
+.padding-tb-base {
+  padding: @padding-base 0;
+}
+
+.padding-lr-base {
+  padding: 0 @padding-base;
+}
+
+.padding-larger {
+  padding: @padding-large;
+}
+
+.padding-tb-larger {
+  padding: @padding-large 0;
+}
+
+.padding-lr-larger {
+  padding: 0 @padding-large;
+}
+
+.padding-r-base {
+  padding-right: @padding-base;
+}
+
+.margin-small {
+  margin: @margin-small;
+}
+
+.margin-tb-small {
+  margin: @margin-small 0;
+}
+
+.margin-lr-small {
+  margin: 0 @margin-small;
+}
+
+.margin-base {
+  margin: @margin-base;
+}
+
+.margin-tb-base {
+  margin: @margin-base 0;
+}
+
+.margin-lr-base {
+  margin: 0 @margin-base;
+}
+
+.margin-larger {
+  margin: @margin-large;
+}
+
+.margin-tb-larger {
+  margin: @margin-large 0;
+}
+
+.margin-lr-larger {
+  margin: 0 @margin-large;
+}
+
+.margin-base-b {
+  margin-bottom: @margin-base;
+}
+
+.margin-base-t {
+  margin-top: @margin-base;
+}
+
+.margin-larger-t {
+  margin-top: @margin-large;
+}
+
+/* 单行超出隐藏 - 宽度需自行配置 */
+.text-overflow__hidden {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 全局自定义类名-栅格 */
+.row {
+  position: relative;
+  box-sizing: border-box;
+}
+
+.row:after, .row:before {
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
+}
+
+[class*=row-col-] {
+  float: left;
+  box-sizing: border-box;
+}
+
+.row-col-4 {
+  width: 33.3% !important;
+}
+
+.row-col-6 {
+  width: 50% !important;
+}
+
+.row-col-12 {
+  width: 100% !important;
+}
+
+/* 底部提示信息样式（加载中、没有更多了、请求失败，请重新加载） start */
+.promptText {
+  font-size: @font-size-primary;
+  color: @theme-color-secondary;
+  text-align: center;
+  line-height: @line-height-large;
+  padding: 26px;
+
+  .iconSplin {
+    font-size: @font-size-primary;
+    color: @theme-color-title;
+    margin-right: @margin-small;
+  }
+}
+
+/* 底部提示信息样式（加载中、没有更多了、请求失败，请重新加载） end */

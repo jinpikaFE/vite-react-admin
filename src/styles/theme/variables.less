@@ -1,0 +1,155 @@
+@public_path: 'http://test1.com';
+
+// 主色（用于标识品牌颜色，这里使用的是「凹凸蓝」）
+@theme-main-icon: #5683BA;
+@theme-main-button: #2F7DCD;
+@theme-main-text: #4F77AA;
+
+@theme-brand-color: #008BFF;
+@theme-brand-color-hover: #73BFFF;
+@theme-brand-color-active: #0076D9;
+
+// 功能色（用于标识状态的按钮等）
+@theme-functional-info: #1876FC;
+@theme-functional-info-bg: #F2F9FF;
+@theme-functional-positive: #52C41A;
+@theme-functional-positive-bg: #EDF9E8;
+@theme-functional-negative: #FC0000;
+@theme-functional-negative-hover: #E35627;
+@theme-functional-negative-active: #B02000;
+@theme-functional-negative-bg: #FDEFED;
+@theme-functional-warning: #FFAA00;
+@theme-functional-warning-bg: #FEF9EA;
+@theme-functional-auxiliary: #fa541c;
+
+@theme-functional-negative-text: #D92D21;
+@theme-functional-warning-text: #EFA200;
+
+// 中性色（用于文本、背景和边框颜色，通过运用不同的中性色来表现层次结构）
+@theme-color-title: #262626;
+@theme-color-primary: #262626;
+@theme-color-normal: #595959;
+@theme-color-secondary: #8C8C8C;
+@theme-color-disabled: #BFBFBF;
+@theme-color-placeholder: #BFBFBF;
+@theme-color-icon: #E5E5E5;
+@theme-color-border: #D9D9D9;
+@theme-color-divider: #E8E8E8;
+@theme-color-bg: #F5F5F5;
+@theme-color-secondary-bg: #F2F2F2;
+@theme-color-table-header: #FAFAFA;
+@theme-color-white-bg: #FFFFFF;
+
+// 字体粗细
+@font-weight-regular: 400;
+@font-weight-medium: 500;
+@font-weight-semibold: 700;
+
+// 字体大小
+@font-size-xxlarge: 34px;
+@font-size-xlarge: 32px;
+@font-size-large: 30px;
+@font-size-primary: 28px;
+@font-size-small: 26px;
+@font-size-mini: 24px;
+
+// 行高
+@line-height-xxlarge: 52px;
+@line-height-xlarge: 48px;
+@line-height-large: 44px;
+@line-height-primary: 40px;
+@line-height-small: 36px;
+
+// 边距
+@margin-large: 30px;
+@margin-base: 20px;
+@margin-small: 10px;
+@margin-mini: 5px;
+
+@padding-large: 30px;
+@padding-base: 20px;
+@padding-small: 10px;
+@padding-mini: 5px;
+
+@transition-duration-longer: 1s;
+@transition-duration-base: 500ms;
+
+// 组件
+// Popper 基础浮层组件
+@popper-main-font-size: @font-size-small;
+@popper-main-line-height: @line-height-small;
+@popper-main-radius: 4px;
+@popper-z-index: 10001;
+@popper-arrow-width: 8px;
+@popper-arrow-offset: 12px;
+
+// Popper 主题色为light相关样式
+@popper-effect-light-bg-color: @theme-color-white-bg;
+@popper-effect-light-font-color: @theme-color-title;
+@popper-effect-light-box-shadow: 0 8px 16px 0 rgba(0, 0, 0, .1);
+@popper-effect-light-arrow-color: @theme-color-white-bg;
+
+// Popper 主题色为dark相关样式
+@popper-effect-dark-bg-color: rgba(38, 38, 38, .85);
+@popper-effect-dark-font-color: @theme-color-white-bg;
+@popper-effect-dark-box-shadow: 0 0 16px 0 rgba(0, 0, 0, .15);
+@popper-effect-dark-arrow-color: rgba(38, 38, 38, .85);
+
+
+// Select
+@select-popper-padding: @padding-mini 0;
+@select-min-width: 200px;
+@select-input-padding-right: @padding-large;
+@select-down-arrow-icon-font-size: @font-size-large;
+@select-down-arrow-icon-font-color: @theme-color-secondary;
+
+@select-option-padding: @padding-base @padding-large;
+@select-option-font-size: @font-size-primary;
+@select-option-line-height: @line-height-primary;
+@select-option-color-hover: @theme-functional-info-bg;
+@select-option-selected-bg-color-: @theme-color-secondary-bg;
+@select-option-selected-font-weight: @font-weight-semibold;
+
+
+// Cascader
+@cascader-min-width: 200px;
+@cascader-input-padding-right: @padding-large;
+@cascader-down-arrow-icon-font-size: @font-size-large;
+@cascader-down-arrow-icon-font-color: @theme-color-secondary;
+
+@cascader-menu-height: 360px;
+@cascader-menu-split-border-color: #f0f0f0; // @theme-color-border;
+@cascader-menu-padding: @padding-mini 0;
+
+@cascader-node-padding: @padding-small @padding-large @padding-small @padding-small;
+@cascader-node-min-width: 180px;
+@cascader-node-selected-font-weight: @font-weight-semibold;
+@cascader-node-hover-bg-color: @theme-functional-info-bg;
+@cascader-node-selected-bg-color: @theme-color-secondary-bg;
+@cascader-node-arrow-icon-color: rgba(0, 0, 0, .45); // @theme-color-icon;
+
+
+// Tooltip
+@tooltip-popper-padding: 8px 16px;
+
+
+// Popover
+@popover-popper-padding: 24px;
+
+
+// DatePicker
+@datepicker-min-width: 200px;
+@datepicker-icon-font-size: @font-size-large;
+@datepicker-icon-color: @theme-color-placeholder;
+
+@datepicker-popper-width: 520px;
+@datepicker-popper-padding: @padding-small 0;
+
+// DatePicker 日期时间选择器模式下，浮层内上方的输入框样式
+@datepicker-popper-top-margin-bottom: @margin-small;
+@datepicker-popper-top-padding: 0 @padding-mini;
+@datepicker-popper-top-input-spacing: 0 @margin-mini;
+
+// DatePicker 日期时间选择器模式下，浮层内下方的按钮样式
+@datepicker-popper-bottom-padding: 0 @padding-small;
+@datepicker-popper-top-input-spacing: @margin-small;
