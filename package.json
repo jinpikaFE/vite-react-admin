@@ -16,6 +16,8 @@
     "@ant-design/pro-layout": "^6.9.0",
     "antd": "^4.16.13",
     "less": "^4.1.1",
+    "mobx": "^6.3.3",
+    "mobx-react": "^7.2.0",
     "mockjs": "^1.1.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
@@ -26,8 +28,8 @@
   "devDependencies": {
     "@babel/core": "^7.15.5",
     "@babel/preset-env": "^7.15.6",
-    "@babel/preset-typescript": "^7.15.0",
     "@babel/preset-react": "^7.14.5",
+    "@babel/preset-typescript": "^7.15.0",
     "@testing-library/react": "^12.1.0",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.9.1",
