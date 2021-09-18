@@ -90,7 +90,7 @@ const handleRequest = async (url: string, options?: Record<string, any>): Promis
   }
   notification.error({
     message: `Request error ${res?.code}: ${url}`,
-    description: res?.message,
+    description: res?.message || '系统错误',
   });
   if (res?.code === 403 && res?.message === '登录已过期,请重新登录') {
     window.location.href = '/user/login';

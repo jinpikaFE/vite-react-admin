@@ -13,8 +13,7 @@ export default ({ mode }) => {
       viteMockServe({
         // default
         localEnabled: process.env.VITE_MODE === 'mock',
-        mockPath: 'mock',
-        configPath: './config/mock/index.ts',
+        mockPath: './config/mock',
       }),
     ],
     resolve: {

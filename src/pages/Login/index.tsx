@@ -16,9 +16,15 @@ import {
   TaobaoCircleOutlined,
   WeiboCircleOutlined,
 } from '@ant-design/icons';
-import { message, Tabs, Space } from 'antd';
+import { message, Tabs, Space, Button, Card } from 'antd';
+import ParticlesBg from 'particles-bg';
+import { WaterMark } from '@ant-design/pro-layout';
+import QRCode from 'qrcode.react';
+import styles from './index.module.less';
+import { postLogin } from './services';
+import { useHistory } from 'react-router-dom';
 
-type LoginType = 'phone' | 'account';
+type LoginType = 'phone' | 'account' | 'qrcode';
 
 const iconStyles: CSSProperties = {
   marginLeft: '16px',
@@ -28,45 +34,131 @@ const iconStyles: CSSProperties = {
   cursor: 'pointer',
 };
 
-const Test: React.FC = (props) => {
-  const [loginType, setLoginType] = useState<LoginType>('phone');
+const Login: React.FC = (props) => {
+  const [loginType, setLoginType] = useState<LoginType>('account');
+  const [btnLoading, setBtnLoading] = useState<boolean>(false);
+
+  const history = useHistory();
+
+  const config = {
+    num: [4, 7],
+    rps: 0.1,
+    radius: [5, 40],
+    life: [1.5, 3],
+    v: [2, 3],
+    tha: [-40, 40],
+    // body: "./img/icon.png", // Whether to render pictures
+    // rotate: [0, 20],
+    alpha: [0.6, 0],
+    scale: [1, 0.1],
+    position: 'all', // all or center or {x:1,y:1,width:100,height:100}
+    color: ['random', '#ff0000'],
+    cross: 'dead', // cross or bround
+    random: 15, // or null,
+    g: 5, // gravity
+    // f: [2, -1], // force
+    onParticleUpdate: (ctx: any, particle: any) => {
+      ctx.beginPath();
+      ctx.rect(
+        particle.p.x,
+        particle.p.y,
+        particle.radius * 2,
+        particle.radius * 2,
+      );
+      ctx.fillStyle = particle.color;
+      ctx.fill();
+      ctx.closePath();
+    },
+  };
+
+  const onFinish = async (val: any) => {
+    setBtnLoading(true);
+    postLogin({ ...val, loginType })
+      .then((res) => {
+        setBtnLoading(false);
+        message.success(res.message || '登陆成功');
+        history.push('/home')
+      })
+      .finally(() => {
+        setBtnLoading(false);
+      });
+  };
+
   return (
     <Observer>
       {() => (
-        <div style={{ backgroundColor: 'white' }}>
-          <LoginForm
-            logo="https://github.githubassets.com/images/modules/logos_page/Octocat.png"
-            title="Github"
-            subTitle="全球网站"
-            actions={
-              <Space>
-                其他登录方式
-                <AlipayCircleOutlined style={iconStyles}></AlipayCircleOutlined>
-                <TaobaoCircleOutlined style={iconStyles}></TaobaoCircleOutlined>
-                <WeiboCircleOutlined style={iconStyles}></WeiboCircleOutlined>
-              </Space>
-            }
+        <div
+          style={{ height: '100vh', background: 'snow' }}
+          className={styles.login}
+        >
+          <WaterMark
+            content="金皮卡"
+            fontColor="gold"
+            fontSize={18}
+            gapX={100}
+            gapY={100}
+            style={{ height: '100%' }}
           >
-            <QueueAnim delay={300}>
-              <div key="tab">
-                <Tabs
-                  activeKey={loginType}
-                  onChange={(activeKey) => setLoginType(activeKey as LoginType)}
-                >
-                  <Tabs.TabPane key={'account'} tab={'账号密码登录'} />
-                  <Tabs.TabPane key={'phone'} tab={'手机号登录'} />
-                </Tabs>
-              </div>
-              {loginType === 'account' && (
-                <QueueAnim>
-                  <div key="account1">
+            <LoginForm
+              logo="https://github.githubassets.com/images/modules/logos_page/Octocat.png"
+              title="Github"
+              subTitle="全球网站"
+              onFinish={onFinish}
+              submitter={{
+                // 完全自定义整个区域
+                render: (props) => {
+                  return [
+                    loginType !== 'qrcode' && (
+                      <Button
+                        type="primary"
+                        size="large"
+                        key="submit"
+                        style={{ width: '100%' }}
+                        loading={btnLoading}
+                        onClick={() => props.form?.submit?.()}
+                      >
+                        登录
+                      </Button>
+                    ),
+                  ];
+                },
+              }}
+              actions={
+                <Space>
+                  其他登录方式
+                  <AlipayCircleOutlined
+                    style={iconStyles}
+                  ></AlipayCircleOutlined>
+                  <TaobaoCircleOutlined
+                    style={iconStyles}
+                  ></TaobaoCircleOutlined>
+                  <WeiboCircleOutlined style={iconStyles}></WeiboCircleOutlined>
+                </Space>
+              }
+            >
+              <QueueAnim delay={300}>
+                <div key="tab">
+                  <Tabs
+                    activeKey={loginType}
+                    onChange={(activeKey) => {
+                      setLoginType(activeKey as LoginType);
+                      setBtnLoading(false);
+                    }}
+                  >
+                    <Tabs.TabPane key={'phone'} tab={'手机号登录'} />
+                    <Tabs.TabPane key={'account'} tab={'账号密码登录'} />
+                    <Tabs.TabPane key={'qrcode'} tab={'二维码登陆'} />
+                  </Tabs>
+                </div>
+                {loginType === 'account' && (
+                  <>
                     <ProFormText
                       name="username"
                       fieldProps={{
                         size: 'large',
                         prefix: <UserOutlined className={'prefixIcon'} />,
                       }}
-                      placeholder={'用户名: admin or user'}
+                      placeholder={'用户名: admin'}
                       rules={[
                         {
                           required: true,
@@ -74,15 +166,13 @@ const Test: React.FC = (props) => {
                         },
                       ]}
                     />
-                  </div>
-                  <div key="account2">
                     <ProFormText.Password
                       name="password"
                       fieldProps={{
                         size: 'large',
                         prefix: <LockOutlined className={'prefixIcon'} />,
                       }}
-                      placeholder={'密码: ant.design'}
+                      placeholder={'密码: admin'}
                       rules={[
                         {
                           required: true,
@@ -90,12 +180,10 @@ const Test: React.FC = (props) => {
                         },
                       ]}
                     />
-                  </div>
-                </QueueAnim>
-              )}
-              {loginType === 'phone' && (
-                <QueueAnim>
-                  <div key="phone1">
+                  </>
+                )}
+                {loginType === 'phone' && (
+                  <>
                     <ProFormText
                       fieldProps={{
                         size: 'large',
@@ -114,8 +202,6 @@ const Test: React.FC = (props) => {
                         },
                       ]}
                     />
-                  </div>
-                  <div key="phone2">
                     <ProFormCaptcha
                       fieldProps={{
                         size: 'large',
@@ -142,32 +228,56 @@ const Test: React.FC = (props) => {
                         message.success('获取验证码成功！验证码为：1234');
                       }}
                     />
-                  </div>
-                </QueueAnim>
-              )}
-              <div
-                key="loginBtn"
-                style={{
-                  marginBottom: 24,
-                }}
-              >
-                <ProFormCheckbox noStyle name="autoLogin">
-                  自动登录
-                </ProFormCheckbox>
-                <a
+                  </>
+                )}
+                {loginType === 'qrcode' && (
+                  <>
+                    <Card>
+                      <QRCode
+                        style={{ width: '100%', height: '100%' }}
+                        level="M"
+                        value="https://gitee.com/jinxin0517/vite-react-ts-admin"
+                      />
+                    </Card>
+                  </>
+                )}
+                <div
+                  key="loginBtn"
                   style={{
-                    float: 'right',
+                    marginBottom: 24,
                   }}
                 >
-                  忘记密码
-                </a>
-              </div>
-            </QueueAnim>
-          </LoginForm>
+                  <ProFormCheckbox noStyle name="autoLogin">
+                    自动登录
+                  </ProFormCheckbox>
+                  <a
+                    style={{
+                      float: 'right',
+                    }}
+                  >
+                    忘记密码
+                  </a>
+                </div>
+              </QueueAnim>
+            </LoginForm>
+          </WaterMark>
+          <ParticlesBg
+            type="custom"
+            config={config}
+            bg={
+              {
+                zIndex: 0,
+                position: 'absolute',
+                top: '0px',
+                left: '0px',
+                pointerEvents: 'none',
+              } as any
+            }
+          />
         </div>
       )}
     </Observer>
   );
 };
 
-export default Test;
+export default Login;
