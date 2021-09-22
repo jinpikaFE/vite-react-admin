@@ -11,20 +11,21 @@ export default [
         data: {
           menuData: [
             {
-              path: '/admin',
+              path: '/home',
               name: '欢迎',
               component: './Welcome',
               icon: 'icon-home',
+              breadcrumbName: 'admin',
             },
             {
-              path: '/admins',
+              path: '/admin',
               name: '管理页',
               access: 'canAdmin',
               component: './Admin',
               icon: 'icon-manage',
               routes: [
                 {
-                  path: '/admin/sub-page1',
+                  path: '/admin/test',
                   name: '一级页面',
                   component: './Welcome',
                   icon: 'icon-manage-order',
@@ -45,6 +46,7 @@ export default [
               name: '列表页',
               path: '/list',
               component: './ListTableList',
+              icon: 'icon-list',
               routes: [
                 {
                   path: '/list/sub-page',
@@ -82,6 +84,7 @@ export default [
             {
               path: 'https://ant.design',
               name: 'Ant Design 官网外链',
+              icon: 'icon-detail',
             },
           ],
         },

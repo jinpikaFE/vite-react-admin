@@ -5,7 +5,7 @@ import React from 'react';
 const Home: React.FC = () => {
   return (
     <>
-      <ProCard>Home</ProCard>
+      <ProCard>Test</ProCard>
     </>
   );
 };
