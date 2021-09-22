@@ -1,5 +1,7 @@
 import { MockMethod } from 'vite-plugin-mock';
 import login from './login'
+import menu from './menu'
 export default [
-  ...login
+  ...login,
+  ...menu
 ] as MockMethod[];
