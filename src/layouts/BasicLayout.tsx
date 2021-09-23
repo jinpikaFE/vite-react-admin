@@ -12,7 +12,9 @@ import { GithubOutlined } from '@ant-design/icons';
 import { queryMenu } from '@/services/global';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { Input } from 'antd';
-import { useFormatMessage } from 'react-intl-hooks'
+import { useFormatMessage } from 'react-intl-hooks';
+import RightContent from '@/components/GlobalHeader/RightContent';
+import { ICON_URL } from '@/types/constants';
 
 const defaultFooterDom = (
   <DefaultFooter
@@ -125,6 +127,7 @@ const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
     <ProLayout
       style={{ height: '100vh' }}
       title="Jin Pi Ka"
+      formatMessage={(msg) => formatMessage(msg) as string}
       footerRender={() => defaultFooterDom}
       onMenuHeaderClick={() => history.push('/home')}
       location={{
@@ -145,7 +148,7 @@ const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
           <span>{route.breadcrumbName}</span>
         );
       }}
-      iconfontUrl="//at.alicdn.com/t/font_2827128_yxrpesjeac.js"
+      iconfontUrl={ICON_URL}
       menuFooterRender={footerRender}
       menuItemRender={(menuItemProps, defaultDom) => {
         if (
@@ -170,6 +173,7 @@ const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
         )
       }
       postMenuData={(menus) => filterByMenuDate(menus || [], keyWord)}
+      rightContentRender={() => <RightContent />}
     >
       <PageContainer>{UseRouteChild({ routes })}</PageContainer>
     </ProLayout>

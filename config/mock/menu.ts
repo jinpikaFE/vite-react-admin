@@ -12,21 +12,21 @@ export default [
           menuData: [
             {
               path: '/home',
-              name: '欢迎',
+              name: 'welcome',
               component: './Welcome',
               icon: 'icon-home',
               breadcrumbName: 'admin',
             },
             {
               path: '/admin',
-              name: '管理页',
+              name: 'admin',
               access: 'canAdmin',
               component: './Admin',
               icon: 'icon-manage',
               routes: [
                 {
                   path: '/admin/test',
-                  name: '一级页面',
+                  name: 'sub-page',
                   component: './Welcome',
                   icon: 'icon-manage-order',
                 },
