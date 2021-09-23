@@ -3,6 +3,8 @@ import {
   DefaultFooter,
   MenuDataItem,
   PageContainer,
+  ProSettings,
+  SettingDrawer,
 } from '@ant-design/pro-layout';
 import ProLayout from '@ant-design/pro-layout';
 import UseRouteChild from '@/hooks/UseRouteChild';
@@ -15,6 +17,7 @@ import { Input } from 'antd';
 import { useFormatMessage } from 'react-intl-hooks';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { ICON_URL } from '@/types/constants';
+import proSettings from '@config/defaultSettings';
 
 const defaultFooterDom = (
   <DefaultFooter
@@ -105,9 +108,10 @@ const filterByMenuDate = (
 const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
   const { routes } = props;
   const [menuData, setMenuData] = useState<MenuDataItem[]>([]);
-  const [pathname, setPathname] = useState<string>('/');
   const [keyWord, setKeyWord] = useState('');
+  const [settings, setSetting] = useState<Partial<ProSettings> | undefined>(proSettings);
   const history = useHistory();
+  
   useEffect(() => {
     const getMenu = async () => {
       const res = await queryMenu();
@@ -124,59 +128,69 @@ const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
   // }, [location]);
 
   return (
-    <ProLayout
-      style={{ height: '100vh' }}
-      title="Jin Pi Ka"
-      formatMessage={(msg) => formatMessage(msg) as string}
-      footerRender={() => defaultFooterDom}
-      onMenuHeaderClick={() => history.push('/home')}
-      location={{
-        pathname: location?.pathname,
-      }}
-      breadcrumbRender={(routers = []) => [
-        {
-          path: '/',
-          breadcrumbName: formatMessage({ id: 'menu.home' }) as string,
-        },
-        ...routers,
-      ]}
-      itemRender={(route, params, routes, paths) => {
-        const first = routes.indexOf(route) === 0;
-        return first ? (
-          <Link to="/home">{route.breadcrumbName}</Link>
-        ) : (
-          <span>{route.breadcrumbName}</span>
-        );
-      }}
-      iconfontUrl={ICON_URL}
-      menuFooterRender={footerRender}
-      menuItemRender={(menuItemProps, defaultDom) => {
-        if (
-          menuItemProps?.isUrl ||
-          !menuItemProps?.path ||
-          location?.pathname === menuItemProps?.path
-        ) {
-          return defaultDom;
+    <div id="pro-layout">
+      <ProLayout
+        style={{ height: '100vh' }}
+        formatMessage={(msg) => formatMessage(msg) as string}
+        footerRender={() => defaultFooterDom}
+        onMenuHeaderClick={() => history.push('/home')}
+        location={{
+          pathname: location?.pathname,
+        }}
+        breadcrumbRender={(routers = []) => [
+          {
+            path: '/',
+            breadcrumbName: formatMessage({ id: 'menu.home' }) as string,
+          },
+          ...routers,
+        ]}
+        itemRender={(route, params, routes, paths) => {
+          const first = routes.indexOf(route) === 0;
+          return first ? (
+            <Link to="/home">{route.breadcrumbName}</Link>
+          ) : (
+            <span>{route.breadcrumbName}</span>
+          );
+        }}
+        menuFooterRender={footerRender}
+        menuItemRender={(menuItemProps, defaultDom) => {
+          if (
+            menuItemProps?.isUrl ||
+            !menuItemProps?.path ||
+            location?.pathname === menuItemProps?.path
+          ) {
+            return defaultDom;
+          }
+          return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+        }}
+        menuDataRender={
+          menuData?.length > 0 ? () => menuDataRender(menuData) : menuDataRender
         }
-        return <Link to={menuItemProps.path}>{defaultDom}</Link>;
-      }}
-      menuDataRender={
-        menuData?.length > 0 ? () => menuDataRender(menuData) : menuDataRender
-      }
-      menuExtraRender={({ collapsed }) =>
-        !collapsed && (
-          <Input.Search
-            onSearch={(e) => {
-              setKeyWord(e);
-            }}
-          />
-        )
-      }
-      postMenuData={(menus) => filterByMenuDate(menus || [], keyWord)}
-      rightContentRender={() => <RightContent />}
-    >
-      <PageContainer>{UseRouteChild({ routes })}</PageContainer>
-    </ProLayout>
+        menuExtraRender={({ collapsed }) =>
+          !collapsed && (
+            <Input.Search
+              onSearch={(e) => {
+                setKeyWord(e);
+              }}
+            />
+          )
+        }
+        postMenuData={(menus) => filterByMenuDate(menus || [], keyWord)}
+        rightContentRender={() => <RightContent />}
+        {...settings}
+      >
+        <PageContainer>{UseRouteChild({ routes })}</PageContainer>
+      </ProLayout>
+      <SettingDrawer
+        pathname={location?.pathname}
+        getContainer={() => document.getElementById('pro-layout')}
+        settings={settings}
+        onSettingChange={(changeSetting) => {
+          setSetting(changeSetting);
+        }}
+        disableUrlParams
+      />
+    </div>
   );
 };
 
