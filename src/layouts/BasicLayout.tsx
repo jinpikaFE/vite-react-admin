@@ -12,6 +12,7 @@ import { GithubOutlined } from '@ant-design/icons';
 import { queryMenu } from '@/services/global';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { Input } from 'antd';
+import { useFormatMessage } from 'react-intl-hooks'
 
 const defaultFooterDom = (
   <DefaultFooter
@@ -115,6 +116,7 @@ const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
     getMenu();
   }, []);
   const location = useLocation();
+  const formatMessage = useFormatMessage();
   // React.useEffect(() => {
   //   ga.send(["pageview", location.pathname]);
   // }, [location]);
@@ -131,7 +133,7 @@ const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
       breadcrumbRender={(routers = []) => [
         {
           path: '/',
-          breadcrumbName: '首页',
+          breadcrumbName: formatMessage({ id: 'menu.home' }) as string,
         },
         ...routers,
       ]}
