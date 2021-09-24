@@ -23,6 +23,8 @@ import QRCode from 'qrcode.react';
 import styles from './index.module.less';
 import { postLogin } from './services';
 import { useHistory } from 'react-router-dom';
+import { setAuthority } from '@/utils/authority';
+import { localeLogin } from '@/stores/login';
 
 type LoginType = 'phone' | 'account' | 'qrcode';
 
@@ -34,7 +36,7 @@ const iconStyles: CSSProperties = {
   cursor: 'pointer',
 };
 
-const Login: React.FC = (props) => {
+const Login: React.FC = () => {
   const [loginType, setLoginType] = useState<LoginType>('account');
   const [btnLoading, setBtnLoading] = useState<boolean>(false);
 
@@ -76,6 +78,8 @@ const Login: React.FC = (props) => {
     postLogin({ ...val, loginType })
       .then((res) => {
         setBtnLoading(false);
+        setAuthority(res.data?.authority)
+        localeLogin.saveCurrentUser(res?.data)
         message.success(res.message || '登陆成功');
         history.push('/home')
       })

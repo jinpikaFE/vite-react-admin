@@ -10,16 +10,13 @@ import styles from './index.module.less';
 import { ICON_URL, LANGUAGE_MENU } from '@/types/constants';
 import { Observer } from 'mobx-react';
 import { localeLanguage } from '@/stores/language';
+import { Link } from 'react-router-dom';
+import AvatarDropdown from './AvatarDropdown';
 
 export type GlobalHeaderRightProps = {
   theme?: ProSettings['navTheme'] | 'realDark';
 } & Partial<ProSettings>;
 
-const ENVTagColor = {
-  dev: 'orange',
-  test: 'green',
-  pre: '#87d068',
-};
 
 const GlobalHeaderRight: React.FC<GlobalHeaderRightProps> = (props) => {
   const { theme, layout } = props;
@@ -57,19 +54,15 @@ const GlobalHeaderRight: React.FC<GlobalHeaderRightProps> = (props) => {
       <HeaderSearch
         className={`${styles.action} ${styles.search}`}
         placeholder="Site Search"
-        defaultValue="umi ui"
+        defaultValue="Home"
         options={[
           {
-            label: <a href="https://umijs.org/zh/guide/umi-ui.html">umi ui</a>,
-            value: 'umi ui',
+            label: <Link to="/home">Home</Link>,
+            value: 'Home',
           },
           {
-            label: <a href="next.ant.design">Ant Design</a>,
-            value: 'Ant Design',
-          },
-          {
-            label: <a href="https://protable.ant.design/">Pro Table</a>,
-            value: 'Pro Table',
+            label: <a href="https://pro.ant.design/zh-CN/">Ant Design Pro</a>,
+            value: 'Ant Design Pro',
           },
           {
             label: <a href="https://prolayout.ant.design/">Pro Layout</a>,
@@ -93,6 +86,7 @@ const GlobalHeaderRight: React.FC<GlobalHeaderRightProps> = (props) => {
           <QuestionCircleOutlined />
         </a>
       </Tooltip>
+      <AvatarDropdown />
       <Dropdown
         overlay={menu}
         placement="bottomRight"

@@ -10,7 +10,9 @@ export default [
         code: -1,
         message: '登陆失败',
         data: {
-          name: 'vben',
+          authority: 'admin',
+          name: 'admin',
+          avatar: 'http://assets.jinxinapp.cn/img/logo.png'
         },
       };
       resObj.data.loginType = body.loginType;

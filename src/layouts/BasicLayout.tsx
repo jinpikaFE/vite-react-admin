@@ -136,7 +136,6 @@ const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
   ) || {
     authority: undefined,
   };
-  localStorage.setItem('authority', JSON.stringify(['admin']));
   return (
     <div id="pro-layout">
       <ProLayout
