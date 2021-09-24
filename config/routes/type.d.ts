@@ -5,6 +5,7 @@ export type RouteType = {
   path?: string;
   exact?: boolean;
   redirect?: string;
+  authority?: string | string[];
   meta?: {
     [key: string]: any;
   },

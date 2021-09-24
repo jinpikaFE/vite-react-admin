@@ -13,11 +13,13 @@ import { RouteType } from '@config/routes/type';
 import { GithubOutlined } from '@ant-design/icons';
 import { queryMenu } from '@/services/global';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { Input } from 'antd';
+import { Button, Input, Result } from 'antd';
 import { useFormatMessage } from 'react-intl-hooks';
 import RightContent from '@/components/GlobalHeader/RightContent';
-import { ICON_URL } from '@/types/constants';
 import proSettings from '@config/defaultSettings';
+import Authorized from '@/utils/Authorized';
+import { getAuthorityFromRouter } from '@/utils/untils';
+import NotFound from '@/components/NotFound';
 
 const defaultFooterDom = (
   <DefaultFooter
@@ -48,13 +50,11 @@ const defaultFooterDom = (
 // 路由菜单，http菜单
 const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
   menuList.map((item) => {
-    // const localItem = {
-    //   ...item,
-    //   // http请求到则使用http相关的，请求失败则路由的，后续改成请求失败，进入失败页面最后做
-    //   icon: iconEnum[item.icon as string] || item.icon,
-    //   children: item.children ? menuDataRender(item.children) : undefined,
-    // };
-    return item;
+    const localItem = {
+      ...item,
+      routes: item.routes ? menuDataRender(item.routes) : undefined,
+    };
+    return Authorized.check(item.authority, localItem, null) as MenuDataItem;
   });
 
 const footerRender = (props: any) => {
@@ -109,9 +109,11 @@ const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
   const { routes } = props;
   const [menuData, setMenuData] = useState<MenuDataItem[]>([]);
   const [keyWord, setKeyWord] = useState('');
-  const [settings, setSetting] = useState<Partial<ProSettings> | undefined>(proSettings);
+  const [settings, setSetting] = useState<Partial<ProSettings> | undefined>(
+    proSettings,
+  );
   const history = useHistory();
-  
+
   useEffect(() => {
     const getMenu = async () => {
       const res = await queryMenu();
@@ -127,6 +129,14 @@ const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
   //   ga.send(["pageview", location.pathname]);
   // }, [location]);
 
+  // get children authority
+  const authorized = getAuthorityFromRouter(
+    menuData,
+    location.pathname || '/',
+  ) || {
+    authority: undefined,
+  };
+  localStorage.setItem('authority', JSON.stringify(['admin']));
   return (
     <div id="pro-layout">
       <ProLayout
@@ -179,7 +189,31 @@ const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
         rightContentRender={() => <RightContent />}
         {...settings}
       >
-        <PageContainer>{UseRouteChild({ routes })}</PageContainer>
+        <Authorized
+          routes={menuData as any}
+          authority={authorized!.authority}
+          noMatch={
+            <NotFound
+              status="403"
+              title="403"
+              subTitle="对不起！暂无该页面访问权限！请联系管理员或更换账号登录"
+              extra={
+                (
+                  <>
+                    <p>
+                      <Link to={'/15757182982'}>联系管理员</Link>
+                    </p>
+                    <Button type="primary">
+                      <Link to="/login">重新登录</Link>
+                    </Button>
+                  </>
+                ) as React.ReactDOM | any
+              }
+            />
+          }
+        >
+          <PageContainer>{UseRouteChild({ routes })}</PageContainer>
+        </Authorized>
       </ProLayout>
       <SettingDrawer
         pathname={location?.pathname}

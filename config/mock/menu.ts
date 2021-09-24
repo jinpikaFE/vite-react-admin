@@ -16,6 +16,7 @@ export default [
               component: './Welcome',
               icon: 'icon-home',
               breadcrumbName: 'admin',
+              authority: 'admin',
             },
             {
               path: '/admin',
@@ -23,22 +24,26 @@ export default [
               access: 'canAdmin',
               component: './Admin',
               icon: 'icon-manage',
+              authority: 'admin',
               routes: [
                 {
                   path: '/admin/test',
                   name: 'sub-page',
                   component: './Welcome',
                   icon: 'icon-manage-order',
+                  authority: 'admin',
                 },
                 {
                   path: '/admin/sub-page2',
                   name: '二级页面',
                   component: './Welcome',
+                  authority: 'admin',
                 },
                 {
                   path: '/admin/sub-page3',
                   name: '三级页面',
                   component: './Welcome',
+                  authority: 'admin',
                 },
               ],
             },
@@ -55,6 +60,7 @@ export default [
                     {
                       path: 'sub-sub-page1',
                       name: '一一级列表页面',
+                      authority: 'admin',
                       component: './Welcome',
                     },
                     {
@@ -73,11 +79,13 @@ export default [
                   path: '/list/sub-page2',
                   name: '二级列表页面',
                   component: './Welcome',
+                  authority: 'admin',
                 },
                 {
                   path: '/list/sub-page3',
                   name: '三级列表页面',
                   component: './Welcome',
+                  authority: 'admin',
                 },
               ],
             },
