@@ -1,13 +1,12 @@
 import React, { Suspense } from 'react';
-import { Route, HashRouter, Switch, Redirect } from 'react-router-dom';
+import { Route, HashRouter, Switch } from 'react-router-dom';
 import routes from '@config/routes';
-const setTitle = (title = 'jinpika') => {
-  document.title = title;
-};
+import Loading from '@/components/Loading'
+
 const RouterView = () => {
   return (
     // 建议使用 HashRouter
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<Loading />}>
       <HashRouter>
         <Switch>
           {routes.map(
@@ -26,12 +25,6 @@ const RouterView = () => {
                         )
                       );
                     }
-                    // 非授权页面
-                    if (!item.auth) {
-                      return <ComponentName {...props} routes={routes} />;
-                    }
-                    // 未登录并页面授权时跳入登录页面
-                    return <Redirect to="/login" />;
                   }}
                 />
               );
