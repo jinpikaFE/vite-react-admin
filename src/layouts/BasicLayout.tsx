@@ -20,6 +20,7 @@ import proSettings from '@config/defaultSettings';
 import Authorized from '@/utils/Authorized';
 import { getAuthorityFromRouter } from '@/utils/untils';
 import NotFound from '@/components/NotFound';
+import loaclRoutes from '@config/routes'
 
 const defaultFooterDom = (
   <DefaultFooter
@@ -189,7 +190,7 @@ const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
         {...settings}
       >
         <Authorized
-          routes={menuData as any}
+          routes={loaclRoutes}
           authority={authorized!.authority}
           noMatch={
             <NotFound

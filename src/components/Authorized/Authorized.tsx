@@ -41,11 +41,9 @@ const Authorized: React.FunctionComponent<AuthorizedProps> = ({
   const authorized = getAuthorityFromRouter(
     routes,
     location.pathname || '/',
-  ) || {
-    authority: undefined,
-  };
+  ) || null;
 
-  return <>{authorized!.authority ? dom : <NotFound />}</>;
+  return <>{authorized ? dom : <NotFound />}</>;
 };
 
 export default Authorized as IAuthorizedType;
