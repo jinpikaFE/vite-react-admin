@@ -104,9 +104,9 @@ const Login: React.FC = () => {
             style={{ height: '100%' }}
           >
             <LoginForm
-              logo="https://github.githubassets.com/images/modules/logos_page/Octocat.png"
-              title="Github"
-              subTitle="全球网站"
+              logo="http://assets.jinxinapp.cn/img/logo.png"
+              title="Jin Pi Ka"
+              subTitle="通用的vite-react后台项目"
               onFinish={onFinish}
               submitter={{
                 // 完全自定义整个区域

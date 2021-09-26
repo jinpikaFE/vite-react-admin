@@ -34,7 +34,7 @@ const defaultFooterDom = (
       {
         key: 'github',
         title: <GithubOutlined />,
-        href: 'https://github.com/ant-design/ant-design-pro',
+        href: 'https://gitee.com/jinxin0517/vite-react-ts-admin',
         blankTarget: true,
       },
       {
