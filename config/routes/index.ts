@@ -31,6 +31,10 @@ const routes: RouteType[] = [
           },
         ],
       },
+      {
+        path: '/menu',
+        component: lazy(() => import('@/pages/SideMenu')),
+      },
     ],
   },
 ];

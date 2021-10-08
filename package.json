@@ -17,6 +17,7 @@
     "@ant-design/pro-card": "^1.14.20",
     "@ant-design/pro-form": "^1.41.0",
     "@ant-design/pro-layout": "^6.9.0",
+    "@ant-design/pro-table": "^2.54.4",
     "@types/lodash": "^4.14.173",
     "@types/qrcode.react": "^1.0.2",
     "ahooks": "^2.10.9",
