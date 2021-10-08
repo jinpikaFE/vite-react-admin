@@ -78,7 +78,8 @@ const Login: React.FC = () => {
     postLogin({ ...val, loginType })
       .then((res) => {
         setBtnLoading(false);
-        setAuthority(res.data?.authority)
+        setAuthority(res.data?.role)
+        localStorage.token = res.data?.token
         localeLogin.saveCurrentUser(res?.data)
         message.success(res.message || '登陆成功');
         history.push('/home')
@@ -157,7 +158,7 @@ const Login: React.FC = () => {
                 {loginType === 'account' && (
                   <>
                     <ProFormText
-                      name="username"
+                      name="userName"
                       fieldProps={{
                         size: 'large',
                         prefix: <UserOutlined className={'prefixIcon'} />,

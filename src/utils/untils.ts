@@ -10,8 +10,6 @@ export const getAuthorityFromRouter = <T extends RouteType>(
   router: T[] = [],
   pathname: string,
 ): T | undefined => {
-  console.log(pathname);
-  
   const authority = router.find(
     ({ routes, path = '/' }) =>
       (path && path === pathname) ||

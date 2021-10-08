@@ -5,7 +5,7 @@ export default [
     url: '/api/menu',
     method: 'get',
     response: ({ body }: any) => {
-      const resObj: ResultType = {
+      const resObj: ResultType<any> = {
         code: 0,
         message: '菜单获取成功',
         data: {
@@ -16,7 +16,6 @@ export default [
               component: './Welcome',
               icon: 'icon-home',
               breadcrumbName: 'admin',
-              authority: 'admin',
             },
             {
               path: '/admin',

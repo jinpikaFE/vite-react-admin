@@ -9,9 +9,9 @@
 export default {
   dev: {
     '/api/': {
-      target: 'http://jinxinapp.cn',
+      target: 'http://127.0.0.1:3003',
       changeOrigin: true,
-      rewrite: (path: string) => path.replace(/^\/api/, '')
+      rewrite: (path: string) => path.replace(/^\/api/, '/api')
     },
   },
   test: {
