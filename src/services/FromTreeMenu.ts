@@ -10,3 +10,20 @@ export const createMenu = async (
     data: params,
   });
 };
+
+export const delMenu = async (
+  id: string,
+): Promise<ResultType<any>> => {
+  return request(`/api/menu/${id}`, {
+    method: 'DELETE'
+  });
+};
+
+export const updateMenu = async (
+  id: string, params: MenuFormType
+): Promise<ResultType<any>> => {
+  return request(`/api/menu/${id}`, {
+    method: 'PATCH',
+    data: params
+  });
+};

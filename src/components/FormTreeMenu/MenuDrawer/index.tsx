@@ -1,36 +1,42 @@
 import { message, Radio, TreeSelect } from 'antd';
-import React, { useEffect, useState } from 'react';
-import ProForm, { DrawerForm, ProFormText } from '@ant-design/pro-form';
+import React, { useEffect, useRef, useState } from 'react';
+import ProForm, {
+  DrawerForm,
+  ProFormInstance,
+  ProFormText,
+} from '@ant-design/pro-form';
 import { MenuDrawerProps, MenuFormType } from './type';
-import { createMenu } from '@/services/FromTreeMenu';
+import { createMenu, updateMenu } from '@/services/FromTreeMenu';
 import { queryMenu } from '@/services/global';
+import { toTree } from '@/utils/untils';
 
 const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
-  const { onCloseDrawer, visibleDrawer } = props;
+  const { onCloseDrawer, visibleDrawer, refTable, item } = props;
   const [treeData, setTreeData] = useState<any[]>([]);
+  const formRef = useRef<ProFormInstance | any>();
   useEffect(() => {
     if (visibleDrawer) {
       const getData = async () => {
         const res = await queryMenu();
         if (res) {
-          const dataTemp: any[] = [];
-          res.data.forEach((item: any) => {
-            const { _id: value, name: title } = item;
-            if (!item?.lastMenu) {
-              dataTemp.push({ value, title });
-            }
+          const dataTemp = toTree(res.data, '_id', 'lastMenu', (item) => {
+            item.title = item.name;
+            item.value = item._id;
+            return item;
           });
-          dataTemp.forEach(item => {
-            
-          })
-          console.log(dataTemp);
-
           setTreeData(dataTemp);
         }
       };
       getData();
     }
   }, [visibleDrawer]);
+
+  useEffect(() => {
+    if (visibleDrawer && item) {
+      formRef?.current?.resetFields();
+      formRef?.current?.setFieldsValue(item);
+    }
+  }, [visibleDrawer, item]);
 
   return (
     <DrawerForm<MenuFormType>
@@ -47,15 +53,26 @@ const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
         onClose: onCloseDrawer,
       }}
       onFinish={async (values: MenuFormType) => {
-        const res = await createMenu(values);
-        if (res) {
-          message.success(res.message || '创建成功');
-          onCloseDrawer();
+        if (item) {
+          const res = await updateMenu(item?._id, values);
+          if (res) {
+            refTable?.reload();
+            message.success(res.message || '更新成功');
+            onCloseDrawer();
+          }
+        } else {
+          const res = await createMenu(values);
+          if (res) {
+            refTable?.reload();
+            message.success(res.message || '创建成功');
+            onCloseDrawer();
+          }
         }
       }}
       initialValues={{
         status: 1,
       }}
+      formRef={formRef}
     >
       <ProFormText
         width="md"
@@ -97,11 +114,11 @@ const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
       />
       <ProForm.Item label="上级菜单" name="lastMenu">
         <TreeSelect
+          allowClear
           style={{ width: '328px' }}
           dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
           treeData={treeData}
           placeholder="请选择"
-          treeDefaultExpandAll
         />
       </ProForm.Item>
       <ProFormText
@@ -113,7 +130,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
           { required: true, message: '请输入图标名!' },
           {
             validator: (rule, value, callback) => {
-              const match = new RegExp('^[a-zA-Z]+$', 'g');
+              const match = new RegExp('^[^\u4e00-\u9fa5]+$', 'g');
               if (!match.test(value)) {
                 callback('请输入正确的图标名');
               } else {

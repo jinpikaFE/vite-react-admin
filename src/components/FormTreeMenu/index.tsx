@@ -1,11 +1,18 @@
+import { delMenu } from '@/services/FromTreeMenu';
+import { queryMenu } from '@/services/global';
+import { IconFont } from '@/types/constants';
+import { toTree } from '@/utils/untils';
 import { PlusOutlined } from '@ant-design/icons';
-import ProTable, { ProColumns } from '@ant-design/pro-table';
-import { Button, Menu } from 'antd';
-import React, { useState } from 'react';
-import MenuDrawer from './MenuDrawer'
+import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
+import { Button, message, Popconfirm } from 'antd';
+import React, { useRef, useState } from 'react';
+import MenuDrawer from './MenuDrawer';
+import { MenuFormType } from './MenuDrawer/type';
 
 const FormTreeMenu: React.FC = () => {
-  const [visibleDrawer, setVisibleDrawer] = useState(false);
+  const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
+  const [item, setItem] = useState<MenuFormType & { _id: string }>();
+  const refTable = useRef<ActionType>();
 
   const showDrawer = () => {
     setVisibleDrawer(true);
@@ -15,17 +22,25 @@ const FormTreeMenu: React.FC = () => {
     setVisibleDrawer(false);
   };
 
+  const edit = (record: any) => {
+    setItem(record);
+    showDrawer();
+  };
+
+  const del = async (id: string) => {
+    const res = await delMenu(id);
+    if (res) {
+      refTable?.current?.reload();
+      message.success(res.message || '删除成功');
+    }
+  };
+
   const columns: ProColumns[] = [
     {
-      dataIndex: 'index',
-      valueType: 'indexBorder',
-      width: 48,
-    },
-    {
       title: '菜单名称',
-      dataIndex: 'title',
+      dataIndex: 'name',
       copyable: true,
-      ellipsis: true,
+      // ellipsis: true,
       tip: '标题过长会自动收缩',
       formItemProps: {
         rules: [
@@ -38,35 +53,33 @@ const FormTreeMenu: React.FC = () => {
     },
     {
       title: '图标',
-      dataIndex: 'state',
-    },
-    {
-      title: '排序',
-      dataIndex: 'state',
+      width: 60,
+      align: 'center',
+      dataIndex: 'icon',
+      render: (text) => <IconFont type={text as string} />,
     },
     {
       title: '状态',
-      dataIndex: 'state',
+      dataIndex: 'status',
       filters: true,
       onFilter: true,
       valueType: 'select',
       valueEnum: {
         all: { text: '全部', status: 'Default' },
-        open: {
-          text: '启用',
+        0: {
+          text: '停用',
           status: 'Error',
         },
-        closed: {
-          text: '停用',
+        1: {
+          text: '启用',
           status: 'Success',
-          disabled: true,
         },
       },
     },
     {
       title: '创建时间',
-      key: 'showTime',
-      dataIndex: 'created_at',
+      key: 'registerTime',
+      dataIndex: 'registerTime',
       valueType: 'dateTime',
       sorter: true,
       hideInSearch: true,
@@ -88,42 +101,69 @@ const FormTreeMenu: React.FC = () => {
     {
       title: '操作',
       valueType: 'option',
-      render: (text, record, _, action) => [
-        <a
+      width: 50,
+      render: (text, record) => [
+        <Button
+          type="link"
           key="editable"
           onClick={() => {
-            action?.startEditable?.(record.id);
+            edit(record);
           }}
         >
           编辑
-        </a>,
-        <a
-          href={record.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          key="view"
-        >
-          查看
-        </a>,
+        </Button>,
+        <>
+          {!record?.children && (
+            <Popconfirm
+              placement="topRight"
+              title="确定要删除吗?"
+              onConfirm={() => del(record?._id)}
+              okText="确定"
+              okType="danger"
+              cancelText="取消"
+            >
+              <Button type="link" danger key="delete">
+                删除
+              </Button>
+            </Popconfirm>
+          )}
+        </>,
       ],
     },
   ];
 
-  const menu = (
-    <Menu>
-      <Menu.Item key="1">1st item</Menu.Item>
-      <Menu.Item key="2">2nd item</Menu.Item>
-      <Menu.Item key="3">3rd item</Menu.Item>
-    </Menu>
-  );
   return (
     <>
       <ProTable
-        columns={columns}
-        request={async (params = {}, sort, filter) => {
-          console.log(sort, filter);
-          return {};
+        bordered
+        actionRef={refTable}
+        // params={params}
+        request={async () => {
+          // 这里需要返回一个 Promise,在返回之前你可以进行数据转化
+          // 如果需要转化参数可以在这里进行修改
+          const msg = await queryMenu();
+          if (msg) {
+            const dataTemp = toTree(
+              msg.data,
+              '_id',
+              'lastMenu',
+              (item) => item,
+            );
+            return {
+              data: dataTemp,
+              success: true,
+            };
+          }
+          return {
+            data: undefined,
+            // success 请返回 true，
+            // 不然 table 会停止解析数据，即使有数据
+            success: false,
+            // 不传会使用 data 的长度，如果是分页一定要传
+            total: 0,
+          };
         }}
+        columns={columns}
         editable={{
           type: 'multiple',
         }}
@@ -131,7 +171,7 @@ const FormTreeMenu: React.FC = () => {
           persistenceKey: 'pro-table-singe-demos',
           persistenceType: 'localStorage',
         }}
-        rowKey="id"
+        rowKey="_id"
         search={{
           labelWidth: 'auto',
         }}
@@ -147,9 +187,7 @@ const FormTreeMenu: React.FC = () => {
             return values;
           },
         }}
-        pagination={{
-          pageSize: 5,
-        }}
+        pagination={false}
         dateFormatter="string"
         headerTitle="高级表格"
         toolBarRender={() => [
@@ -157,13 +195,21 @@ const FormTreeMenu: React.FC = () => {
             key="button"
             icon={<PlusOutlined />}
             type="primary"
-            onClick={showDrawer}
+            onClick={() => {
+              showDrawer();
+              setItem(undefined);
+            }}
           >
             新建
           </Button>,
         ]}
       />
-      <MenuDrawer onCloseDrawer={onCloseDrawer} visibleDrawer={visibleDrawer} />
+      <MenuDrawer
+        onCloseDrawer={onCloseDrawer}
+        visibleDrawer={visibleDrawer}
+        refTable={refTable?.current}
+        item={item}
+      />
     </>
   );
 };

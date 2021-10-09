@@ -1,3 +1,5 @@
+import { createFromIconfontCN } from "@ant-design/icons";
+
 export const ICON_URL = '//at.alicdn.com/t/font_2827128_ebswi6hw8c8.js'
 
 export const LANGUAGE_MENU = {
@@ -6,3 +8,7 @@ export const LANGUAGE_MENU = {
   en: '🇺🇸 English',
   jp: '🇯🇵 日本語',
 }
+
+export const IconFont = createFromIconfontCN({
+  scriptUrl: ICON_URL,
+});

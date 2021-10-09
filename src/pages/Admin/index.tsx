@@ -4,7 +4,7 @@ import { PageContainer } from '@ant-design/pro-layout';
 import { RouteType } from '@config/routes/type';
 import React from 'react';
 
-const Home: React.FC<{ routes: RouteType[] }> = (props) => {
+const Admin: React.FC<{ routes: RouteType[] }> = (props) => {
   return (
     <>
       <ProCard>Admin</ProCard>
@@ -12,4 +12,4 @@ const Home: React.FC<{ routes: RouteType[] }> = (props) => {
   );
 };
 
-export default Home;
+export default Admin;
