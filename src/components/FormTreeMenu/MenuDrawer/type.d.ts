@@ -5,7 +5,7 @@ export type MenuDrawerProps = {
   onCloseDrawer: () => void;
   visibleDrawer: boolean;
   refTable: ActionType | undefined
-  item: (MenuFormType & {_id: string}) | undefined
+  cItem: (MenuFormType & {_id: string}) | undefined
 };
 
 export type MenuFormType = {
@@ -14,4 +14,5 @@ export type MenuFormType = {
   lastMenu?: string;
   icon: string;
   status: 0 | 1
+  isLink: 0 | 1
 }

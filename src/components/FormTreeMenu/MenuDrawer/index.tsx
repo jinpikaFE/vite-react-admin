@@ -11,7 +11,7 @@ import { queryMenu } from '@/services/global';
 import { toTree } from '@/utils/untils';
 
 const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
-  const { onCloseDrawer, visibleDrawer, refTable, item } = props;
+  const { onCloseDrawer, visibleDrawer, refTable, cItem } = props;
   const [treeData, setTreeData] = useState<any[]>([]);
   const formRef = useRef<ProFormInstance | any>();
   useEffect(() => {
@@ -19,24 +19,42 @@ const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
       const getData = async () => {
         const res = await queryMenu();
         if (res) {
-          const dataTemp = toTree(res.data, '_id', 'lastMenu', (item) => {
+          let dataTemp = toTree(res.data, '_id', 'lastMenu', (item) => {
             item.title = item.name;
             item.value = item._id;
+            if (item?.isLink) {
+              item.disabled = true;
+              return item;
+            }
             return item;
           });
+          if (cItem) {
+            const reduceFilter = (data: any[], cId: string) => {
+              data.forEach((item, index) => {
+                if (item?.children) {
+                  reduceFilter(item?.children, cId);
+                }
+                if (item?._id === cId) {
+                  data.splice(index, 1);
+                }
+              });
+              return data;
+            };
+            dataTemp = reduceFilter(dataTemp, cItem?._id);
+          }
           setTreeData(dataTemp);
         }
       };
       getData();
     }
-  }, [visibleDrawer]);
+  }, [visibleDrawer, cItem]);
 
   useEffect(() => {
-    if (visibleDrawer && item) {
+    if (visibleDrawer && cItem) {
       formRef?.current?.resetFields();
-      formRef?.current?.setFieldsValue(item);
+      formRef?.current?.setFieldsValue(cItem);
     }
-  }, [visibleDrawer, item]);
+  }, [visibleDrawer, cItem]);
 
   return (
     <DrawerForm<MenuFormType>
@@ -53,8 +71,8 @@ const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
         onClose: onCloseDrawer,
       }}
       onFinish={async (values: MenuFormType) => {
-        if (item) {
-          const res = await updateMenu(item?._id, values);
+        if (cItem) {
+          const res = await updateMenu(cItem?._id, values);
           if (res) {
             refTable?.reload();
             message.success(res.message || '更新成功');
@@ -71,6 +89,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
       }}
       initialValues={{
         status: 1,
+        isLink: 0,
       }}
       formRef={formRef}
     >
@@ -97,13 +116,17 @@ const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
         width="md"
         name="path"
         label="路由路径"
-        placeholder="路由路径，例‘/path/paths’"
+        placeholder="路由路径，例‘/path/paths’,‘https://www.baidu.com/’"
         rules={[
           { required: true, message: '请输入路由路径!' },
           {
             validator: (rule, value, callback) => {
               const match = new RegExp('^(/[a-zA-Z]+)+$', 'g');
-              if (!match.test(value)) {
+              const urlMatch = new RegExp(
+                '^https?://(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+.)+(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+)',
+                'g',
+              );
+              if (!(match.test(value) || urlMatch.test(value))) {
                 callback('请输入正确的路由');
               } else {
                 callback();
@@ -152,6 +175,22 @@ const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
             {
               label: '禁用',
               value: 0,
+            },
+          ]}
+        />
+      </ProForm.Item>
+      <ProForm.Item name="isLink" label="是否外链">
+        <Radio.Group
+          optionType="button"
+          buttonStyle="solid"
+          options={[
+            {
+              label: '否',
+              value: 0,
+            },
+            {
+              label: '是',
+              value: 1,
             },
           ]}
         />

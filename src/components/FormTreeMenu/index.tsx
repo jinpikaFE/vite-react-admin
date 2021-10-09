@@ -11,7 +11,7 @@ import { MenuFormType } from './MenuDrawer/type';
 
 const FormTreeMenu: React.FC = () => {
   const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
-  const [item, setItem] = useState<MenuFormType & { _id: string }>();
+  const [cItem, setCItem] = useState<MenuFormType & { _id: string }>();
   const refTable = useRef<ActionType>();
 
   const showDrawer = () => {
@@ -23,7 +23,7 @@ const FormTreeMenu: React.FC = () => {
   };
 
   const edit = (record: any) => {
-    setItem(record);
+    setCItem(record);
     showDrawer();
   };
 
@@ -155,7 +155,7 @@ const FormTreeMenu: React.FC = () => {
             type="primary"
             onClick={() => {
               showDrawer();
-              setItem(undefined);
+              setCItem(undefined);
             }}
           >
             新建
@@ -166,7 +166,7 @@ const FormTreeMenu: React.FC = () => {
         onCloseDrawer={onCloseDrawer}
         visibleDrawer={visibleDrawer}
         refTable={refTable?.current}
-        item={item}
+        cItem={cItem}
       />
     </>
   );
