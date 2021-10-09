@@ -24,7 +24,7 @@ export default [
               component: './Admin',
               icon: 'icon-manage',
               authority: 'admin',
-              routes: [
+              children: [
                 {
                   path: '/admin/test',
                   name: 'sub-page',
@@ -51,11 +51,11 @@ export default [
               path: '/list',
               component: './ListTableList',
               icon: 'icon-list',
-              routes: [
+              children: [
                 {
                   path: '/list/sub-page',
                   name: '一级列表页面',
-                  routes: [
+                  children: [
                     {
                       path: 'sub-sub-page1',
                       name: '一一级列表页面',

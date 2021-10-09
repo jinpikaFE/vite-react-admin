@@ -25,10 +25,6 @@ const routes: RouteType[] = [
             path: '/admin',
             redirect: '/admin/test',
           },
-          {
-            path: '/admin/test',
-            component: lazy(() => import('@/pages/Admin/test')),
-          },
         ],
       },
       {

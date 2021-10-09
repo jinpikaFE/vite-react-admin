@@ -16,9 +16,9 @@ export default {
   },
   test: {
     '/api/': {
-      target: 'http://jsonplaceholder.typicode.com',
+      target: 'http://nestadmin_dt.jinxinapp.cn/',
       changeOrigin: true,
-      rewrite: (path: string) => path.replace(/^\/api/, '')
+      rewrite: (path: string) => path.replace(/^\/api/, '/api')
     },
   },
   pre: {

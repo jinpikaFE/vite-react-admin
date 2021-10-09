@@ -41,15 +41,6 @@ const FormTreeMenu: React.FC = () => {
       dataIndex: 'name',
       copyable: true,
       // ellipsis: true,
-      tip: '标题过长会自动收缩',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '此项为必填项',
-          },
-        ],
-      },
     },
     {
       title: '图标',
@@ -61,8 +52,6 @@ const FormTreeMenu: React.FC = () => {
     {
       title: '状态',
       dataIndex: 'status',
-      filters: true,
-      onFilter: true,
       valueType: 'select',
       valueEnum: {
         all: { text: '全部', status: 'Default' },
@@ -78,25 +67,8 @@ const FormTreeMenu: React.FC = () => {
     },
     {
       title: '创建时间',
-      key: 'registerTime',
       dataIndex: 'registerTime',
       valueType: 'dateTime',
-      sorter: true,
-      hideInSearch: true,
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'created_at',
-      valueType: 'dateRange',
-      hideInTable: true,
-      search: {
-        transform: (value) => {
-          return {
-            startTime: value[0],
-            endTime: value[1],
-          };
-        },
-      },
     },
     {
       title: '操作',
@@ -172,21 +144,7 @@ const FormTreeMenu: React.FC = () => {
           persistenceType: 'localStorage',
         }}
         rowKey="_id"
-        search={{
-          labelWidth: 'auto',
-        }}
-        form={{
-          // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
-          syncToUrl: (values, type) => {
-            if (type === 'get') {
-              return {
-                ...values,
-                created_at: [values.startTime, values.endTime],
-              };
-            }
-            return values;
-          },
-        }}
+        search={false}
         pagination={false}
         dateFormatter="string"
         headerTitle="高级表格"
