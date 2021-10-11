@@ -22,9 +22,13 @@ const routes: RouteType[] = [
         component: lazy(() => import('@/layouts/BlankLayout')),
         routes: [
           {
-            path: '/admin',
-            redirect: '/admin/test',
+            path: '/admin/userManager',
+            component: lazy(()=>import('@/pages/Admin/userManager'))
           },
+          {
+            path: '/admin/roleManager',
+            component: lazy(()=>import('@/pages/Admin/roleManager'))
+          }
         ],
       },
       {

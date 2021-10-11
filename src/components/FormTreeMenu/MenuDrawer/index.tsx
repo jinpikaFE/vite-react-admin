@@ -9,10 +9,12 @@ import { MenuDrawerProps, MenuFormType } from './type';
 import { createMenu, updateMenu } from '@/services/FromTreeMenu';
 import { queryMenu } from '@/services/global';
 import { toTree } from '@/utils/untils';
+import { SketchPicker } from 'react-color';
 
 const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
   const { onCloseDrawer, visibleDrawer, refTable, cItem } = props;
   const [treeData, setTreeData] = useState<any[]>([]);
+  const [background, setBackground] = useState<string>('#fff')
   const formRef = useRef<ProFormInstance | any>();
   useEffect(() => {
     if (visibleDrawer) {
@@ -50,7 +52,9 @@ const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
   }, [visibleDrawer, cItem]);
 
   useEffect(() => {
+    setBackground('#fff')
     if (visibleDrawer && cItem) {
+      setBackground(cItem?.color)
       formRef?.current?.resetFields();
       formRef?.current?.setFieldsValue(cItem);
     }
@@ -72,14 +76,14 @@ const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
       }}
       onFinish={async (values: MenuFormType) => {
         if (cItem) {
-          const res = await updateMenu(cItem?._id, values);
+          const res = await updateMenu(cItem?._id, {...values, color: values?.color?.hex});
           if (res) {
             refTable?.reload();
             message.success(res.message || '更新成功');
             onCloseDrawer();
           }
         } else {
-          const res = await createMenu(values);
+          const res = await createMenu({...values, color: values?.color?.hex});
           if (res) {
             refTable?.reload();
             message.success(res.message || '创建成功');
@@ -163,6 +167,14 @@ const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
           },
         ]}
       />
+      <ProForm.Item
+        name="color"
+        label="菜单标签颜色"
+        rules={[{ required: true, message: '请选择菜单标签颜色!' }]}
+      >
+        <SketchPicker color={ background }
+        onChangeComplete={ (color) => {setBackground(color.hex)} } />
+      </ProForm.Item>
       <ProForm.Item name="status" label="状态">
         <Radio.Group
           optionType="button"

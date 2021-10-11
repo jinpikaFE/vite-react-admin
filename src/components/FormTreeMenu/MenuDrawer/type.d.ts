@@ -1,4 +1,3 @@
-import { ProFormInstance } from "@ant-design/pro-form";
 import { ActionType } from "@ant-design/pro-table";
 
 export type MenuDrawerProps = {
@@ -13,6 +12,7 @@ export type MenuFormType = {
   path: string;
   lastMenu?: string;
   icon: string;
-  status: 0 | 1
-  isLink: 0 | 1
+  status: 0 | 1;
+  isLink: 0 | 1;
+  color: any;
 }
