@@ -28,7 +28,7 @@ export const updateMenu = async (
   });
 };
 
-export const updateManyMenu = async ( params: {name: string;authority: string[]}
+export const updateManyMenu = async ( params: {name: string;authority?: string[]}
 ): Promise<ResultType<any>> => {
   return request(`/api/menu/many`, {
     method: 'POST',

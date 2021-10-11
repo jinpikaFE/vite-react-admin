@@ -4,14 +4,17 @@ import { queryMenu } from '@/services/global';
 import { toTree } from '@/utils/untils';
 import { PlusOutlined } from '@ant-design/icons';
 import ProForm, { ProFormText } from '@ant-design/pro-form';
-import ProTable, {
-  ActionType,
-  ProColumns,
-} from '@ant-design/pro-table';
+import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
 import { Button, message, Popconfirm, Space, Tag, TreeSelect } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormatMessage } from 'react-intl-hooks';
-import { createRole, delRole, queryRole, queryRoleOne, updateRole } from './services';
+import {
+  createRole,
+  delRole,
+  queryRole,
+  queryRoleOne,
+  updateRole,
+} from './services';
 import { FormRoleType } from './type';
 
 const RoleManager: React.FC = () => {
@@ -102,7 +105,7 @@ const RoleManager: React.FC = () => {
         <Popconfirm
           placement="topRight"
           title="确定要删除吗?"
-          onConfirm={() => del(record?._id)}
+          onConfirm={() => del(record?._id, record?.name)}
           okText="确定"
           okType="danger"
           cancelText="取消"
@@ -145,14 +148,15 @@ const RoleManager: React.FC = () => {
   };
 
   const edit = async (id: string) => {
-    const res = await queryRoleOne(id)
+    const res = await queryRoleOne(id);
     setCItem(res?.data);
     showDrawer();
   };
 
-  const del = async (id: string) => {
+  const del = async (id: string, name: string) => {
     const res = await delRole(id);
     if (res) {
+      const updateData = await updateManyMenu({ name });
       refTable?.current?.reload();
       message.success(res.message || '删除成功');
     }
