@@ -11,6 +11,7 @@ import { Observer } from 'mobx-react';
 import { localeLanguage } from '@/stores/language';
 import { Link } from 'react-router-dom';
 import AvatarDropdown from './AvatarDropdown';
+import FullScreen from '../FullScreen.tsx';
 
 export type GlobalHeaderRightProps = {
   theme?: ProSettings['navTheme'] | 'realDark';
@@ -81,6 +82,7 @@ const GlobalHeaderRight: React.FC<GlobalHeaderRightProps> = (props) => {
           <QuestionCircleOutlined />
         </a>
       </Tooltip>
+      <FullScreen />
       <AvatarDropdown />
       <Dropdown
         overlay={menu}

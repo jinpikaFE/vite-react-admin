@@ -20,25 +20,25 @@ const exportToExcel = (data: any[], fileName: string, ) => {
     columnArr.push(tempObj);
   }
 
-  // 设置表格的头部信息，可以用来设置标题，说明或者注意事项
-  sheet.addTable({
-    name: `Header`,
-    ref: 'A1', // 头部信息从A1单元格开始显示
-    headerRow: true,
-    totalsRow: false,
-    style: {
-      // theme: '',
-      showRowStripes: false,
-      showFirstColumn: true,
-    },
-    columns: [{ name: '创建信息' }],
-    rows: [[`As of: ${new Date().toLocaleString()}`], [`jx`]],
-  });
+  // // 设置表格的头部信息，可以用来设置标题，说明或者注意事项
+  // sheet.addTable({
+  //   name: `Header`,
+  //   ref: 'A1', // 头部信息从A1单元格开始显示
+  //   headerRow: true,
+  //   totalsRow: false,
+  //   style: {
+  //     // theme: '',
+  //     showRowStripes: false,
+  //     showFirstColumn: true,
+  //   },
+  //   columns: [{ name: '创建信息' }],
+  //   rows: [[`As of: ${new Date().toLocaleString()}`], [`jx`]],
+  // });
 
   // 设置表格的主要数据部分
   sheet.addTable({
     name: headerName,
-    ref: 'A5', // 主要数据从A5单元格开始
+    ref: 'A1', // 主要数据从A5单元格开始
     headerRow: true,
     totalsRow: false,
     style: {

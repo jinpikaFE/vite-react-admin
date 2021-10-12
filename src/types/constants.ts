@@ -1,6 +1,6 @@
 import { createFromIconfontCN } from "@ant-design/icons";
 
-export const ICON_URL = '//at.alicdn.com/t/font_2827128_ov4ea4nu7kl.js'
+export const ICON_URL = '//at.alicdn.com/t/font_2827128_s7lesd9eiy.js'
 
 export const LANGUAGE_MENU = {
   zh: '🇨🇳 简体中文',
