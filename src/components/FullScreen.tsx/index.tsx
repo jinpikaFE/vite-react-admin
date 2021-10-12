@@ -1,4 +1,3 @@
-import { localeRefRoot } from '@/stores/refRoot';
 import { IconFont } from '@/types/constants';
 import React, { Component } from 'react';
 import styles from '../GlobalHeader/index.module.less';
@@ -27,7 +26,7 @@ class FullScreen extends Component {
   // 全屏
   fullScreen = () => {
     if (!this.state.isFullScreen) {
-      localeRefRoot.rootRef?.current?.requestFullscreen();
+      document.documentElement?.requestFullscreen();
     }
   };
 

@@ -13,7 +13,6 @@ import locale_tw from './locales/zh-TW';
 
 import { localeLanguage } from '@/stores/language';
 import { Observer } from 'mobx-react';
-import { localeRefRoot } from './stores/refRoot';
 
 const data = {
   zh: locale_cn,
@@ -34,9 +33,7 @@ ReactDOM.render(
         messages={(data as any)?.[localeLanguage?.localeLang || language]}
         defaultLocale="zh"
       >
-        <div ref={localeRefRoot.rootRef}>
-          <RouterView />
-        </div>
+        <RouterView />
       </IntlProvider>
     )}
   </Observer>,
