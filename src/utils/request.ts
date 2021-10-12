@@ -97,7 +97,7 @@ const handleRequest = async (
       message: `Request error ${res?.status}: ${url}`,
       description: 'token过期重新登录',
     });
-    window.location.href = '/#/login';
+    window.location.href = '/login';
   } else {
     notification.error({
       message: `Request error ${res?.code || res?.status}: ${url}`,

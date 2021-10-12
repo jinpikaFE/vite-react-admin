@@ -5,7 +5,15 @@ import { toTree } from '@/utils/untils';
 import { PlusOutlined } from '@ant-design/icons';
 import ProForm, { ProFormText } from '@ant-design/pro-form';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Button, message, Popconfirm, Space, Tag, TreeSelect } from 'antd';
+import {
+  Button,
+  message,
+  Popconfirm,
+  Select,
+  Space,
+  Tag,
+  TreeSelect,
+} from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormatMessage } from 'react-intl-hooks';
 import {
@@ -22,6 +30,7 @@ const RoleManager: React.FC = () => {
   const [cItem, setCItem] = useState<FormRoleType>();
   const refTable = useRef<ActionType>();
   const [treeData, setTreeData] = useState<any[]>([]);
+  const [menusData, setMenusData] = useState<any[]>([]);
 
   const formatMessage = useFormatMessage();
 
@@ -49,9 +58,18 @@ const RoleManager: React.FC = () => {
     {
       title: '权限',
       dataIndex: 'authority',
-      search: false,
-      renderFormItem: (_, { defaultRender }) => {
-        return defaultRender(_);
+      renderFormItem: () => {
+        return (
+          <Select allowClear>
+            {menusData?.map((item) => {
+              return (
+                <Select.Option value={item._id} key={item._id}>
+                  {formatMessage({ id: `menu.${item?.name}` }) as string}
+                </Select.Option>
+              );
+            })}
+          </Select>
+        );
       },
       render: (text) => (
         <>
@@ -77,7 +95,7 @@ const RoleManager: React.FC = () => {
     {
       title: '创建时间',
       dataIndex: 'created_at',
-      valueType: 'dateRange',
+      valueType: 'dateTimeRange',
       hideInTable: true,
       search: {
         transform: (value) => {
@@ -103,6 +121,7 @@ const RoleManager: React.FC = () => {
           编辑
         </Button>,
         <Popconfirm
+          key="del"
           placement="topRight"
           title="确定要删除吗?"
           onConfirm={() => del(record?._id, record?.name)}
@@ -119,11 +138,18 @@ const RoleManager: React.FC = () => {
   ];
 
   useEffect(() => {
+    const getTableData = async () => {
+      const res = await queryMenu();
+      setMenusData(res?.data);
+    };
+    getTableData();
+  }, []);
+
+  useEffect(() => {
     if (visibleDrawer) {
       const getData = async () => {
-        const res = await queryMenu();
-        if (res) {
-          let dataTemp = toTree(res.data, '_id', 'lastMenu', (item) => {
+        if (menusData) {
+          let dataTemp = toTree(menusData, '_id', 'lastMenu', (item) => {
             item.title = formatMessage({ id: `menu.${item.name}` }) as string;
             item.value = item._id;
             if (item?.isLink) {
@@ -157,8 +183,10 @@ const RoleManager: React.FC = () => {
     const res = await delRole(id);
     if (res) {
       const updateData = await updateManyMenu({ name });
-      refTable?.current?.reload();
-      message.success(res.message || '删除成功');
+      if (updateData) {
+        refTable?.current?.reload();
+        message.success(res.message || '删除成功');
+      }
     }
   };
 
@@ -231,16 +259,17 @@ const RoleManager: React.FC = () => {
 
   return (
     <>
-      <ProTable
+      <ProTable<FormRoleType>
         bordered
-        request={async () => {
+        request={async (params, sorter, filter) => {
+          console.log(params, sorter, filter);
           // 这里需要返回一个 Promise,在返回之前你可以进行数据转化
           // 如果需要转化参数可以在这里进行修改
-          const menuData = await queryMenu();
-          const msg = await queryRole();
+          const res = await queryMenu();
+          const msg = await queryRole({ ...params, ...sorter, ...filter });
           const dataTemp = msg.data?.map((item: any) => {
             item.authority = [];
-            menuData.data?.forEach((c_item: any) => {
+            res?.data?.forEach((c_item: any) => {
               if (c_item.authority.includes(item.name)) {
                 item.authority.push(c_item);
               }
@@ -251,6 +280,7 @@ const RoleManager: React.FC = () => {
             return {
               data: dataTemp,
               success: true,
+              total: msg.total,
             };
           }
           return {
@@ -289,6 +319,7 @@ const RoleManager: React.FC = () => {
         }}
         pagination={{
           pageSize: 5,
+          pageSizeOptions: ['5', '10', '20', '30', '50', '100'],
         }}
         dateFormatter="string"
         headerTitle="高级表格"

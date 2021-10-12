@@ -5,4 +5,5 @@ export type ResultType<T> = {
   code: number;
   status?: number;
   statusText?: string;
+  total?: number
 };

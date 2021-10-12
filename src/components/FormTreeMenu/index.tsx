@@ -84,7 +84,7 @@ const FormTreeMenu: React.FC = () => {
         >
           编辑
         </Button>,
-        <>
+        <span key='del'>
           {!record?.children && (
             <Popconfirm
               placement="topRight"
@@ -99,7 +99,7 @@ const FormTreeMenu: React.FC = () => {
               </Button>
             </Popconfirm>
           )}
-        </>,
+        </span>,
       ],
     },
   ];

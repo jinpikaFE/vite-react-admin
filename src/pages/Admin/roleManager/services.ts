@@ -2,9 +2,10 @@ import { ResultType } from '@/types/global';
 import request from '@/utils/request';
 import { FormRoleType } from './type';
 
-export const queryRole = async (): Promise<ResultType<any>> => {
+export const queryRole = async (params: any): Promise<ResultType<any>> => {
   return request('/api/roles', {
     method: 'GET',
+    params
   });
 };
 
