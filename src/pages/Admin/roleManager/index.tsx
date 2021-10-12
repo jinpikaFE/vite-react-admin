@@ -1,6 +1,7 @@
 import RightDrawer from '@/components/RightDrawer';
 import { updateManyMenu } from '@/services/FromTreeMenu';
 import { queryMenu } from '@/services/global';
+import exportToExcel from '@/utils/ExportToExcel';
 import { toTree } from '@/utils/untils';
 import { PlusOutlined } from '@ant-design/icons';
 import ProForm, { ProFormText } from '@ant-design/pro-form';
@@ -31,6 +32,8 @@ const RoleManager: React.FC = () => {
   const refTable = useRef<ActionType>();
   const [treeData, setTreeData] = useState<any[]>([]);
   const [menusData, setMenusData] = useState<any[]>([]);
+
+  const [datasSource, setDatasSource] = useState<any[]>([]);
 
   const formatMessage = useFormatMessage();
 
@@ -276,7 +279,26 @@ const RoleManager: React.FC = () => {
             });
             return item;
           });
+          const midDataTemp = JSON.parse(JSON.stringify(dataTemp));
           if (msg) {
+            const execlData = midDataTemp.map(
+              (item: { authority: any[]; name?: string; registerTime?: any }) => {
+                const tempArr: string[] = [];
+                item?.authority?.map((c_item) => {
+                  tempArr.push(
+                    formatMessage({ id: `menu.${c_item.name}` }) as string,
+                  );
+                });
+                item.authority = tempArr;
+                const { name, authority, registerTime } = item;
+                return {
+                  name,
+                  authority,
+                  registerTime: new Date(registerTime).toLocaleString(),
+                };
+              },
+            );
+            setDatasSource(execlData);
             return {
               data: dataTemp,
               success: true,
@@ -324,7 +346,14 @@ const RoleManager: React.FC = () => {
         dateFormatter="string"
         headerTitle="高级表格"
         toolBarRender={() => [
-          <Button key="out">导出数据</Button>,
+          <Button
+            key="out"
+            onClick={() => {
+              exportToExcel(datasSource, '角色管理');
+            }}
+          >
+            导出数据
+          </Button>,
           <Button
             key="button"
             icon={<PlusOutlined />}
