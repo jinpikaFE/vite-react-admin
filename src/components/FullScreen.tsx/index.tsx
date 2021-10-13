@@ -1,4 +1,5 @@
 import { IconFont } from '@/types/constants';
+import { Tooltip } from 'antd';
 import React, { Component } from 'react';
 import styles from '../GlobalHeader/index.module.less';
 
@@ -38,14 +39,19 @@ class FullScreen extends Component {
   render() {
     const { isFullScreen } = this.state;
     return (
-      <a className={`${styles.action}`} onClick={isFullScreen ?this.exitFullScreen:this.fullScreen}>
-        {/* 全屏的时候显示 退出全屏按钮，非全屏的时候显示 全屏按钮 */}
-        {isFullScreen ? (
-          <IconFont type='icon-exitFullScreen' />
-        ) : (
-          <IconFont type='icon-fullScreen' />
-        )}
-      </a>
+      <Tooltip title={isFullScreen ? '退出全屏' : '全屏'}>
+        <a
+          className={`${styles.action}`}
+          onClick={isFullScreen ? this.exitFullScreen : this.fullScreen}
+        >
+          {/* 全屏的时候显示 退出全屏按钮，非全屏的时候显示 全屏按钮 */}
+          {isFullScreen ? (
+            <IconFont type="icon-exitFullScreen" />
+          ) : (
+            <IconFont type="icon-fullScreen" />
+          )}
+        </a>
+      </Tooltip>
     );
   }
 }

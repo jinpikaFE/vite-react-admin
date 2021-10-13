@@ -29,6 +29,7 @@ const RoleManager: React.FC = () => {
   const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
   const [cItem, setCItem] = useState<FormRoleType>();
   const refTable = useRef<ActionType>();
+  
   const [treeData, setTreeData] = useState<any[]>([]);
   const [menusData, setMenusData] = useState<any[]>([]);
 

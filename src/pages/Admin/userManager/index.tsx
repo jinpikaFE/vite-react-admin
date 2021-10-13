@@ -1,26 +1,10 @@
 import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
-import ProCard from '@ant-design/pro-card';
 import ProTable, { ActionType, ProColumns, TableDropdown } from '@ant-design/pro-table';
 import { Button, Dropdown, Menu, Space, Tag } from 'antd';
 import React, { useRef } from 'react';
+import { FormUserType } from './type';
 
-type GithubIssueItem = {
-  url: string;
-  id: number;
-  number: number;
-  title: string;
-  labels: {
-    name: string;
-    color: string;
-  }[];
-  state: string;
-  comments: number;
-  created_at: string;
-  updated_at: string;
-  closed_at?: string;
-};
-
-const columns: ProColumns<GithubIssueItem>[] = [
+const columns: ProColumns<FormUserType>[] = [
   {
     dataIndex: 'index',
     valueType: 'indexBorder',
