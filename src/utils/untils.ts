@@ -51,7 +51,7 @@ export const toTree = (
   data.forEach(function (item) {
     // 以当前遍历项，的pid,去map对象中找到索引的id
     var parent = map?.[item?.[parentKey]];
-    const newItem =cb(item);
+    const newItem = cb(item);
     // 好绕啊，如果找到索引，那么说明此项不在顶级当中,那么需要把此项添加到，他对应的父级中
     if (parent) {
       (parent?.[children] || (parent[children] = [])).push(newItem);
@@ -61,4 +61,51 @@ export const toTree = (
     }
   });
   return val;
+};
+
+/**
+ * 上传附件转base64
+ * @param {File} file 文件流
+ */
+export const getBase64 = (file: any) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+};
+
+export type ProvinceType = {
+  value: string;
+  label: string;
+  children?: ProvinceType[];
+};
+// 省市区数据处理antd格式
+export const reduceProvArr = (dataKey: any[], tempArr: ProvinceType[]) => {
+  const keyArr = Object.keys(dataKey);
+  for (let i = 0; i < keyArr.length; i += 1) {
+    const itemObj: ProvinceType = {
+      value: keyArr[i],
+      label: keyArr[i],
+    };
+    if (
+      Object.keys(dataKey?.[keyArr?.[i] as any]) &&
+      Object.keys(dataKey?.[keyArr?.[i] as any])[0] !== '0'
+    ) {
+      itemObj.children = [];
+      reduceProvArr(dataKey?.[keyArr?.[i] as any], itemObj.children);
+    } else {
+      itemObj.children = [];
+      const cDataKey = dataKey?.[keyArr?.[i] as any];
+      for (let j = 0; j < cDataKey.length; j += 1) {
+        const cItemObj: ProvinceType = {
+          value: cDataKey[j],
+          label: cDataKey[j],
+        };
+        itemObj.children.push(cItemObj);
+      }
+    }
+    tempArr.push(itemObj);
+  }
 };

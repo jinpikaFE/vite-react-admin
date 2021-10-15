@@ -29,7 +29,7 @@ const RoleManager: React.FC = () => {
   const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
   const [cItem, setCItem] = useState<FormRoleType>();
   const refTable = useRef<ActionType>();
-  
+
   const [treeData, setTreeData] = useState<any[]>([]);
   const [menusData, setMenusData] = useState<any[]>([]);
 
@@ -344,7 +344,7 @@ const RoleManager: React.FC = () => {
           pageSizeOptions: ['5', '10', '20', '30', '50', '100'],
         }}
         dateFormatter="string"
-        headerTitle="高级表格"
+        headerTitle="角色列表"
         toolBarRender={() => [
           <Button
             key="out"

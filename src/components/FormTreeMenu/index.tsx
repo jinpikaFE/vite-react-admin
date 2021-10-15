@@ -147,7 +147,7 @@ const FormTreeMenu: React.FC = () => {
         search={false}
         pagination={false}
         dateFormatter="string"
-        headerTitle="高级表格"
+        headerTitle="菜单列表"
         toolBarRender={() => [
           <Button
             key="button"
