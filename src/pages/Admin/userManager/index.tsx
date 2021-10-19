@@ -1,38 +1,22 @@
 import RightDrawer from '@/components/RightDrawer';
-import { updateManyMenu } from '@/services/FromTreeMenu';
 import { queryMenu } from '@/services/global';
 import exportToExcel from '@/utils/exportToExcel';
 import { PlusOutlined } from '@ant-design/icons';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-import {
-  Button,
-  message,
-  Popconfirm,
-  Select,
-  Tag,
-} from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
-import { useFormatMessage } from 'react-intl-hooks';
-import {
-  createRole,
-  delRole,
-  queryRoleOne,
-  updateRole,
-} from './services';
+import { Button, message, Popconfirm } from 'antd';
+import React, { useRef, useState } from 'react';
+import { createUser, delUser, queryUser, updateUser } from './services';
 import { FormUserType } from './type';
 import UserForm from './UserForm';
-
 
 const UserManager: React.FC = () => {
   const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
   const [cItem, setCItem] = useState<FormUserType>();
   const refTable = useRef<ActionType>();
 
-  const [menusData, setMenusData] = useState<any[]>([]);
+  const [captcha, setCaptcha] = useState<string>('1111');
 
   const [datasSource, setDatasSource] = useState<any[]>([]);
-
-  const formatMessage = useFormatMessage();
 
   const columns: ProColumns[] = [
     {
@@ -41,8 +25,8 @@ const UserManager: React.FC = () => {
       width: 48,
     },
     {
-      title: '角色名',
-      dataIndex: 'name',
+      title: '用户名',
+      dataIndex: 'userName',
       copyable: true,
       ellipsis: true,
       tip: '标题过长会自动收缩',
@@ -56,34 +40,16 @@ const UserManager: React.FC = () => {
       },
     },
     {
-      title: '权限',
-      dataIndex: 'authority',
-      renderFormItem: () => {
-        return (
-          <Select allowClear>
-            {menusData?.map((item) => {
-              return (
-                <Select.Option value={item._id} key={item._id}>
-                  {formatMessage({ id: `menu.${item?.name}` }) as string}
-                </Select.Option>
-              );
-            })}
-          </Select>
-        );
-      },
-      render: (text) => (
-        <>
-          {(text as any[])?.map((item) => (
-            <Tag
-              key={item?._id}
-              color={item?.color}
-              style={{ marginBottom: '5px' }}
-            >
-              {formatMessage({ id: `menu.${item?.name}` }) as string}
-            </Tag>
-          ))}
-        </>
-      ),
+      title: '邮箱',
+      dataIndex: 'email',
+    },
+    {
+      title: '手机号',
+      dataIndex: 'phone',
+    },
+    {
+      title: '角色',
+      dataIndex: 'role',
     },
     {
       title: '创建时间',
@@ -115,7 +81,7 @@ const UserManager: React.FC = () => {
           type="link"
           key="editable"
           onClick={() => {
-            edit(record?._id);
+            // edit(record?._id);
           }}
         >
           编辑
@@ -124,7 +90,7 @@ const UserManager: React.FC = () => {
           key="del"
           placement="topRight"
           title="确定要删除吗?"
-          onConfirm={() => del(record?._id, record?.name)}
+          onConfirm={() => del(record?._id)}
           okText="确定"
           okType="danger"
           cancelText="取消"
@@ -137,14 +103,6 @@ const UserManager: React.FC = () => {
     },
   ];
 
-  useEffect(() => {
-    const getTableData = async () => {
-      const res = await queryMenu();
-      setMenusData(res?.data);
-    };
-    getTableData();
-  }, []);
-
   const showDrawer = () => {
     setVisibleDrawer(true);
   };
@@ -153,50 +111,49 @@ const UserManager: React.FC = () => {
     setVisibleDrawer(false);
   };
 
-  const edit = async (id: string) => {
-    const res = await queryRoleOne(id);
-    setCItem(res?.data);
-    showDrawer();
-  };
+  // const edit = async (id: string) => {
+  //   const res = await queryRoleOne(id);
+  //   setCItem(res?.data);
+  //   showDrawer();
+  // };
 
-  const del = async (id: string, name: string) => {
-    const res = await delRole(id);
+  const del = async (id: string) => {
+    const res = await delUser(id);
     if (res) {
-      const updateData = await updateManyMenu({ name });
-      if (updateData) {
-        refTable?.current?.reload();
-        message.success(res.message || '删除成功');
-      }
+      refTable?.current?.reload();
+      message.success(res.message || '删除成功');
     }
   };
 
   const renderFormItemDom = () => {
-    return (
-      <UserForm />
-    );
+    return <UserForm setCaptcha={setCaptcha} />;
   };
 
   const onFinish = async (values: FormUserType) => {
-    if (cItem) {
-      const resRole = await updateRole(cItem?._id, values);
-      if (resRole) {
-        const res = await updateManyMenu(values);
-        if (res) {
+    if (captcha === values?.captcha) {
+      if (cItem) {
+        const resRole = await updateUser(cItem?._id, {
+          ...values,
+          avatar: values?.avatar?.file?.preview,
+        });
+        if (resRole) {
           refTable?.current?.reload();
           message.success(resRole.message || '更新成功');
           onCloseDrawer();
         }
-      }
-    } else {
-      const resRole = await createRole(values);
-      if (resRole) {
-        const res = await updateManyMenu(values);
-        if (res) {
+      } else {
+        const resRole = await createUser({
+          ...values,
+          avatar: values?.avatar?.file?.preview,
+        });
+        if (resRole) {
           refTable?.current?.reload();
           message.success(resRole.message || '创建成功');
           onCloseDrawer();
         }
       }
+    } else {
+      message.error('验证码错误');
     }
   };
 
@@ -207,7 +164,14 @@ const UserManager: React.FC = () => {
         request={async (params, sorter, filter) => {
           // 这里需要返回一个 Promise,在返回之前你可以进行数据转化
           // 如果需要转化参数可以在这里进行修改
-          
+          const msg = await queryUser({ ...params, ...sorter, ...filter });
+          if (msg) {
+            return {
+              data: msg.data,
+              success: true,
+              total: 100,
+            };
+          }
           return {
             data: undefined,
             // success 请返回 true，

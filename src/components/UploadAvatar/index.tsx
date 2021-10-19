@@ -42,7 +42,7 @@ const UploadAvatar: React.FC = () => {
   );
   return (
     <>
-      <ProForm.Item label="头像" name="avatar" hasFeedback>
+      <ProForm.Item label="头像" name="avatar">
         <Upload
           fileList={fileList}
           beforeUpload={() => false}

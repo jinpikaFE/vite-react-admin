@@ -2,39 +2,39 @@ import { ResultType } from '@/types/global';
 import request from '@/utils/request';
 import { FormUserType } from './type';
 
-export const queryRole = async (params: any): Promise<ResultType<any>> => {
-  return request('/api/roles', {
+export const queryUser = async (params: any): Promise<ResultType<any>> => {
+  return request('/api/users', {
     method: 'GET',
     params
   });
 };
 
-export const queryRoleOne = async (id: string): Promise<ResultType<any>> => {
-  return request(`/api/roles/${id}`, {
+export const queryUserOne = async (id: string): Promise<ResultType<any>> => {
+  return request(`/api/users/${id}`, {
     method: 'GET',
   });
 };
 
-export const createRole = async (
+export const createUser = async (
   params: FormUserType,
 ): Promise<ResultType<any>> => {
-  return request('/api/roles', {
+  return request('/api/users', {
     method: 'POST',
     data: params,
   });
 };
 
-export const delRole = async (id: string): Promise<ResultType<any>> => {
-  return request(`/api/roles/${id}`, {
+export const delUser = async (id: string): Promise<ResultType<any>> => {
+  return request(`/api/users/${id}`, {
     method: 'DELETE',
   });
 };
 
-export const updateRole = async (
+export const updateUser = async (
   id: string,
   params: FormUserType,
 ): Promise<ResultType<any>> => {
-  return request(`/api/roles/${id}`, {
+  return request(`/api/users/${id}`, {
     method: 'PATCH',
     data: params,
   });

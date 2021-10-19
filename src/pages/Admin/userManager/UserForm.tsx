@@ -1,14 +1,34 @@
 import UploadAvatar from '@/components/UploadAvatar';
 import { MailTwoTone } from '@ant-design/icons';
-import ProForm, { ProFormCaptcha, ProFormText } from '@ant-design/pro-form';
+import ProForm, {
+  ProFormCaptcha,
+  ProFormText,
+} from '@ant-design/pro-form';
 import { useEventTarget } from 'ahooks';
-import { Input } from 'antd';
-import React from 'react';
+import { Input, message, Select } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { queryRoleAlll } from '../roleManager/services';
 
-const UserForm: React.FC = () => {
+const { Option } = Select;
+const UserForm: React.FC<{
+  setCaptcha: React.Dispatch<React.SetStateAction<string>>;
+}> = (props) => {
+  const { setCaptcha } = props;
   const [value, { onChange, reset }] = useEventTarget({
     transformer: (val: string) => val.replace(/[^\d]/g, ''),
   });
+  const [roleList, setRoleList] = useState<any[]>([]);
+
+  useEffect(() => {
+    const getRoleList = async () => {
+      const res = await queryRoleAlll();
+      if (res) {
+        setRoleList(res.data);
+      }
+    };
+    getRoleList();
+  }, []);
+
   return (
     <>
       <ProFormText
@@ -109,6 +129,19 @@ const UserForm: React.FC = () => {
           }),
         ]}
       />
+      <ProForm.Item
+        label="角色"
+        name="role"
+        rules={[{ required: true, message: '请选择角色!' }]}
+      >
+        <Select placeholder="请选择角色" style={{ width: 328 }} allowClear>
+          {roleList?.map((item) => (
+            <Option value={item?.name} key={item?._id}>
+              {item?.name}
+            </Option>
+          ))}
+        </Select>
+      </ProForm.Item>
       <UploadAvatar />
       <ProFormCaptcha
         fieldProps={{
@@ -132,8 +165,9 @@ const UserForm: React.FC = () => {
         // 如果需要失败可以 throw 一个错误出来，onGetCaptcha 会自动停止
         // throw new Error("获取验证码错误")
         onGetCaptcha={async (phone) => {
-          // await waitTime(1000);
-          console.log(`手机号 ${phone} 验证码发送成功!`);
+          const random = parseInt((Math.random() * 10000).toString());
+          setCaptcha(random.toString());
+          message.success(`验证码为${random}`);
         }}
       />
     </>

@@ -9,6 +9,12 @@ export const queryRole = async (params: any): Promise<ResultType<any>> => {
   });
 };
 
+export const queryRoleAlll = async (): Promise<ResultType<any>> => {
+  return request('/api/roles/all', {
+    method: 'GET'
+  });
+};
+
 export const queryRoleOne = async (id: string): Promise<ResultType<any>> => {
   return request(`/api/roles/${id}`, {
     method: 'GET',

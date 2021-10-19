@@ -1,5 +1,10 @@
 export type FormUserType = {
   _id: string;
-  name: string;
-  authority: string[]
+  userName: string;
+  email: string;
+  phone: string;
+  password: string;
+  role: string;
+  captcha: string;
+  avatar?: any
 }
