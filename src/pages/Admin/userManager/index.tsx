@@ -1,10 +1,10 @@
 import RightDrawer from '@/components/RightDrawer';
-import { queryMenu } from '@/services/global';
 import exportToExcel from '@/utils/exportToExcel';
 import { PlusOutlined } from '@ant-design/icons';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Button, message, Popconfirm } from 'antd';
-import React, { useRef, useState } from 'react';
+import { Button, message, Popconfirm, Select } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
+import { queryRoleAlll } from '../roleManager/services';
 import { createUser, delUser, queryUser, updateUser } from './services';
 import { FormUserType } from './type';
 import UserForm from './UserForm';
@@ -17,6 +17,18 @@ const UserManager: React.FC = () => {
   const [captcha, setCaptcha] = useState<string>('1111');
 
   const [datasSource, setDatasSource] = useState<any[]>([]);
+
+  const [roleList, setRoleList] = useState<any[]>([]);
+
+  useEffect(() => {
+    const getRoleList = async () => {
+      const res = await queryRoleAlll();
+      if (res) {
+        setRoleList(res.data);
+      }
+    };
+    getRoleList()
+  }, []);
 
   const columns: ProColumns[] = [
     {
@@ -50,6 +62,19 @@ const UserManager: React.FC = () => {
     {
       title: '角色',
       dataIndex: 'role',
+      renderFormItem: () => {
+        return (
+          <Select allowClear>
+            {roleList?.map((item) => {
+              return (
+                <Select.Option value={item.name} key={item._id}>
+                  {item?.name}
+                </Select.Option>
+              );
+            })}
+          </Select>
+        );
+      },
     },
     {
       title: '创建时间',
@@ -90,7 +115,7 @@ const UserManager: React.FC = () => {
           key="del"
           placement="topRight"
           title="确定要删除吗?"
-          onConfirm={() => del(record?._id)}
+          onConfirm={() => del(record?._id, record?.avatar?.[0]?.uid)}
           okText="确定"
           okType="danger"
           cancelText="取消"
@@ -117,8 +142,8 @@ const UserManager: React.FC = () => {
   //   showDrawer();
   // };
 
-  const del = async (id: string) => {
-    const res = await delUser(id);
+  const del = async (id: string, fileName: string) => {
+    const res = await delUser(id, fileName);
     if (res) {
       refTable?.current?.reload();
       message.success(res.message || '删除成功');
@@ -169,7 +194,7 @@ const UserManager: React.FC = () => {
             return {
               data: msg.data,
               success: true,
-              total: 100,
+              total: msg.total,
             };
           }
           return {

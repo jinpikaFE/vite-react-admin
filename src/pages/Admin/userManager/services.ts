@@ -5,7 +5,7 @@ import { FormUserType } from './type';
 export const queryUser = async (params: any): Promise<ResultType<any>> => {
   return request('/api/users', {
     method: 'GET',
-    params
+    params,
   });
 };
 
@@ -24,8 +24,11 @@ export const createUser = async (
   });
 };
 
-export const delUser = async (id: string): Promise<ResultType<any>> => {
-  return request(`/api/users/${id}`, {
+export const delUser = async (
+  id: string,
+  fileName: string,
+): Promise<ResultType<any>> => {
+  return request(`/api/users/${id}/${fileName}`, {
     method: 'DELETE',
   });
 };
