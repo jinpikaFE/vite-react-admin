@@ -24,6 +24,12 @@ const RightDrawer: React.FC<RightDrawerProps> = (props) => {
     }
   }, [visibleDrawer, cItem]);
 
+  useEffect(() => {
+    if (!cItem) {
+      formRef?.current?.resetFields();
+    }
+  }, [cItem])
+
   return (
     <DrawerForm
       {...{
@@ -35,7 +41,7 @@ const RightDrawer: React.FC<RightDrawerProps> = (props) => {
       visible={visibleDrawer}
       drawerProps={{
         forceRender: true,
-        destroyOnClose: true,
+        // destroyOnClose: true,
         onClose: onCloseDrawer,
       }}
       onFinish={onFinish}
