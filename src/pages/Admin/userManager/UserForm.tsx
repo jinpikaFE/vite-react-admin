@@ -1,19 +1,18 @@
 import UploadAvatar from '@/components/UploadAvatar';
 import { MailTwoTone } from '@ant-design/icons';
-import ProForm, {
-  ProFormCaptcha,
-  ProFormText,
-} from '@ant-design/pro-form';
+import ProForm, { ProFormCaptcha, ProFormText } from '@ant-design/pro-form';
 import { useEventTarget } from 'ahooks';
 import { Input, message, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { queryRoleAlll } from '../roleManager/services';
+import { FormUserType } from './type';
 
 const { Option } = Select;
 const UserForm: React.FC<{
   setCaptcha: React.Dispatch<React.SetStateAction<string>>;
+  cItem?: FormUserType;
 }> = (props) => {
-  const { setCaptcha } = props;
+  const { setCaptcha, cItem } = props;
   const [value, { onChange, reset }] = useEventTarget({
     transformer: (val: string) => val.replace(/[^\d]/g, ''),
   });
@@ -88,47 +87,51 @@ const UserForm: React.FC<{
           allowClear
           maxLength={11}
           style={{ width: '328px' }}
-          value={value || ''}
+          value={value || cItem?.phone || ''}
           onChange={onChange}
         />
       </ProForm.Item>
-      <ProFormText.Password
-        width="md"
-        label="密码"
-        name="password"
-        extra="密码至少包含 数字和英文，长度6-20"
-        validateFirst={true}
-        rules={[
-          { required: true, message: '请输入密码!' },
-          {
-            validator: (rule, value, callback) => {
-              const match = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/g;
-              if (!match.test(value)) {
-                callback('密码至少包含 数字和英文，长度6-20');
-              } else {
-                callback();
-              }
-            },
-          },
-        ]}
-      />
-      <ProFormText.Password
-        width="md"
-        label="确认密码"
-        name="confirmPassword"
-        placeholder="请再次输入密码"
-        rules={[
-          { required: true, message: '请输入确认密码密码!' },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (!value || getFieldValue('password') === value) {
-                return Promise.resolve();
-              }
-              return Promise.reject(new Error('两次输入密码不一致!'));
-            },
-          }),
-        ]}
-      />
+      {!cItem && (
+        <>
+          <ProFormText.Password
+            width="md"
+            label="密码"
+            name="password"
+            extra="密码至少包含 数字和英文，长度6-20"
+            validateFirst={true}
+            rules={[
+              { required: true, message: '请输入密码!' },
+              {
+                validator: (rule, value, callback) => {
+                  const match = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/g;
+                  if (!match.test(value)) {
+                    callback('密码至少包含 数字和英文，长度6-20');
+                  } else {
+                    callback();
+                  }
+                },
+              },
+            ]}
+          />
+          <ProFormText.Password
+            width="md"
+            label="确认密码"
+            name="confirmPassword"
+            placeholder="请再次输入密码"
+            rules={[
+              { required: true, message: '请输入确认密码密码!' },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error('两次输入密码不一致!'));
+                },
+              }),
+            ]}
+          />
+        </>
+      )}
       <ProForm.Item
         label="角色"
         name="role"
@@ -142,7 +145,7 @@ const UserForm: React.FC<{
           ))}
         </Select>
       </ProForm.Item>
-      <UploadAvatar />
+      <UploadAvatar avatar={cItem?.avatar} />
       <ProFormCaptcha
         fieldProps={{
           size: 'large',

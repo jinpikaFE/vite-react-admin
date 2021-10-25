@@ -57,7 +57,7 @@ const AvatarDropdown: React.FC<AvatarDropdownPropsType> = ({ menu = true }) => {
               <Avatar
                 size="small"
                 className={styles.avatar}
-                src={`http://${currentUser?.avatar?.[0]?.url}`}
+                src={currentUser?.avatar?.[0]?.url}
                 alt="avatar"
               />
               <span className={`${styles.name} anticon`}>

@@ -142,6 +142,10 @@ const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
     <div id="pro-layout">
       <ProLayout
         style={{ height: '100vh' }}
+        waterMarkProps={{
+          content: '金皮卡',
+          fontColor: 'rgba(24,144,255,0.15)',
+        }}
         formatMessage={(msg) => formatMessage(msg) as string}
         footerRender={() => defaultFooterDom}
         onMenuHeaderClick={() => history.push('/home')}

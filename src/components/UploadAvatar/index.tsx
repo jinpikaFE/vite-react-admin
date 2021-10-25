@@ -2,9 +2,10 @@ import { getBase64 } from '@/utils/untils';
 import { PlusOutlined } from '@ant-design/icons';
 import ProForm from '@ant-design/pro-form';
 import { Modal, Upload } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const UploadAvatar: React.FC = () => {
+const UploadAvatar: React.FC<{ avatar?: any[] }> = (props) => {
+  const { avatar } = props;
   const [previewVisible, setPreviewVisible] = useState<boolean>(false);
   const [previewImage, setPreviewImage] = useState<string>('');
   const [previewTitle, setPreviewTitle] = useState<string>('');
@@ -12,9 +13,15 @@ const UploadAvatar: React.FC = () => {
   const [fileList, setFileList] = useState<any[]>([]);
   const handleCancel = () => setPreviewVisible(false);
 
-  const handlePreview = async (file: any) => {
-    console.log(1);
+  useEffect(() => {
+    if (avatar) {
+      setPreviewTitle(avatar?.[0]?.name);
+      setPreviewImage(avatar?.[0]?.url);
+      setFileList(avatar);
+    }
+  }, [avatar]);
 
+  const handlePreview = async (file: any) => {
     setPreviewTitle(
       file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
     );

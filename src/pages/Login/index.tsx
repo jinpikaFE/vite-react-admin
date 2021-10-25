@@ -25,6 +25,7 @@ import { postLogin } from './services';
 import { useHistory } from 'react-router-dom';
 import { setAuthority } from '@/utils/authority';
 import { localeLogin } from '@/stores/login';
+import { useUnmount } from 'ahooks';
 
 type LoginType = 'phone' | 'account' | 'qrcode';
 

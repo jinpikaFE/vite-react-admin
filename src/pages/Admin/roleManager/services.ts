@@ -30,8 +30,8 @@ export const createRole = async (
   });
 };
 
-export const delRole = async (id: string): Promise<ResultType<any>> => {
-  return request(`/api/roles/${id}`, {
+export const delRole = async (id: string, name: string): Promise<ResultType<any>> => {
+  return request(`/api/roles/${id}/${name}`, {
     method: 'DELETE',
   });
 };

@@ -6,14 +6,7 @@ import { toTree } from '@/utils/untils';
 import { PlusOutlined } from '@ant-design/icons';
 import ProForm, { ProFormText } from '@ant-design/pro-form';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-import {
-  Button,
-  message,
-  Popconfirm,
-  Select,
-  Tag,
-  TreeSelect,
-} from 'antd';
+import { Button, message, Popconfirm, Select, Tag, TreeSelect } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormatMessage } from 'react-intl-hooks';
 import {
@@ -183,7 +176,7 @@ const RoleManager: React.FC = () => {
   };
 
   const del = async (id: string, name: string) => {
-    const res = await delRole(id);
+    const res = await delRole(id, name);
     if (res) {
       const updateData = await updateManyMenu({ name });
       if (updateData) {
@@ -195,7 +188,9 @@ const RoleManager: React.FC = () => {
 
   const tProps = {
     treeData,
+    treeDefaultExpandAll: true,
     treeCheckable: true,
+    treeCheckStrictly: true,
     showCheckedStrategy: TreeSelect.SHOW_ALL,
     placeholder: '请选择',
     allowClear: true,
@@ -237,10 +232,17 @@ const RoleManager: React.FC = () => {
   };
 
   const onFinish = async (values: FormRoleType) => {
+    const newAuthority = values?.authority?.map((item: any) => item.value);
     if (cItem) {
-      const resRole = await updateRole(cItem?._id, values);
+      const resRole = await updateRole(cItem?._id, {
+        ...values,
+        authority: newAuthority,
+      });
       if (resRole) {
-        const res = await updateManyMenu(values);
+        const res = await updateManyMenu({
+          ...values,
+          authority: newAuthority,
+        });
         if (res) {
           refTable?.current?.reload();
           message.success(resRole.message || '更新成功');
@@ -248,9 +250,12 @@ const RoleManager: React.FC = () => {
         }
       }
     } else {
-      const resRole = await createRole(values);
+      const resRole = await createRole({ ...values, authority: newAuthority });
       if (resRole) {
-        const res = await updateManyMenu(values);
+        const res = await updateManyMenu({
+          ...values,
+          authority: newAuthority,
+        });
         if (res) {
           refTable?.current?.reload();
           message.success(resRole.message || '创建成功');
@@ -265,7 +270,6 @@ const RoleManager: React.FC = () => {
       <ProTable<FormRoleType>
         bordered
         request={async (params, sorter, filter) => {
-          console.log(params, sorter, filter);
           // 这里需要返回一个 Promise,在返回之前你可以进行数据转化
           // 如果需要转化参数可以在这里进行修改
           const res = await queryMenu();
@@ -282,7 +286,11 @@ const RoleManager: React.FC = () => {
           const midDataTemp = JSON.parse(JSON.stringify(dataTemp));
           if (msg) {
             const execlData = midDataTemp.map(
-              (item: { authority: any[]; name?: string; registerTime?: any }) => {
+              (item: {
+                authority: any[];
+                name?: string;
+                registerTime?: any;
+              }) => {
                 const tempArr: string[] = [];
                 item?.authority?.map((c_item) => {
                   tempArr.push(

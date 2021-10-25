@@ -2,7 +2,7 @@ import RightDrawer from '@/components/RightDrawer';
 import exportToExcel from '@/utils/exportToExcel';
 import { PlusOutlined } from '@ant-design/icons';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Button, message, Popconfirm, Select } from 'antd';
+import { Avatar, Button, message, Popconfirm, Row, Select } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { queryRoleAlll } from '../roleManager/services';
 import { createUser, delUser, queryUser, updateUser } from './services';
@@ -27,7 +27,7 @@ const UserManager: React.FC = () => {
         setRoleList(res.data);
       }
     };
-    getRoleList()
+    getRoleList();
   }, []);
 
   const columns: ProColumns[] = [
@@ -49,6 +49,19 @@ const UserManager: React.FC = () => {
             message: '此项为必填项',
           },
         ],
+      },
+      render: (userName, record) => {
+        return (
+          <Row justify="start" align="middle" style={{ flexFlow: 'nowrap' }}>
+            {record?.avatar && (
+              <Avatar
+                style={{ flex: '0 0 auto', marginRight: '5px' }}
+                src={record.avatar?.[0]?.url}
+              />
+            )}
+            {userName}
+          </Row>
+        );
       },
     },
     {
@@ -106,7 +119,7 @@ const UserManager: React.FC = () => {
           type="link"
           key="editable"
           onClick={() => {
-            // edit(record?._id);
+            edit(record);
           }}
         >
           编辑
@@ -136,11 +149,10 @@ const UserManager: React.FC = () => {
     setVisibleDrawer(false);
   };
 
-  // const edit = async (id: string) => {
-  //   const res = await queryRoleOne(id);
-  //   setCItem(res?.data);
-  //   showDrawer();
-  // };
+  const edit = (item: FormUserType) => {
+    setCItem(item);
+    showDrawer();
+  };
 
   const del = async (id: string, fileName: string) => {
     const res = await delUser(id, fileName);
@@ -151,15 +163,21 @@ const UserManager: React.FC = () => {
   };
 
   const renderFormItemDom = () => {
-    return <UserForm setCaptcha={setCaptcha} />;
+    return <UserForm setCaptcha={setCaptcha} cItem={cItem} />;
   };
 
   const onFinish = async (values: FormUserType) => {
     if (captcha === values?.captcha) {
       if (cItem) {
+        const getAvatar = () => {
+          if (values?.avatar?.file?.preview) {
+            return values?.avatar?.file.preview;
+          }
+          return values?.avatar?.fileList?.length === 0 ? '' : values?.avatar;
+        };
         const resRole = await updateUser(cItem?._id, {
           ...values,
-          avatar: values?.avatar?.file?.preview,
+          avatar: getAvatar(),
         });
         if (resRole) {
           refTable?.current?.reload();
