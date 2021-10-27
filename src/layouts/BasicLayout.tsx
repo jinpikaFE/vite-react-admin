@@ -141,7 +141,7 @@ const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
   return (
     <div id="pro-layout">
       <ProLayout
-        style={{ height: '100vh' }}
+        style={{ height: '100%', minHeight: '100vh' }}
         waterMarkProps={{
           content: '金皮卡',
           fontColor: 'rgba(24,144,255,0.15)',
