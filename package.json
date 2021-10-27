@@ -5,7 +5,7 @@
     "start": "vite",
     "start:mock": "vite --mode mock",
     "start:test": "vite --mode test",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "serve": "vite preview",
     "lint": "eslint src",
     "lint:create": "eslint --init",
