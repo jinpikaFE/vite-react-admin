@@ -8,7 +8,7 @@ const Home: React.FC = () => {
   return (
     <>
       <ProCard>
-        Home{' '}
+        Home
         <Button
           onClick={() => {
             history.push('/manager/menu');
