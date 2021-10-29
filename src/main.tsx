@@ -17,6 +17,7 @@ import { Observer } from 'mobx-react';
 import { cookie } from './utils/untils';
 import { nanoid } from 'nanoid';
 import ErrorBoundary from './components/ErrorBoundary';
+import { creatPv, creatUv } from './services/global';
 
 const data = {
   zh: locale_cn,
@@ -40,7 +41,7 @@ const uvData = {
 };
 // localeMonitor.setUvData({ uid: '' });
 localeMonitor.setUvData(uvData);
-window.onbeforeunload = () => {
+window.onbeforeunload = async () => {
   if (cookie.getCookie('uid') === localeMonitor?.uvData?.uid) {
     localeMonitor.setUvData({
       endTime: new Date(),
@@ -50,6 +51,7 @@ window.onbeforeunload = () => {
     });
     localStorage.test = JSON.stringify(localeMonitor.uvData);
     // 记录一一次访问记录
+    const res = await creatUv(localeMonitor.uvData);
     console.log(localeMonitor.uvData);
     // 离开时记录一次
     const pvData = {
@@ -57,6 +59,9 @@ window.onbeforeunload = () => {
       durationVisit:
         new Date().getTime() - localeMonitor.pathStartTime.getTime(),
     };
+    if (res) {
+      await creatPv(pvData);
+    }
   }
 };
 

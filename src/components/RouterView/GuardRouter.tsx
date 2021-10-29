@@ -1,4 +1,6 @@
+import { creatPv } from '@/services/global';
 import { localeMonitor } from '@/stores/monitor';
+import { useThrottleFn } from 'ahooks';
 import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
@@ -8,9 +10,11 @@ import {
 
 const _GuardRouterHelper: React.FC<any> = () => {
   const { pathname } = useLocation();
-  useEffect(() => {
-    if (JSON.stringify(localeMonitor.pvData) !== '{}') {
-      console.log({
+  const { run } = useThrottleFn(
+    async () => {
+      // 记录一次
+      await creatPv({
+        type: 'admin',
         uid: localeMonitor.uvData?.uid,
         ip: localeMonitor.uvData?.ip,
         pathname: localeMonitor.pvData?.pathname,
@@ -18,13 +22,18 @@ const _GuardRouterHelper: React.FC<any> = () => {
         durationVisit:
           new Date().getTime() - localeMonitor.pathStartTime.getTime(),
       });
-      // 记录一次
+    },
+    { wait: 2000 },
+  );
+  useEffect(() => {
+    if (localeMonitor.pvData?.pathname) {
+      run();
     }
     localeMonitor.setPvData({
       uid: localeMonitor.uvData?.uid,
       ip: localeMonitor.uvData?.ip,
       pathname,
-      startTime: new Date()
+      startTime: new Date(),
     });
     localeMonitor.setPathStartTime(new Date());
   }, [pathname]);

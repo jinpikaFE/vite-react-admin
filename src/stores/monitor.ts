@@ -1,19 +1,21 @@
 import { makeAutoObservable } from 'mobx';
 import type { MonitorUvType } from './type';
 
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
 class Monitor {
-  uvData: MonitorUvType = {};
-  pvData: MonitorUvType & { pathname?: string } = {};
+  uvData: MonitorUvType = { type: 'admin' };
+  pvData: MonitorUvType & { pathname?: string } = { type: 'admin' };
   pathStartTime: Date = new Date();
   constructor() {
     makeAutoObservable(this);
   }
 
-  setUvData = (val: MonitorUvType) => {
+  setUvData = (val: Omit<MonitorUvType, 'type'>) => {
     this.uvData = { ...this.uvData, ...val };
   };
 
-  setPvData = (val: MonitorUvType & { pathname?: string }) => {
+  setPvData = (val: Omit<MonitorUvType, 'type'> & { pathname?: string }) => {
     this.pvData = { ...this.pvData, ...val };
   };
 
