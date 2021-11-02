@@ -11,4 +11,5 @@ interface Window {
     cid: string;
     cname: string;
   };
+  AMap: any
 }

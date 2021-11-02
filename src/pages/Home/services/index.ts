@@ -6,3 +6,9 @@ export const findAllUser = async (): Promise<ResultType<any>> => {
     method: 'GET',
   });
 };
+
+export const findUvMaps = async (): Promise<ResultType<any>> => {
+  return request('/api/uv/maps', {
+    method: 'GET',
+  });
+};
