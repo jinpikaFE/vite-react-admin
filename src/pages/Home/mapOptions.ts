@@ -55,33 +55,33 @@ export const mapOptions = (
   };
   return {
     // 加载 amap 组件
-    amap: {
-      // 3D模式，无论你使用的是1.x版本还是2.x版本，都建议开启此项以获得更好的渲染体验
-      viewMode: '3D',
-      // 高德地图中心经纬度
-      center: [108.39, 39.9],
-      // 高德地图缩放
-      zoom: 4,
-      // 启用resize
-      resizeEnable: true,
-      // 移动过程中实时渲染 默认为true 如数据量较大 建议置为false
-      renderOnMoving: true,
-      // 自定义地图样式主题
-      mapStyle: 'amap://styles/whitesmoke',
-      // ECharts 图层的 zIndex 默认 2000
-      // 从 v1.9.0 起 此配置项已被弃用 请使用 `echartsLayerInteractive` 代替
-      echartsLayerZIndex: 2019,
-      // 设置 ECharts 图层是否可交互 默认为 true
-      // 设置为 false 可实现高德地图自身图层交互
-      // 此配置项从 v1.9.0 起开始支持
-      echartsLayerInteractive: true,
-      // 是否启用大数据模式 默认为 false
-      // 此配置项从 v1.9.0 起开始支持
-      largeMode: false,
-      // 说明：如果想要添加卫星、路网等图层
-      // 暂时先不要使用layers配置，因为存在Bug
-      // 建议使用amap.add的方式，使用方式参见最下方代码
-    },
+    // amap: {
+    //   // 3D模式，无论你使用的是1.x版本还是2.x版本，都建议开启此项以获得更好的渲染体验
+    //   viewMode: '3D',
+    //   // 高德地图中心经纬度
+    //   center: [108.39, 39.9],
+    //   // 高德地图缩放
+    //   zoom: 4,
+    //   // 启用resize
+    //   resizeEnable: true,
+    //   // 移动过程中实时渲染 默认为true 如数据量较大 建议置为false
+    //   renderOnMoving: true,
+    //   // 自定义地图样式主题
+    //   mapStyle: 'amap://styles/whitesmoke',
+    //   // ECharts 图层的 zIndex 默认 2000
+    //   // 从 v1.9.0 起 此配置项已被弃用 请使用 `echartsLayerInteractive` 代替
+    //   echartsLayerZIndex: 2019,
+    //   // 设置 ECharts 图层是否可交互 默认为 true
+    //   // 设置为 false 可实现高德地图自身图层交互
+    //   // 此配置项从 v1.9.0 起开始支持
+    //   echartsLayerInteractive: true,
+    //   // 是否启用大数据模式 默认为 false
+    //   // 此配置项从 v1.9.0 起开始支持
+    //   largeMode: false,
+    //   // 说明：如果想要添加卫星、路网等图层
+    //   // 暂时先不要使用layers配置，因为存在Bug
+    //   // 建议使用amap.add的方式，使用方式参见最下方代码
+    // },
     title: {
       text: '地域分布(UV)',
       left: 'left',
@@ -92,67 +92,52 @@ export const mapOptions = (
     tooltip: {
       trigger: 'item',
     },
+    toolbox: {
+      show: true,
+      //orient: 'vertical',
+      left: 'right',
+      top: 'top',
+      feature: {
+        dataView: { readOnly: false },
+        saveAsImage: {},
+      },
+    },
     animation: true,
+    visualMap: {
+      left: 'right',
+      min: 0,
+      max: 30,
+      inRange: {
+        color: ['#f2f2f2', 'yellow', 'orangered', 'red'],
+      },
+      text: ['High', 'Low'],
+      calculable: true,
+    },
     series: [
       {
         name: 'UV',
-        type: 'scatter',
-        // 使用高德地图坐标系
-        coordinateSystem: 'amap',
-        // 数据格式跟在 geo 坐标系上一样，每一项都是 [经度，纬度，数值大小，其它维度...]
+        type: 'map',
+        color: 'data',
+        zoom: 2,
+        roam: true,
+        map: 'china',
         data: convertData(data),
-        symbolSize: function (val) {
-          return val[2] < 5 ? val[2] * 3 : val[2];
-        },
+        // symbolSize: function (val) {
+        //   return val[2] < 5 ? val[2] * 3 : val[2];
+        // },
         encode: {
           value: 2,
-        },
-        label: {
-          formatter: '{b}',
-          position: 'right',
-          show: false,
-        },
-        itemStyle: {
-          color: '#00c1de',
-        },
-        emphasis: {
-          label: {
-            show: true,
-          },
-        },
-      },
-      {
-        name: 'Top 5',
-        type: 'effectScatter',
-        coordinateSystem: 'amap',
-        data: convertData(
-          data
-            .sort(function (a, b) {
-              return b.value - a.value;
-            })
-            .slice(0, 5),
-        ),
-        symbolSize: function (val) {
-          return val[2] < 5 ? val[2] * 3 : val[2];
-        },
-        encode: {
-          value: 2,
-        },
-        showEffectOn: 'render',
-        rippleEffect: {
-          brushType: 'stroke',
         },
         label: {
           formatter: '{b}',
           position: 'right',
           show: true,
         },
-        itemStyle: {
-          color: '#FC5531',
-          shadowBlur: 10,
-          shadowColor: '#333',
+        emphasis: {
+          label: {
+            show: true,
+          },
         },
-        zlevel: 1,
       },
     ],
   };

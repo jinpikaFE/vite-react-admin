@@ -12,3 +12,15 @@ export const findUvMaps = async (): Promise<ResultType<any>> => {
     method: 'GET',
   });
 };
+
+export const findUvAll = async (): Promise<ResultType<any>> => {
+  return request('/api/uv/statistics', {
+    method: 'GET',
+  });
+};
+
+export const findPvAll = async (): Promise<ResultType<any>> => {
+  return request('/api/pv/statistics', {
+    method: 'GET',
+  });
+};
