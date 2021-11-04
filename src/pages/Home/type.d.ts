@@ -10,3 +10,5 @@ export type PvStatisticsType = {
   pvLastDay: number;
   pvPeak: number;
 }
+
+export type GlobalType = 'admin' | 'blog' | 'all'
