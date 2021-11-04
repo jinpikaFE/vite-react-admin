@@ -194,11 +194,7 @@ const RoleManager: React.FC = () => {
     showCheckedStrategy: TreeSelect.SHOW_ALL,
     placeholder: '请选择',
     allowClear: true,
-<<<<<<< HEAD
     className:'input-fix-md',
-=======
-    style: { width: '328px' },
->>>>>>> e8fbd1edc97f6d3e693548c2636cdddfcdf2f982
     dropdownStyle: { maxHeight: 400, overflow: 'auto' },
   };
 
@@ -272,10 +268,7 @@ const RoleManager: React.FC = () => {
   return (
     <>
       <ProTable<FormRoleType>
-<<<<<<< HEAD
         scroll={{ x: true }}
-=======
->>>>>>> e8fbd1edc97f6d3e693548c2636cdddfcdf2f982
         bordered
         request={async (params, sorter, filter) => {
           // 这里需要返回一个 Promise,在返回之前你可以进行数据转化

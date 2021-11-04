@@ -109,7 +109,6 @@ export const reduceProvArr = (dataKey: any[], tempArr: ProvinceType[]) => {
     tempArr.push(itemObj);
   }
 };
-<<<<<<< HEAD
 
 //自定义cookie对象
 export const cookie = {
@@ -171,5 +170,3 @@ export const cookie = {
     document.cookie = name + '=123;expires=' + oDate + ';path=/';
   },
 };
-=======
->>>>>>> e8fbd1edc97f6d3e693548c2636cdddfcdf2f982
