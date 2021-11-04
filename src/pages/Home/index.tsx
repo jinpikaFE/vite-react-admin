@@ -1,4 +1,5 @@
 import ProCard from '@ant-design/pro-card';
+<<<<<<< HEAD
 import { Button, Select, Statistic } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
@@ -35,6 +36,18 @@ const Home: React.FC = () => {
   return (
     <>
       <ProCard>
+=======
+import { Button } from 'antd';
+import React from 'react';
+import { useHistory } from 'react-router';
+
+const Home: React.FC = () => {
+  const history = useHistory();
+  return (
+    <>
+      <ProCard>
+        Home{' '}
+>>>>>>> e8fbd1edc97f6d3e693548c2636cdddfcdf2f982
         <Button
           onClick={() => {
             history.push('/manager/menu');
@@ -42,6 +55,7 @@ const Home: React.FC = () => {
         >
           菜单管理
         </Button>
+<<<<<<< HEAD
         <Select
           defaultValue="all"
           style={{ width: 150, marginLeft: 20 }}
@@ -114,6 +128,9 @@ const Home: React.FC = () => {
           </ProCard>
         </ProCard>
       </RcResizeObserver>
+=======
+      </ProCard>
+>>>>>>> e8fbd1edc97f6d3e693548c2636cdddfcdf2f982
     </>
   );
 };

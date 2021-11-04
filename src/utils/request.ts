@@ -70,9 +70,13 @@ const request = extend({
 // 请求拦截
 request.interceptors.request.use((url, options) => {
   const token = window.localStorage.getItem('token');
+<<<<<<< HEAD
   const role = JSON.parse(
     window.localStorage.getItem('currentUser') || '{}',
   )?.role;
+=======
+  const role = JSON.parse(window.localStorage.getItem('currentUser') || '{}')?.role
+>>>>>>> e8fbd1edc97f6d3e693548c2636cdddfcdf2f982
   return {
     url,
     options: {
@@ -80,7 +84,11 @@ request.interceptors.request.use((url, options) => {
       headers: {
         ...options.headers,
         Authorization: `Bearer ${token}`,
+<<<<<<< HEAD
         role,
+=======
+        role
+>>>>>>> e8fbd1edc97f6d3e693548c2636cdddfcdf2f982
       },
     },
   };

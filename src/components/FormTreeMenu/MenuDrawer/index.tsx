@@ -10,7 +10,10 @@ import { createMenu, updateMenu } from '@/services/FromTreeMenu';
 import { queryMenu } from '@/services/global';
 import { toTree } from '@/utils/untils';
 import { SketchPicker } from 'react-color';
+<<<<<<< HEAD
 import styles from './index.module.less'
+=======
+>>>>>>> e8fbd1edc97f6d3e693548c2636cdddfcdf2f982
 
 const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
   const { onCloseDrawer, visibleDrawer, refTable, cItem } = props;
@@ -63,7 +66,10 @@ const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
 
   return (
     <DrawerForm<MenuFormType>
+<<<<<<< HEAD
     className={styles.drawerForm}
+=======
+>>>>>>> e8fbd1edc97f6d3e693548c2636cdddfcdf2f982
       {...{
         labelCol: { span: 4 },
         wrapperCol: { span: 14 },
@@ -84,7 +90,10 @@ const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
           });
           if (res) {
             refTable?.reload();
+<<<<<<< HEAD
             window.location.reload()
+=======
+>>>>>>> e8fbd1edc97f6d3e693548c2636cdddfcdf2f982
             message.success(res.message || '更新成功');
             onCloseDrawer();
           }
@@ -95,7 +104,10 @@ const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
           });
           if (res) {
             refTable?.reload();
+<<<<<<< HEAD
             window.location.reload()
+=======
+>>>>>>> e8fbd1edc97f6d3e693548c2636cdddfcdf2f982
             message.success(res.message || '创建成功');
             onCloseDrawer();
           }
@@ -152,7 +164,11 @@ const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
       <ProForm.Item label="上级菜单" name="lastMenu">
         <TreeSelect
           allowClear
+<<<<<<< HEAD
           className='input-fix-md'
+=======
+          style={{ width: '328px' }}
+>>>>>>> e8fbd1edc97f6d3e693548c2636cdddfcdf2f982
           dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
           treeData={treeData}
           placeholder="请选择"

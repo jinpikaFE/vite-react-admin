@@ -10,7 +10,7 @@
 
 [个人博客中,Problem记录了该项目开发中遇到的相关问题](http://blog.jinxinapp.cn/)
 
-## 相关功能
+## 主要功能
 
 - 登录功能
   - token存储

@@ -120,7 +120,11 @@ const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
     const getMenu = async () => {
       const res = await queryMenu();
       if (res) {
+<<<<<<< HEAD
         const dataTemp = toTree(res.data, '_id', 'lastMenu', (item) => item);
+=======
+        const dataTemp = toTree(res.data, '_id', 'lastMenu', (item) => item)
+>>>>>>> e8fbd1edc97f6d3e693548c2636cdddfcdf2f982
         setMenuData(dataTemp); // res.data?.menuData
       }
     };
@@ -142,7 +146,11 @@ const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
   return (
     <div id="pro-layout">
       <ProLayout
+<<<<<<< HEAD
         style={{ height: '100%', minHeight: '100vh' }}
+=======
+        style={{ height: '100vh' }}
+>>>>>>> e8fbd1edc97f6d3e693548c2636cdddfcdf2f982
         waterMarkProps={{
           content: '金皮卡',
           fontColor: 'rgba(24,144,255,0.15)',

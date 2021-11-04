@@ -1,7 +1,15 @@
 import React, { useEffect, useRef } from 'react';
+<<<<<<< HEAD
 import { DrawerForm, ProFormInstance } from '@ant-design/pro-form';
 import { RightDrawerProps } from './type';
 import styles from './index.module.less'
+=======
+import {
+  DrawerForm,
+  ProFormInstance,
+} from '@ant-design/pro-form';
+import { RightDrawerProps } from './type';
+>>>>>>> e8fbd1edc97f6d3e693548c2636cdddfcdf2f982
 
 const RightDrawer: React.FC<RightDrawerProps> = (props) => {
   const {
@@ -11,7 +19,11 @@ const RightDrawer: React.FC<RightDrawerProps> = (props) => {
     onFinish,
     title,
     renderFormItemDom,
+<<<<<<< HEAD
     initialValues,
+=======
+    initialValues
+>>>>>>> e8fbd1edc97f6d3e693548c2636cdddfcdf2f982
   } = props;
   const formRef = useRef<ProFormInstance | any>();
 
@@ -26,11 +38,18 @@ const RightDrawer: React.FC<RightDrawerProps> = (props) => {
     if (!cItem) {
       formRef?.current?.resetFields();
     }
+<<<<<<< HEAD
   }, [cItem]);
 
   return (
     <DrawerForm
       className={styles.drawerForm}
+=======
+  }, [cItem])
+
+  return (
+    <DrawerForm
+>>>>>>> e8fbd1edc97f6d3e693548c2636cdddfcdf2f982
       {...{
         labelCol: { span: 4 },
         wrapperCol: { span: 14 },
