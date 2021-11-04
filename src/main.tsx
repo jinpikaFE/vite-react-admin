@@ -41,7 +41,7 @@ const uvData = {
 };
 // localeMonitor.setUvData({ uid: '' });
 localeMonitor.setUvData(uvData);
-window.onbeforeunload = async () => {
+window.onunload = async () => {
   if (cookie.getCookie('uid') === localeMonitor?.uvData?.uid) {
     localeMonitor.setUvData({
       endTime: new Date(),
