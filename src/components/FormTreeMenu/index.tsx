@@ -31,6 +31,7 @@ const FormTreeMenu: React.FC = () => {
     const res = await delMenu(id);
     if (res) {
       refTable?.current?.reload();
+      window.location.reload()
       message.success(res.message || '删除成功');
     }
   };

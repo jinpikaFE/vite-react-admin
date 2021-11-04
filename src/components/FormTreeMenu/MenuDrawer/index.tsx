@@ -84,6 +84,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
           });
           if (res) {
             refTable?.reload();
+            window.location.reload()
             message.success(res.message || '更新成功');
             onCloseDrawer();
           }
@@ -94,6 +95,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = (props) => {
           });
           if (res) {
             refTable?.reload();
+            window.location.reload()
             message.success(res.message || '创建成功');
             onCloseDrawer();
           }

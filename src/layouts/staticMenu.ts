@@ -6,9 +6,7 @@ export const staticMenu = [
     icon: 'icon-home',
     status: 1,
     isLink: 0,
-    authority: ['admin', 'safw', 'wfwf', 'fawaw', 's'],
     registerTime: '2021-10-11T01:58:44.807Z',
-    __v: 0,
     color: '#181717',
   },
 ];
