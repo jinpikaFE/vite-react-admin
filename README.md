@@ -2,6 +2,8 @@
 
 一个简易的vite-reat后台框架
 
+分支1.0版本为通用的模版，可进行clone直接使用
+
 ## 项目简介
 
 基于 vite-mobx-TypeScript-react 开发的后台管理系统
