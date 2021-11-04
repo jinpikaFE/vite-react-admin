@@ -6889,7 +6889,6 @@ zip-stream@^4.1.0:
     archiver-utils "^2.1.0"
     compress-commons "^4.1.0"
     readable-stream "^3.6.0"
-<<<<<<< HEAD
 
 zrender@5.2.1:
   version "5.2.1"
@@ -6897,5 +6896,3 @@ zrender@5.2.1:
   integrity sha512-M3bPGZuyLTNBC6LiNKXJwSCtglMp8XUEqEBG+2MdICDI3d1s500Y4P0CzldQGsqpRVB7fkvf3BKQQRxsEaTlsw==
   dependencies:
     tslib "2.3.0"
-=======
->>>>>>> e8fbd1edc97f6d3e693548c2636cdddfcdf2f982
