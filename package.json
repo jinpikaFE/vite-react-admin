@@ -7,7 +7,7 @@
     "start:test": "vite --mode test",
     "build": "vite build",
     "serve": "vite preview",
-    "lint": "eslint src",
+    "lint": "eslint src --fix",
     "lint:create": "eslint --init",
     "test": "jest",
     "test:u": "jest -u",

@@ -20,5 +20,8 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['react', '@typescript-eslint'],
-  rules: {},
+  rules: {
+    'react/prop-types': 0,
+    'react/display-name': 0,
+  },
 };
