@@ -10,7 +10,7 @@ module.exports = {
         message: 'Expected class selector to be kebab-case',
       },
     ],
-    'string-quotes': 'single', // 单引号
+    'string-quotes': 'double', // 单引号
     'at-rule-empty-line-before': null,
     'at-rule-no-unknown': null,
     'at-rule-name-case': 'lower', // 指定@规则名的大小写
@@ -20,7 +20,7 @@ module.exports = {
     'declaration-block-no-duplicate-properties': true, // 禁止声明快重复属性
     'no-descending-specificity': true, // 禁止在具有较高优先级的选择器后出现被其覆盖的较低优先级的选择器。
     'selector-max-id': 0, // 限制一个选择器中 ID 选择器的数量
-    'max-nesting-depth': 3,
+    'max-nesting-depth': 7,
     indentation: [
       2,
       {
@@ -106,5 +106,11 @@ module.exports = {
       'size',
       'transform',
     ],
+    'no-descending-specificity': null,
+    'selector-class-pattern': null,
+    'declaration-block-no-redundant-longhand-properties': null,
+    'selector-class-pattern': null, // 后续改
+    'font-family-no-missing-generic-family-keyword': null,
+    'font-family-name-quotes': null,
   },
 };
