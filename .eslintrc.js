@@ -3,6 +3,7 @@ module.exports = {
     jest: true,
     browser: true,
     es2021: true,
+    es2017: true,
     node: true,
   },
   extends: [
