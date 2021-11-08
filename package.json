@@ -10,7 +10,8 @@
     "lint:create": "eslint --init",
     "test": "jest",
     "test:u": "jest -u",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit",
+    "lint-staged": "lint-staged"
   },
   "dependencies": {
     "@ant-design/icons": "^4.6.4",
