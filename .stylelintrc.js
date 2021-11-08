@@ -112,5 +112,6 @@ module.exports = {
     'selector-class-pattern': null, // 后续改
     'font-family-no-missing-generic-family-keyword': null,
     'font-family-name-quotes': null,
+    'number-leading-zero': null,
   },
 };
