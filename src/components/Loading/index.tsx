@@ -16,7 +16,6 @@ const Loading: React.FC = () => {
         }}
         preview={false}
       />
-      {s}
     </div>
   );
 };
