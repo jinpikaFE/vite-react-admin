@@ -12,7 +12,8 @@
     "test": "jest",
     "test:u": "jest -u",
     "tsc": "tsc --noEmit",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "lint:css": "stylelint src/**/*.less --fix  --custom-syntax postcss-less"
   },
   "dependencies": {
     "@ant-design/icons": "^4.6.4",
@@ -52,12 +53,16 @@
     "lint-staged"
   ],
   "lint-staged": {
-      "*.{ts,tsx}": [
-          "eslint --fix",
-          "prettier --write",
-          "git add"
-      ],
-      "*.{json.md,xml,svg,html,js,jsx}": "prettier --write"
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "*.{json.md,xml,svg,html,js,jsx}": "prettier --write",
+    "*.less": [
+      "stylelint --fix  --custom-syntax postcss-less",
+      "git add"
+    ]
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
@@ -79,7 +84,9 @@
     "husky": "^7.0.4",
     "jest": "^27.2.0",
     "lint-staged": "^11.2.6",
+    "postcss-less": "^5.0.0",
     "prettier": "^2.4.1",
+    "stylelint": "^14.0.1",
     "typescript": "^4.3.2",
     "vite": "^2.5.4",
     "vite-plugin-mock": "^2.9.6"
