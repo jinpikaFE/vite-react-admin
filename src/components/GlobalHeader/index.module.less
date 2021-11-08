@@ -1,6 +1,7 @@
 @import "~antd/es/style/themes/default.less";
 
 @pro-header-hover-bg: rgba(0, 0, 0, 0.025);
+@pro-header-hover-color: rgba(255, 255, 255, 0.85);
 
 .menu {
   :global(.anticon) {
@@ -61,10 +62,10 @@
 
 .dark {
   .action {
-    color: rgb(255 255 255 85%);
+    color: @pro-header-hover-color;
 
     > span {
-      color: rgb(255 255 255 85%);
+      color: @pro-header-hover-color;
     }
 
     &:hover,
@@ -84,10 +85,10 @@
       }
 
       &:hover {
-        color: rgb(255 255 255 85%);
+        color: @pro-header-hover-color;
 
         > span {
-          color: rgb(255 255 255 85%);
+          color: @pro-header-hover-color;
         }
       }
     }
