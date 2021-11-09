@@ -61,7 +61,6 @@ const Home: React.FC = () => {
     {
       title: '访客标识码',
       tip: '根据cookie生成的参数',
-      hideInSearch: true,
       dataIndex: 'uid',
     },
     {
