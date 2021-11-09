@@ -51,6 +51,15 @@ window.onunload = async () => {
     });
     localStorage.test = JSON.stringify(localeMonitor.uvData);
     // 记录一一次访问记录
+    if (localStorage.currentUser) {
+      creatUv({
+        ...localeMonitor.uvData,
+        uid:
+          localeMonitor?.uvData?.uid +
+          '/' +
+          JSON.parse(localStorage?.currentUser)?.userName,
+      });
+    }
     creatUv(localeMonitor.uvData);
     // 离开时记录一次
     const pvData = {
