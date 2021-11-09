@@ -72,6 +72,7 @@ const Home: React.FC = () => {
     {
       title: '访问时间',
       dataIndex: 'startTime',
+      defaultSortOrder: 'descend',
       valueType: 'dateTime',
       sorter: true,
       hideInSearch: true,
