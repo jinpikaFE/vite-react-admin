@@ -8,7 +8,6 @@ export const mapOptions = (
     const tempArr = [];
     for (let index = 0; index < ['省', '市', '区'].length; index++) {
       const element = ['省', '市', '区'][index];
-      console.log(element, addressName.includes(element));
 
       if (addressName.includes(element)) {
         tempArr.push(element);
