@@ -6217,6 +6217,15 @@ rc-trigger@^5.0.0, rc-trigger@^5.0.4, rc-trigger@^5.1.2, rc-trigger@^5.2.10:
     rc-motion "^2.0.0"
     rc-util "^5.5.0"
 
+rc-tween-one@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/rc-tween-one/-/rc-tween-one-3.0.3.tgz#ab33ced673545ed36dbbaedf10882c0dd280fc00"
+  integrity sha512-sU4Ci6sgN9Rglsctdk2C3G7r0bWcOv/4l3xBWfrBoTTV8c3Qsoch8a7oBR7ZRovW2PyzdPnCmM08byEYwHbPDQ==
+  dependencies:
+    "@babel/runtime" "^7.11.1"
+    style-utils "^0.3.4"
+    tween-one "^1.0.50"
+
 rc-upload@~4.3.0:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/rc-upload/-/rc-upload-4.3.1.tgz#d6ee66b8bd1e1dd2f78526c486538423f7e7ed84"
@@ -6961,7 +6970,7 @@ style-search@^0.1.0:
   resolved "https://registry.yarnpkg.com/style-search/-/style-search-0.1.0.tgz#7958c793e47e32e07d2b5cafe5c0bf8e12e77902"
   integrity sha1-eVjHk+R+MuB9K1yv5cC/jhLneQI=
 
-style-utils@^0.3.0:
+style-utils@^0.3.0, style-utils@^0.3.4:
   version "0.3.4"
   resolved "https://registry.yarnpkg.com/style-utils/-/style-utils-0.3.4.tgz#ff407c360d3b5c1a0971279586e39ce27251064f"
   integrity sha512-7hUxeI95H6J0REP/7Y4WTPj0YsRrKljWIz0Q3Tex1nzzba9xAgGOnm3dr5qwsvEbAHcgu0V/sXfZDdqZ/tDtfg==
@@ -7293,6 +7302,18 @@ tween-functions@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/tween-functions/-/tween-functions-1.2.0.tgz#1ae3a50e7c60bb3def774eac707acbca73bbc3ff"
   integrity sha1-GuOlDnxguz3vd06scHrLynO7w/8=
+
+tween-one@^1.0.50:
+  version "1.0.55"
+  resolved "https://registry.yarnpkg.com/tween-one/-/tween-one-1.0.55.tgz#84d75e6289e9530895c955120f8c383bf7891a49"
+  integrity sha512-zpY7yjfwl2hR3AjfEqsAvfAiFQN7iofJMpD82m4dQT7P+zQBw9ZdfzBje9Bm6NOl7yrUnIBwPAy54Mwz8Dh/eA==
+  dependencies:
+    "@babel/runtime" "^7.11.1"
+    flubber "^0.4.2"
+    raf "^3.4.1"
+    style-utils "^0.3.0"
+    svg-path-properties "^1.0.4"
+    tween-functions "^1.2.0"
 
 tween-one@^1.0.52:
   version "1.0.54"

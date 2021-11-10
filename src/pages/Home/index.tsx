@@ -19,6 +19,10 @@ import type {
 import moment from 'moment';
 import exportToExcel from '@/utils/exportToExcel';
 import ProTable, { ProColumns } from '@ant-design/pro-table';
+import TweenOne from 'rc-tween-one';
+import Children from 'rc-tween-one/lib/plugin/ChildrenPlugin';
+
+TweenOne.plugins.push(Children);
 
 moment.locale('zh-cn');
 
@@ -95,12 +99,24 @@ const Home: React.FC = () => {
       dataIndex: 'durationVisit',
       sorter: true,
       hideInSearch: true,
-      render: (text) =>
-        `${
-          moment(Number(text)).locale() === 'en'
-            ? new Date(Number(text)).getHours() - 8
-            : new Date(Number(text)).getHours()
-        }:${moment(Number(text)).format('mm:ss')}`,
+      render: (text) => {
+        return (
+          <>
+            {new Date(Number(uvStatistics?.uvAverageTime) || 0).getDate() - 1 >
+              0 && (
+              <span>
+                {new Date(Number(uvStatistics?.uvAverageTime) || 0).getDate() -
+                  1}
+                天{' '}
+              </span>
+            )}
+            {moment(Number(text)).locale() === 'en'
+              ? new Date(Number(text)).getHours() - 8
+              : new Date(Number(text)).getHours()}
+            :{moment(Number(text)).format('mm:ss')}
+          </>
+        );
+      },
     },
   ];
 
@@ -124,6 +140,45 @@ const Home: React.FC = () => {
       dataIndex: 'address',
     },
   ];
+
+  const renderAnimationNum = (
+    val?: number,
+    bolder = false,
+    unit?: string,
+    showStartZero = false,
+  ) => (
+    <span
+      style={
+        bolder
+          ? {
+              color: 'rgba(0, 0, 0, 0.85)',
+              fontSize: '24px',
+            }
+          : {}
+      }
+    >
+      {showStartZero && <span>0</span>}
+      <TweenOne
+        animation={{
+          Children: {
+            value: val || 0,
+            floatLength: 0,
+          },
+          duration: 1000,
+        }}
+        style={
+          bolder
+            ? {
+                display: 'inline',
+              }
+            : {}
+        }
+      >
+        0
+      </TweenOne>
+      <span>{unit}</span>
+    </span>
+  );
 
   return (
     <>
@@ -164,29 +219,46 @@ const Home: React.FC = () => {
             <ProCard split="horizontal">
               <ProCard split={responsive ? 'horizontal' : 'vertical'}>
                 <ProCard title="总访问量(UV)">
-                  <Statistic value={uvStatistics?.uvTotal || 0} />
+                  {renderAnimationNum(uvStatistics?.uvTotal, true)}
                 </ProCard>
                 <ProCard title="总流量(PV)">
-                  <Statistic value={pvStatistics?.pvTotal || 0} />
+                  {renderAnimationNum(pvStatistics?.pvTotal, true)}
                 </ProCard>
               </ProCard>
               <ProCard split={responsive ? 'horizontal' : 'vertical'}>
                 <ProCard title="昨日全部流量(PV)">
-                  {pvStatistics?.pvLastDay || 0}
+                  {renderAnimationNum(pvStatistics?.pvLastDay)}
                 </ProCard>
                 <ProCard title="本月累计流量(PV)">
-                  {pvStatistics?.pvThisMonth || 0}
+                  {renderAnimationNum(pvStatistics?.pvThisMonth)}
                 </ProCard>
                 <ProCard title="今年累计流量(PV)">
-                  {pvStatistics?.pvThisYear || 0}
+                  {renderAnimationNum(pvStatistics?.pvThisYear)}
                 </ProCard>
               </ProCard>
               <ProCard split="vertical">
                 <ProCard title="历史峰值(PV)">
-                  <Statistic value={pvStatistics?.pvPeak || 0} />
+                  {renderAnimationNum(pvStatistics?.pvPeak, true)}
                 </ProCard>
                 <ProCard title="平均访问时长(UV)">
-                  {uvStatistics?.uvAverageTime
+                  {new Date(
+                    Number(uvStatistics?.uvAverageTime) || 0,
+                  ).getDate() -
+                    1 >
+                    0 && (
+                    <span
+                      style={{
+                        color: 'rgba(0, 0, 0, 0.85)',
+                        fontSize: '24px',
+                      }}
+                    >
+                      {new Date(
+                        Number(uvStatistics?.uvAverageTime) || 0,
+                      ).getDate() - 1}
+                      天{' '}
+                    </span>
+                  )}
+                  {(uvStatistics?.uvAverageTime
                     ? `${
                         moment(Number(uvStatistics?.uvAverageTime)).locale() ===
                         'en'
@@ -199,7 +271,29 @@ const Home: React.FC = () => {
                       }:${moment(Number(uvStatistics?.uvAverageTime)).format(
                         'mm:ss',
                       )}`
-                    : '00:00:00'}
+                    : '00:00:00'
+                  )
+                    .split(':')
+                    .map((item, index) => {
+                      let showStartZero = false;
+                      if (Number(item) < 10) {
+                        showStartZero = true;
+                      }
+                      if (index === 2) {
+                        return renderAnimationNum(
+                          Number(item),
+                          true,
+                          '',
+                          showStartZero,
+                        );
+                      }
+                      return renderAnimationNum(
+                        Number(item),
+                        true,
+                        ':',
+                        showStartZero,
+                      );
+                    })}
                 </ProCard>
               </ProCard>
             </ProCard>
