@@ -1,9 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { WOW } from 'wowjs';
-import 'animate.css';
-
 import 'swiper/css';
 import 'swiper/css/scrollbar';
 import 'swiper/css/navigation';
@@ -26,11 +23,51 @@ type dateSelectValType = 'day' | 'week' | 'month' | 'year';
 
 const Banner: React.FC = () => {
   const [dateSelectVal, setDateSelectVal] = useState<dateSelectValType>();
-
   const linePvRef = useRef(null);
   const lineUvRef = useRef(null);
   const renderEcharts$ = useEventEmitter();
+
+  const eventScroll = () =>
+    onScroll({
+      activeClassName: 'swiper-content',
+      cb: () => {
+        renderEcharts$.emit();
+        setTimeout(() => {
+          window.removeEventListener('scroll', eventScroll);
+        }, 100);
+      },
+      offset: -100,
+    });
+
+  // 监听滚动
+  const onScroll = (obj: {
+    activeClassName: string;
+    offset: number;
+    dom?: typeof window;
+    cb: () => void;
+  }): void => {
+    const { activeClassName, offset = 10, dom = window, cb } = obj;
+    const slideItems = document.querySelectorAll(`.${activeClassName}`);
+
+    slideItems.forEach((item: any) => {
+      const slideBCR = item.getBoundingClientRect();
+      // 进入视区或在视区之上
+      if (slideBCR.top <= dom.innerHeight + offset) {
+        cb();
+      }
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', eventScroll);
+
+    return () => {
+      window.removeEventListener('scroll', eventScroll);
+    };
+  }, []);
+
   const [optionInit, setOptionInit] = useState<echarts.EChartsOption>({
+    animationDuration: 1500,
     title: {
       text: '流量趋势(PV)',
       textAlign: 'left',
@@ -49,21 +86,6 @@ const Banner: React.FC = () => {
       },
     ],
   });
-  const wow = new WOW({
-    boxClass: 'swiper-content',
-    animateClass: 'animated',
-    offset: 100,
-    mobile: true,
-    live: true,
-    callback: function () {
-      // useEChart(linePvRef, optionInit)
-      console.log(1);
-
-      renderEcharts$.emit();
-    },
-    scrollContainer: null,
-  });
-  wow.init();
 
   const options = [
     { label: '一天', value: 'day' },
