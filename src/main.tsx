@@ -58,7 +58,6 @@ window.onunload = async () => {
         userName: JSON.parse(localStorage?.currentUser)?.userName,
       });
     }
-    creatUv(localeMonitor.uvData);
     // 离开时记录一次
     const pvData = {
       ...localeMonitor.pvData,
