@@ -99,6 +99,7 @@ const Home: React.FC = () => {
     {
       title: '访问时长',
       dataIndex: 'durationVisit',
+      tip: '访问系统的时长',
       sorter: true,
       hideInSearch: true,
       render: (text) => {
@@ -134,6 +135,7 @@ const Home: React.FC = () => {
       title: '访问结束时间',
       dataIndex: 'endTime',
       valueType: 'dateTime',
+      tip: '最终离开的时间',
       sorter: true,
       hideInSearch: true,
     },
