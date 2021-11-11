@@ -141,6 +141,10 @@ const Home: React.FC = () => {
       title: '地域',
       dataIndex: 'address',
     },
+    {
+      title: '用户',
+      dataIndex: 'userName',
+    },
   ];
 
   const renderAnimationNum = (

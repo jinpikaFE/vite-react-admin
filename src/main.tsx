@@ -54,10 +54,8 @@ window.onunload = async () => {
     if (localStorage.currentUser) {
       creatUv({
         ...localeMonitor.uvData,
-        uid:
-          localeMonitor?.uvData?.uid +
-          '/' +
-          JSON.parse(localStorage?.currentUser)?.userName,
+        uid: localeMonitor?.uvData?.uid,
+        userName: JSON.parse(localStorage?.currentUser)?.userName,
       });
     }
     creatUv(localeMonitor.uvData);
