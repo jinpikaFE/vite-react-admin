@@ -1,9 +1,9 @@
 import ProCard from '@ant-design/pro-card';
-import { Button, Select, Statistic } from 'antd';
+import { Button, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import RcResizeObserver from 'rc-resize-observer';
-import Maps from './maps';
+import Maps from './components/Map';
 import {
   findPvAll,
   findPvStatistics,
@@ -21,6 +21,8 @@ import exportToExcel from '@/utils/exportToExcel';
 import ProTable, { ProColumns } from '@ant-design/pro-table';
 import TweenOne from 'rc-tween-one';
 import Children from 'rc-tween-one/lib/plugin/ChildrenPlugin';
+import { nanoid } from 'nanoid';
+import Banner from './components/Banner';
 
 TweenOne.plugins.push(Children);
 
@@ -148,6 +150,7 @@ const Home: React.FC = () => {
     showStartZero = false,
   ) => (
     <span
+      key={nanoid()}
       style={
         bolder
           ? {
@@ -298,11 +301,7 @@ const Home: React.FC = () => {
               </ProCard>
             </ProCard>
             <ProCard title="流量趋势">
-              <div>图表</div>
-              <div>图表</div>
-              <div>图表</div>
-              <div>图表</div>
-              <div>图表</div>
+              <Banner />
             </ProCard>
           </ProCard>
           <ProCard title="地域分布情况">

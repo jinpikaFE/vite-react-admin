@@ -14,3 +14,5 @@ interface Window {
   AMap: any;
   AMapUI: any;
 }
+
+declare module 'wowjs';
