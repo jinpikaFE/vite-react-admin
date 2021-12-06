@@ -1,18 +1,17 @@
 import RightDrawer from '@/components/RightDrawer';
 import exportToExcel from '@/utils/exportToExcel';
 import { PlusOutlined } from '@ant-design/icons';
-import { ProFormInstance } from '@ant-design/pro-form';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
 import { Avatar, Button, message, Popconfirm, Row, Select } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
-import { queryRoleAlll } from '../roleManager/services';
 import { createUser, delUser, queryUser, updateUser } from './services';
-import { FormUserType } from './type';
-import UserForm from './UserForm';
+import { FormBillType } from './type';
+import BillForm from './BillForm';
+import { ProFormInstance } from '@ant-design/pro-form';
 
-const UserManager: React.FC = () => {
+const Bill: React.FC = () => {
   const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
-  const [cItem, setCItem] = useState<FormUserType>();
+  const [cItem, setCItem] = useState<FormBillType>();
   const refTable = useRef<ActionType>();
   const formRef = useRef<ProFormInstance | any>();
 
@@ -21,16 +20,6 @@ const UserManager: React.FC = () => {
   const [datasSource, setDatasSource] = useState<any[]>([]);
 
   const [roleList, setRoleList] = useState<any[]>([]);
-
-  useEffect(() => {
-    const getRoleList = async () => {
-      const res = await queryRoleAlll();
-      if (res) {
-        setRoleList(res.data);
-      }
-    };
-    getRoleList();
-  }, []);
 
   const columns: ProColumns[] = [
     {
@@ -143,6 +132,10 @@ const UserManager: React.FC = () => {
     },
   ];
 
+  useEffect(() => {
+    console.log(formRef);
+  }, [formRef]);
+
   const showDrawer = () => {
     setVisibleDrawer(true);
   };
@@ -151,7 +144,7 @@ const UserManager: React.FC = () => {
     setVisibleDrawer(false);
   };
 
-  const edit = (item: FormUserType) => {
+  const edit = (item: FormBillType) => {
     setCItem(item);
     showDrawer();
   };
@@ -165,46 +158,44 @@ const UserManager: React.FC = () => {
   };
 
   const renderFormItemDom = () => {
-    return <UserForm setCaptcha={setCaptcha} cItem={cItem} />;
+    return <BillForm formRef={formRef} setCaptcha={setCaptcha} cItem={cItem} />;
   };
 
-  const onFinish = async (values: FormUserType) => {
-    if (captcha === values?.captcha) {
-      if (cItem) {
-        const getAvatar = () => {
-          if (values?.avatar?.file?.preview) {
-            return values?.avatar?.file.preview;
-          }
-          return values?.avatar?.fileList?.length === 0 ? '' : values?.avatar;
-        };
-        const resRole = await updateUser(cItem?._id, {
-          ...values,
-          avatar: getAvatar(),
-        });
-        if (resRole) {
-          refTable?.current?.reload();
-          message.success(resRole.message || '更新成功');
-          onCloseDrawer();
-        }
-      } else {
-        const resRole = await createUser({
-          ...values,
-          avatar: values?.avatar?.file?.preview,
-        });
-        if (resRole) {
-          refTable?.current?.reload();
-          message.success(resRole.message || '创建成功');
-          onCloseDrawer();
-        }
-      }
+  const onFinish = async (values: FormBillType) => {
+    if (cItem) {
+      // const getAvatar = () => {
+      //   if (values?.avatar?.file?.preview) {
+      //     return values?.avatar?.file.preview;
+      //   }
+      //   return values?.avatar?.fileList?.length === 0 ? '' : values?.avatar;
+      // };
+      // const resRole = await updateUser(cItem?._id, {
+      //   ...values,
+      //   avatar: getAvatar(),
+      // });
+      // if (resRole) {
+      //   refTable?.current?.reload();
+      //   message.success(resRole.message || '更新成功');
+      //   onCloseDrawer();
+      // }
     } else {
-      message.error('验证码错误');
+      console.log(values);
+
+      // const resRole = await createUser({
+      //   ...values,
+      //   avatar: values?.avatar?.file?.preview,
+      // });
+      // if (resRole) {
+      //   refTable?.current?.reload();
+      //   message.success(resRole.message || '创建成功');
+      //   onCloseDrawer();
+      // }
     }
   };
 
   return (
     <>
-      <ProTable<FormUserType>
+      <ProTable<FormBillType>
         scroll={{ x: true }}
         bordered
         request={async (params, sorter, filter) => {
@@ -293,4 +284,4 @@ const UserManager: React.FC = () => {
   );
 };
 
-export default UserManager;
+export default Bill;
