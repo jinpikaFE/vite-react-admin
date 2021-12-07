@@ -1,10 +1,11 @@
 export type FormBillType = {
   _id: string;
-  userName: string;
-  email: string;
-  phone: string;
-  password: string;
-  role: string;
-  captcha: string;
-  avatar?: any;
+  date: string;
+  exRecords: IExRecord[];
+  totalConsume: number;
 };
+
+export interface IExRecord {
+  type: string;
+  value: number;
+}

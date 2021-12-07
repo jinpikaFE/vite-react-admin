@@ -7,30 +7,30 @@ import {
   ProFormText,
 } from '@ant-design/pro-form';
 import { Input } from 'antd';
-import React, { useState } from 'react';
-import { FormBillType } from './type';
+import type {
+  FormListFieldData,
+  FormListOperation,
+} from 'antd/lib/form/FormList';
+import React, { ReactNode, useEffect } from 'react';
 
 const BillForm: React.FC<{
-  setCaptcha: React.Dispatch<React.SetStateAction<string>>;
-  cItem?: FormBillType;
   formRef?: ProFormInstance | any;
 }> = (props) => {
-  const { setCaptcha, cItem, formRef } = props;
-  const [roleList, setRoleList] = useState<any[]>([]);
+  const { formRef } = props;
 
-  const handleChange = (val: number) => {
-    console.log(
-      formRef?.current
-        ?.getFieldsValue(['exRecords'])
-        ?.exRecords?.reduce(
-          (total: { value: string | number }, current: { value: number }) => {
-            console.log(total, current);
-            return total?.value
-              ? +total?.value
-              : Number(total) + (Number(current?.value) || 0);
-          },
-        ),
-    );
+  const handleChange = () => {
+    let total = 0;
+    for (
+      let index = 0;
+      index <
+      formRef?.current?.getFieldsValue(['exRecords'])?.exRecords?.length;
+      index++
+    ) {
+      const element = formRef?.current?.getFieldsValue(['exRecords'])
+        ?.exRecords?.[index];
+      total += element?.value ? +element?.value : 0;
+    }
+    formRef?.current?.setFieldsValue({ totalConsume: total });
   };
 
   return (
@@ -42,6 +42,31 @@ const BillForm: React.FC<{
           creatorButtonText: '添加一笔记录',
         }}
         label="消费记录"
+        actionRender={(
+          field: FormListFieldData,
+          action: FormListOperation,
+          defaultActionDom: ReactNode[],
+        ) => {
+          // 使用装饰者模式原有基础上添加handleChange
+          return defaultActionDom.map((item: any) => {
+            return {
+              ...item,
+              props: {
+                ...item.props,
+                children: {
+                  ...item.props.children,
+                  props: {
+                    ...item.props.children.props,
+                    onClick: () => {
+                      item.props.children.props.onClick();
+                      handleChange();
+                    },
+                  },
+                },
+              },
+            };
+          });
+        }}
       >
         <Input.Group compact>
           <ProFormSelect
@@ -72,7 +97,7 @@ const BillForm: React.FC<{
           />
         </Input.Group>
       </ProFormList>
-      <ProFormText width="md" name="totalConsume" label="总消费" disabled />
+      <ProFormText width="md" name="totalConsume" label="消费总额" disabled />
     </>
   );
 };

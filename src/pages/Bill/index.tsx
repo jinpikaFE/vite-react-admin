@@ -4,10 +4,11 @@ import { PlusOutlined } from '@ant-design/icons';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
 import { Avatar, Button, message, Popconfirm, Row, Select } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
-import { createUser, delUser, queryUser, updateUser } from './services';
 import { FormBillType } from './type';
 import BillForm from './BillForm';
 import { ProFormInstance } from '@ant-design/pro-form';
+import { createBill, delBill, queryBill, updateBill } from './services';
+import { CUSTOMOPTIONS } from './constants';
 
 const Bill: React.FC = () => {
   const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
@@ -15,11 +16,7 @@ const Bill: React.FC = () => {
   const refTable = useRef<ActionType>();
   const formRef = useRef<ProFormInstance | any>();
 
-  const [captcha, setCaptcha] = useState<string>('1111');
-
   const [datasSource, setDatasSource] = useState<any[]>([]);
-
-  const [roleList, setRoleList] = useState<any[]>([]);
 
   const columns: ProColumns[] = [
     {
@@ -28,69 +25,27 @@ const Bill: React.FC = () => {
       width: 48,
     },
     {
-      title: '用户名',
-      dataIndex: 'userName',
-      copyable: true,
-      ellipsis: true,
-      tip: '标题过长会自动收缩',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '此项为必填项',
-          },
-        ],
-      },
-      render: (userName, record) => {
-        return (
-          <Row justify="start" align="middle" style={{ flexFlow: 'nowrap' }}>
-            {record?.avatar && (
-              <Avatar
-                style={{ flex: '0 0 auto', marginRight: '5px' }}
-                src={record.avatar?.[0]?.url}
-              />
-            )}
-            {userName}
-          </Row>
-        );
-      },
+      title: '日期',
+      dataIndex: 'date',
+      valueType: 'date',
+      sorter: true,
+      hideInSearch: true,
     },
     {
-      title: '邮箱',
-      dataIndex: 'email',
-    },
-    {
-      title: '手机号',
-      dataIndex: 'phone',
-    },
-    {
-      title: '角色',
-      dataIndex: 'role',
-      renderFormItem: () => {
-        return (
-          <Select allowClear>
-            {roleList?.map((item) => {
-              return (
-                <Select.Option value={item.name} key={item._id}>
-                  {item?.name}
-                </Select.Option>
-              );
-            })}
-          </Select>
-        );
-      },
+      title: '消费总额',
+      dataIndex: 'totalConsume',
+      hideInSearch: true,
     },
     {
       title: '创建时间',
       dataIndex: 'registerTime',
       valueType: 'dateTime',
-      sorter: true,
       hideInSearch: true,
     },
     {
-      title: '创建时间',
+      title: '日期',
       dataIndex: 'created_at',
-      valueType: 'dateTimeRange',
+      valueType: 'dateRange',
       hideInTable: true,
       search: {
         transform: (value) => {
@@ -105,7 +60,7 @@ const Bill: React.FC = () => {
       title: '操作',
       valueType: 'option',
       width: 180,
-      render: (text, record, _, action) => [
+      render: (text, record) => [
         <Button
           type="link"
           key="editable"
@@ -119,7 +74,7 @@ const Bill: React.FC = () => {
           key="del"
           placement="topRight"
           title="确定要删除吗?"
-          onConfirm={() => del(record?._id, record?.avatar?.[0]?.uid)}
+          onConfirm={() => del(record?._id)}
           okText="确定"
           okType="danger"
           cancelText="取消"
@@ -149,8 +104,8 @@ const Bill: React.FC = () => {
     showDrawer();
   };
 
-  const del = async (id: string, fileName: string) => {
-    const res = await delUser(id, fileName);
+  const del = async (id: string) => {
+    const res = await delBill(id);
     if (res) {
       refTable?.current?.reload();
       message.success(res.message || '删除成功');
@@ -158,39 +113,53 @@ const Bill: React.FC = () => {
   };
 
   const renderFormItemDom = () => {
-    return <BillForm formRef={formRef} setCaptcha={setCaptcha} cItem={cItem} />;
+    return <BillForm formRef={formRef} />;
   };
 
   const onFinish = async (values: FormBillType) => {
     if (cItem) {
-      // const getAvatar = () => {
-      //   if (values?.avatar?.file?.preview) {
-      //     return values?.avatar?.file.preview;
-      //   }
-      //   return values?.avatar?.fileList?.length === 0 ? '' : values?.avatar;
-      // };
-      // const resRole = await updateUser(cItem?._id, {
-      //   ...values,
-      //   avatar: getAvatar(),
-      // });
-      // if (resRole) {
-      //   refTable?.current?.reload();
-      //   message.success(resRole.message || '更新成功');
-      //   onCloseDrawer();
-      // }
+      const res = await updateBill(cItem?._id, {
+        ...values,
+      });
+      if (res) {
+        refTable?.current?.reload();
+        message.success(res?.message || '更新成功');
+        onCloseDrawer();
+      }
     } else {
-      console.log(values);
-
-      // const resRole = await createUser({
-      //   ...values,
-      //   avatar: values?.avatar?.file?.preview,
-      // });
-      // if (resRole) {
-      //   refTable?.current?.reload();
-      //   message.success(resRole.message || '创建成功');
-      //   onCloseDrawer();
-      // }
+      const res = await createBill({
+        ...values,
+      });
+      if (res) {
+        refTable?.current?.reload();
+        message.success(res.message || '创建成功');
+        onCloseDrawer();
+      }
     }
+  };
+
+  const expandedRowRender = (record: FormBillType) => {
+    return (
+      <ProTable
+        columns={[
+          {
+            title: '类型',
+            dataIndex: 'type',
+            key: 'type',
+            render: ((text: 'diet' | 'shop') => CUSTOMOPTIONS?.[text]) as (
+              text: any,
+            ) => any,
+          },
+          { title: '消费金额', dataIndex: 'value', key: 'value' },
+        ]}
+        headerTitle="消费记录"
+        search={false}
+        options={false}
+        bordered
+        dataSource={record?.exRecords}
+        pagination={false}
+      />
+    );
   };
 
   return (
@@ -201,7 +170,7 @@ const Bill: React.FC = () => {
         request={async (params, sorter, filter) => {
           // 这里需要返回一个 Promise,在返回之前你可以进行数据转化
           // 如果需要转化参数可以在这里进行修改
-          const msg = await queryUser({ ...params, ...sorter, ...filter });
+          const msg = await queryBill({ ...params, ...sorter, ...filter });
           if (msg) {
             return {
               data: msg.data,
@@ -249,6 +218,7 @@ const Bill: React.FC = () => {
         }}
         dateFormatter="string"
         headerTitle="用户列表"
+        expandable={{ expandedRowRender }}
         toolBarRender={() => [
           <Button
             key="out"
