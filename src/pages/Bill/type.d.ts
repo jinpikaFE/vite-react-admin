@@ -1,6 +1,6 @@
 export type FormBillType = {
   _id: string;
-  date: string;
+  date: Date;
   exRecords: IExRecord[];
   totalConsume: number;
 };

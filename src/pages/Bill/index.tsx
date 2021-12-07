@@ -120,6 +120,7 @@ const Bill: React.FC = () => {
     if (cItem) {
       const res = await updateBill(cItem?._id, {
         ...values,
+        date: new Date(values?.date),
       });
       if (res) {
         refTable?.current?.reload();
@@ -129,6 +130,7 @@ const Bill: React.FC = () => {
     } else {
       const res = await createBill({
         ...values,
+        date: new Date(values?.date),
       });
       if (res) {
         refTable?.current?.reload();
