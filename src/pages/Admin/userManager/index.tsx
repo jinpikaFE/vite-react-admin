@@ -212,6 +212,7 @@ const UserManager: React.FC = () => {
           // 如果需要转化参数可以在这里进行修改
           const msg = await queryUser({ ...params, ...sorter, ...filter });
           if (msg) {
+            setDatasSource(msg.data);
             return {
               data: msg.data,
               success: true,
@@ -262,7 +263,7 @@ const UserManager: React.FC = () => {
           <Button
             key="out"
             onClick={() => {
-              exportToExcel(datasSource, '角色管理');
+              exportToExcel(datasSource, '用户管理');
             }}
           >
             导出数据

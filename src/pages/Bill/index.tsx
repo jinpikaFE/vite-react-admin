@@ -2,13 +2,14 @@ import RightDrawer from '@/components/RightDrawer';
 import exportToExcel from '@/utils/exportToExcel';
 import { PlusOutlined } from '@ant-design/icons';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Avatar, Button, message, Popconfirm, Row, Select } from 'antd';
+import { Button, message, Popconfirm } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormBillType } from './type';
 import BillForm from './BillForm';
 import { ProFormInstance } from '@ant-design/pro-form';
 import { createBill, delBill, queryBill, updateBill } from './services';
 import { CUSTOMOPTIONS } from './constants';
+import moment from 'moment';
 
 const Bill: React.FC = () => {
   const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
@@ -174,6 +175,26 @@ const Bill: React.FC = () => {
           // 如果需要转化参数可以在这里进行修改
           const msg = await queryBill({ ...params, ...sorter, ...filter });
           if (msg) {
+            const exData = await queryBill({
+              ...params,
+              ...sorter,
+              ...filter,
+              pageSize: null,
+              current: null,
+            });
+            const newData: any[] = [];
+            exData.data.forEach((item: { exRecords: any; date: any }) => {
+              item.exRecords.forEach(
+                (c_item: { type: 'diet' | 'shop'; value: number }) => {
+                  newData.push({
+                    type: CUSTOMOPTIONS?.[c_item.type],
+                    value: c_item.value,
+                    date: moment(item.date).format('YYYY-MM-DD'),
+                  });
+                },
+              );
+            });
+            setDatasSource(newData);
             return {
               data: msg.data,
               success: true,
@@ -225,7 +246,7 @@ const Bill: React.FC = () => {
           <Button
             key="out"
             onClick={() => {
-              exportToExcel(datasSource, '角色管理');
+              exportToExcel(datasSource, '账单管理');
             }}
           >
             导出数据
