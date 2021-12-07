@@ -2,14 +2,15 @@ import RightDrawer from '@/components/RightDrawer';
 import exportToExcel from '@/utils/exportToExcel';
 import { PlusOutlined } from '@ant-design/icons';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Button, message, Popconfirm } from 'antd';
+import { Button, Card, message, Popconfirm } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormBillType } from './type';
-import BillForm from './BillForm';
+import BillForm from './components/BillForm';
 import { ProFormInstance } from '@ant-design/pro-form';
 import { createBill, delBill, queryBill, updateBill } from './services';
 import { CUSTOMOPTIONS } from './constants';
 import moment from 'moment';
+import BillChart from './components/BillChart';
 
 const Bill: React.FC = () => {
   const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
@@ -18,6 +19,7 @@ const Bill: React.FC = () => {
   const formRef = useRef<ProFormInstance | any>();
 
   const [datasSource, setDatasSource] = useState<any[]>([]);
+  const [chartData, setChartData] = useState<any[]>([]);
 
   const columns: ProColumns[] = [
     {
@@ -194,6 +196,7 @@ const Bill: React.FC = () => {
                 },
               );
             });
+            setChartData(exData?.data);
             setDatasSource(newData);
             return {
               data: msg.data,
@@ -264,6 +267,9 @@ const Bill: React.FC = () => {
           </Button>,
         ]}
       />
+      <Card style={{ marginTop: '20px' }}>
+        <BillChart data={chartData} />
+      </Card>
       <RightDrawer
         ref={formRef}
         onCloseDrawer={onCloseDrawer}
