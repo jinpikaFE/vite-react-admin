@@ -2,7 +2,7 @@ import RightDrawer from '@/components/RightDrawer';
 import exportToExcel from '@/utils/exportToExcel';
 import { PlusOutlined } from '@ant-design/icons';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Button, Card, message, Popconfirm } from 'antd';
+import { Button, Card, message, Popconfirm, Select } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormBillType } from './type';
 import BillForm from './components/BillForm';
@@ -11,6 +11,8 @@ import { createBill, delBill, queryBill, updateBill } from './services';
 import { CUSTOMOPTIONS } from './constants';
 import moment from 'moment';
 import BillChart from './components/BillChart';
+
+type typeEnum = 'diet' | 'shop' | 'transport';
 
 const Bill: React.FC = () => {
   const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
@@ -57,6 +59,24 @@ const Bill: React.FC = () => {
             endTime: value[1],
           };
         },
+      },
+    },
+    {
+      title: '类型',
+      dataIndex: 'type',
+      hideInTable: true,
+      renderFormItem: () => {
+        return (
+          <Select allowClear>
+            {(Object.keys(CUSTOMOPTIONS) as any)?.map((item: typeEnum) => {
+              return (
+                <Select.Option value={item} key={item}>
+                  {CUSTOMOPTIONS?.[item]}
+                </Select.Option>
+              );
+            })}
+          </Select>
+        );
       },
     },
     {
@@ -151,9 +171,8 @@ const Bill: React.FC = () => {
             title: '类型',
             dataIndex: 'type',
             key: 'type',
-            render: ((text: 'diet' | 'shop') => CUSTOMOPTIONS?.[text]) as (
-              text: any,
-            ) => any,
+            render: ((text: 'diet' | 'shop' | 'transport') =>
+              CUSTOMOPTIONS?.[text]) as (text: any) => any,
           },
           { title: '消费金额', dataIndex: 'value', key: 'value' },
         ]}
@@ -187,7 +206,10 @@ const Bill: React.FC = () => {
             const newData: any[] = [];
             exData.data.forEach((item: { exRecords: any; date: any }) => {
               item.exRecords.forEach(
-                (c_item: { type: 'diet' | 'shop'; value: number }) => {
+                (c_item: {
+                  type: 'diet' | 'shop' | 'transport';
+                  value: number;
+                }) => {
                   newData.push({
                     type: CUSTOMOPTIONS?.[c_item.type],
                     value: c_item.value,
