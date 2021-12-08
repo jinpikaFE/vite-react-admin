@@ -11,6 +11,7 @@ import { createBill, delBill, queryBill, updateBill } from './services';
 import { CUSTOMOPTIONS } from './constants';
 import moment from 'moment';
 import BillChart from './components/BillChart';
+import { getCurrentMonthLast, getFirstDayOfMonth } from '@/utils/dateTools';
 
 type typeEnum = 'diet' | 'shop' | 'transport';
 
@@ -254,7 +255,14 @@ const Bill: React.FC = () => {
             if (type === 'get') {
               return {
                 ...values,
-                created_at: [values.startTime, values.endTime],
+                created_at: [
+                  values.startTime ||
+                    moment(getFirstDayOfMonth(new Date())).format('YYYY-MM-DD'),
+                  values.endTime ||
+                    moment(getCurrentMonthLast(new Date())).format(
+                      'YYYY-MM-DD',
+                    ),
+                ],
               };
             }
             return values;
