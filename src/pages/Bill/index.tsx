@@ -3,7 +3,7 @@ import exportToExcel from '@/utils/exportToExcel';
 import { PlusOutlined } from '@ant-design/icons';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
 import { Button, Card, message, Popconfirm, Select } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FormBillType } from './type';
 import BillForm from './components/BillForm';
 import { ProFormInstance } from '@ant-design/pro-form';
@@ -110,10 +110,6 @@ const Bill: React.FC = () => {
       ],
     },
   ];
-
-  useEffect(() => {
-    console.log(formRef);
-  }, [formRef]);
 
   const showDrawer = () => {
     setVisibleDrawer(true);
