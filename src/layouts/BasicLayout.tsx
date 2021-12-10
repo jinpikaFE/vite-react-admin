@@ -12,7 +12,7 @@ import '@ant-design/pro-layout/dist/layout.css';
 import { GithubOutlined } from '@ant-design/icons';
 import { queryMenu } from '@/services/global';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { Button, Input } from 'antd';
+import { Button, Input, Spin } from 'antd';
 import { useFormatMessage } from 'react-intl-hooks';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import proSettings from '@config/defaultSettings';
@@ -214,7 +214,15 @@ const BasicLayout: React.FC<{ route: RouteConfig }> = (props) => {
           }
         >
           <PageContainer>
-            <Suspense fallback={<Loading />}>
+            <Suspense
+              fallback={
+                <Spin
+                  size="large"
+                  tip="Loading..."
+                  style={{ width: '100%', height: '100vh' }}
+                />
+              }
+            >
               {renderRoutes(route.routes)}
             </Suspense>
           </PageContainer>
