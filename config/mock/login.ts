@@ -12,7 +12,7 @@ export default [
         data: {
           authority: 'admin',
           name: 'admin',
-          avatar: './src/assets/logo.png',
+          avatar: '/src/assets/logo.png',
         },
       };
       resObj.data.loginType = body.loginType;
