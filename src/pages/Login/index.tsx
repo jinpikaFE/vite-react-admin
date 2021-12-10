@@ -78,10 +78,10 @@ const Login: React.FC = () => {
     postLogin({ ...val, loginType })
       .then((res) => {
         setBtnLoading(false);
-        setAuthority(res.data?.authority)
-        localeLogin.saveCurrentUser(res?.data)
+        setAuthority(res.data?.authority);
+        localeLogin.saveCurrentUser(res?.data);
         message.success(res.message || '登陆成功');
-        history.push('/home')
+        history.push('/home');
       })
       .finally(() => {
         setBtnLoading(false);
@@ -104,7 +104,7 @@ const Login: React.FC = () => {
             style={{ height: '100%' }}
           >
             <LoginForm
-              logo="http://assets.jinxinapp.cn/img/logo.png"
+              logo="./src/assets/logo.png"
               title="Jin Pi Ka"
               subTitle="通用的vite-react后台项目"
               onFinish={onFinish}
