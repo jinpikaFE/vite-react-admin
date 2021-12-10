@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import {
   DefaultFooter,
   MenuDataItem,
@@ -7,20 +7,21 @@ import {
   SettingDrawer,
 } from '@ant-design/pro-layout';
 import ProLayout from '@ant-design/pro-layout';
-import UseRouteChild from '@/hooks/UseRouteChild';
+import { renderRoutes } from 'react-router-config';
 import '@ant-design/pro-layout/dist/layout.css';
-import { RouteType } from '@config/routes/type';
 import { GithubOutlined } from '@ant-design/icons';
 import { queryMenu } from '@/services/global';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { Button, Input, Result } from 'antd';
+import { Button, Input } from 'antd';
 import { useFormatMessage } from 'react-intl-hooks';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import proSettings from '@config/defaultSettings';
 import Authorized from '@/utils/Authorized';
 import { getAuthorityFromRouter } from '@/utils/untils';
 import NotFound from '@/components/NotFound';
-import loaclRoutes from '@config/routes'
+import loaclRoutes from '@config/routes';
+import type { RouteConfig } from 'react-router-config';
+import Loading from '@/components/Loading';
 
 const defaultFooterDom = (
   <DefaultFooter
@@ -106,8 +107,8 @@ const filterByMenuDate = (
     })
     .filter((item) => item) as MenuDataItem[];
 
-const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
-  const { routes } = props;
+const BasicLayout: React.FC<{ route: RouteConfig }> = (props) => {
+  const { route } = props;
   const [menuData, setMenuData] = useState<MenuDataItem[]>([]);
   const [keyWord, setKeyWord] = useState('');
   const [settings, setSetting] = useState<Partial<ProSettings> | undefined>(
@@ -154,7 +155,7 @@ const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
           },
           ...routers,
         ]}
-        itemRender={(route, params, routes, paths) => {
+        itemRender={(route, params, routes) => {
           const first = routes.indexOf(route) === 0;
           return first ? (
             <Link to="/home">{route.breadcrumbName}</Link>
@@ -212,7 +213,11 @@ const BasicLayout: React.FC<{ routes: RouteType[] }> = (props) => {
             />
           }
         >
-          <PageContainer>{UseRouteChild({ routes })}</PageContainer>
+          <PageContainer>
+            <Suspense fallback={<Loading />}>
+              {renderRoutes(route.routes)}
+            </Suspense>
+          </PageContainer>
         </Authorized>
       </ProLayout>
       <SettingDrawer
