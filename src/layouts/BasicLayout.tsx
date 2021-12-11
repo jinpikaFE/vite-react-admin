@@ -21,7 +21,6 @@ import { getAuthorityFromRouter } from '@/utils/untils';
 import NotFound from '@/components/NotFound';
 import loaclRoutes from '@config/routes';
 import type { RouteConfig } from 'react-router-config';
-import Loading from '@/components/Loading';
 
 const defaultFooterDom = (
   <DefaultFooter

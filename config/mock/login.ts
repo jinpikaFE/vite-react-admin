@@ -1,5 +1,4 @@
 import { ResultType } from '@/types/global';
-import { IncomingMessage, ServerResponse } from 'http';
 
 export default [
   {
