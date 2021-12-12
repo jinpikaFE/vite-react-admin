@@ -106,5 +106,12 @@ module.exports = {
       'size',
       'transform',
     ],
+    'no-descending-specificity': null,
+    'selector-class-pattern': null,
+    'declaration-block-no-redundant-longhand-properties': null,
+    'selector-class-pattern': null, // 后续改
+    'font-family-no-missing-generic-family-keyword': null,
+    'font-family-name-quotes': null,
+    'number-leading-zero': null,
   },
 };
