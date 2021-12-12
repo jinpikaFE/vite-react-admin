@@ -19,6 +19,32 @@ export default [
               authority: 'admin',
             },
             {
+              path: '/authManage',
+              name: 'authManage',
+              icon: 'icon-manage',
+              authority: ['admin', 'user'],
+              routes: [
+                {
+                  path: '/authManage/componManage',
+                  name: 'componManage',
+                  icon: 'icon-manage',
+                  authority: ['admin', 'user'],
+                },
+                {
+                  path: '/authManage/roleManage',
+                  name: 'roleManage',
+                  icon: 'icon-manage',
+                  authority: ['admin', 'user'],
+                },
+                {
+                  path: '/authManage/userManage',
+                  name: 'userManage',
+                  icon: 'icon-manage',
+                  authority: ['admin', 'user'],
+                },
+              ],
+            },
+            {
               path: '/admin',
               name: 'admin',
               access: 'canAdmin',

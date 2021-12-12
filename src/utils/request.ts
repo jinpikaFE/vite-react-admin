@@ -72,7 +72,10 @@ request.interceptors.request.use((url, options) => {
     url,
     options: {
       ...options,
-      headers: { ...options.headers, token: token || (null as unknown as string) },
+      headers: {
+        ...options.headers,
+        token: token || (null as unknown as string),
+      },
     },
   };
 });
@@ -83,8 +86,12 @@ request.interceptors.response.use((response) => {
 });
 
 // 针对个人接口处理请求
-const handleRequest = async (url: string, options?: Record<string, any>): Promise<any> => {
+const handleRequest = async (
+  url: string,
+  options?: Record<string, any>,
+): Promise<any> => {
   const res: responseType = await request(url, options);
+  // 请求成功这返回，其他进行异常处理
   if (res?.code === 0) {
     return res;
   }

@@ -67,4 +67,9 @@ export default {
   'menu.articleManage.articleLiist': '文章列表',
   'menu.articleLiist': '文章列表',
   'menu.articleManage.articleCreate': '新建文章',
+
+  'menu.authManage': '权限管理',
+  'menu.authManage.componManage': '组件管理',
+  'menu.authManage.roleManage': '角色管理',
+  'menu.authManage.userManage': '用户管理',
 };

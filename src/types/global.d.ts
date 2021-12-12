@@ -3,4 +3,5 @@ export type ResultType<T = any> = {
   data: T;
   message: string;
   code: number;
+  total?: number;
 };
