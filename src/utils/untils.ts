@@ -6,17 +6,23 @@ import type { RouteConfig } from 'react-router-config';
  * @param router [{}]
  * @param pathname string
  */
-export const getAuthorityFromRouter = <T extends RouteConfig>(
+export const getAuthorityFromRouter = <T>(
   router: T[] = [],
   pathname: string,
-): T | undefined => {
-  console.log(pathname);
+): RouteConfig | undefined => {
+  let authority = null;
+  const reduceAuth = (routers: RouteConfig[]) => {
+    for (let index = 0; index < routers.length; index++) {
+      const item: RouteConfig = routers[index];
+      console.log(item);
 
-  const authority = router.find(
-    ({ routes, path = '/' }) =>
-      (path && path === pathname) ||
-      (routes && getAuthorityFromRouter(routes, pathname)),
-  );
+      if (item?.path && item?.path === pathname) return (authority = item);
+      item?.routes && reduceAuth(item?.routes);
+    }
+  };
+
+  reduceAuth(router);
+
   if (authority) return authority;
   return undefined;
 };

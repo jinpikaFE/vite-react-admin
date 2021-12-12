@@ -2,7 +2,7 @@ import ProCard from '@ant-design/pro-card';
 import { PageContainer } from '@ant-design/pro-layout';
 import React from 'react';
 
-const Home: React.FC = () => {
+const Auth1: React.FC = () => {
   return (
     <>
       <ProCard>Test</ProCard>
@@ -10,4 +10,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Auth1;

@@ -131,12 +131,11 @@ const BasicLayout: React.FC<{ route: RouteConfig }> = (props) => {
   // }, [location]);
 
   // get children authority
-  const authorized = getAuthorityFromRouter(
+  const authorized = getAuthorityFromRouter<MenuDataItem>(
     menuData,
     location.pathname || '/',
-  ) || {
-    authority: undefined,
-  };
+  );
+
   return (
     <div id="pro-layout">
       <ProLayout
@@ -191,7 +190,7 @@ const BasicLayout: React.FC<{ route: RouteConfig }> = (props) => {
       >
         <Authorized
           routes={loaclRoutes}
-          authority={authorized!.authority}
+          authority={authorized?.authority}
           noMatch={
             <NotFound
               status="403"

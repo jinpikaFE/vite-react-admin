@@ -5,9 +5,6 @@ import type { IAuthorityType } from './CheckPermissions';
 import type AuthorizedRoute from './AuthorizedRoute';
 import type Secured from './Secured';
 import type { RouteConfig } from 'react-router-config';
-import { getAuthorityFromRouter } from '@/utils/untils';
-import { useLocation } from 'react-router-dom';
-import NotFound from '../NotFound';
 
 type AuthorizedProps = {
   authority: IAuthorityType;
@@ -21,8 +18,7 @@ type IAuthorizedType = React.FunctionComponent<AuthorizedProps> & {
   AuthorizedRoute: typeof AuthorizedRoute;
 };
 
-const Authorized: React.FunctionComponent<AuthorizedProps> = ({
-  routes,
+const Authorized: React.FC<AuthorizedProps> = ({
   children,
   authority,
   noMatch = (
@@ -36,12 +32,8 @@ const Authorized: React.FunctionComponent<AuthorizedProps> = ({
   const childrenRender: React.ReactNode =
     typeof children === 'undefined' ? null : children;
   const dom = check(authority, childrenRender, noMatch);
-  const location = useLocation();
-  // 找不到路由的404
-  const authorized =
-    getAuthorityFromRouter(routes, location.pathname || '/') || null;
 
-  return <>{authorized ? dom : <NotFound />}</>;
+  return <>{dom}</>;
 };
 
 export default Authorized as IAuthorizedType;

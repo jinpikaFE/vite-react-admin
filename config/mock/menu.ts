@@ -27,17 +27,35 @@ export default [
               authority: 'admin',
               routes: [
                 {
-                  path: '/admin/test',
+                  path: '/admin/auth1',
                   name: 'sub-page',
                   component: './Welcome',
                   icon: 'icon-manage-order',
-                  authority: 'admin',
+                  authority: 'admin1',
                 },
                 {
-                  path: '/admin/sub-page2',
+                  path: '/admin/auth3',
                   name: '二级页面',
                   component: './Welcome',
                   authority: 'admin',
+                  routes: [
+                    {
+                      path: '/admin/auth3/test',
+                      name: '二一级页面',
+                      component: './Welcome',
+                      authority: 'admin1',
+                    },
+                    {
+                      path: '/admin/auth3/test2',
+                      name: '二二级页面',
+                      component: './Welcome',
+                    },
+                    {
+                      path: '/admin/auth3/test3',
+                      name: '二三级页面',
+                      component: './Welcome',
+                    },
+                  ],
                 },
                 {
                   path: '/admin/sub-page3',
@@ -56,24 +74,6 @@ export default [
                 {
                   path: '/list/sub-page',
                   name: '一级列表页面',
-                  routes: [
-                    {
-                      path: 'sub-sub-page1',
-                      name: '一一级列表页面',
-                      authority: 'admin',
-                      component: './Welcome',
-                    },
-                    {
-                      path: 'sub-sub-page2',
-                      name: '一二级列表页面',
-                      component: './Welcome',
-                    },
-                    {
-                      path: 'sub-sub-page3',
-                      name: '一三级列表页面',
-                      component: './Welcome',
-                    },
-                  ],
                 },
                 {
                   path: '/list/sub-page2',

@@ -1,4 +1,4 @@
-export type ResultType<T> = {
+export type ResultType<T = any> = {
   success?: boolean;
   data: T;
   message: string;
