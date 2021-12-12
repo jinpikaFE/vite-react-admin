@@ -1,6 +1,6 @@
-export type ResultType = {
+export type ResultType<T = any> = {
   success?: boolean;
-  data: any;
+  data: T;
   message: string;
   code: number;
 };

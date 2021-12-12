@@ -21,7 +21,6 @@ import { getAuthorityFromRouter } from '@/utils/untils';
 import NotFound from '@/components/NotFound';
 import loaclRoutes from '@config/routes';
 import type { RouteConfig } from 'react-router-config';
-import Loading from '@/components/Loading';
 
 const defaultFooterDom = (
   <DefaultFooter
@@ -132,12 +131,11 @@ const BasicLayout: React.FC<{ route: RouteConfig }> = (props) => {
   // }, [location]);
 
   // get children authority
-  const authorized = getAuthorityFromRouter(
+  const authorized = getAuthorityFromRouter<MenuDataItem>(
     menuData,
     location.pathname || '/',
-  ) || {
-    authority: undefined,
-  };
+  );
+
   return (
     <div id="pro-layout">
       <ProLayout
@@ -192,7 +190,7 @@ const BasicLayout: React.FC<{ route: RouteConfig }> = (props) => {
       >
         <Authorized
           routes={loaclRoutes}
-          authority={authorized!.authority}
+          authority={authorized?.authority}
           noMatch={
             <NotFound
               status="403"
