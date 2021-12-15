@@ -1,7 +1,7 @@
 import { ResultType } from '@/types/global';
 import request from '@/utils/request';
 
-export const queryCompon = async <T, F>(params: T): Promise<ResultType<F>> => {
+export const queryCompon = async <T, F>(params?: T): Promise<ResultType<F>> => {
   return request('/api/component', {
     method: 'GET',
     params,

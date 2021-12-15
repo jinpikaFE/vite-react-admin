@@ -1,11 +1,11 @@
 import { PlusOutlined } from '@ant-design/icons';
 import ProTable from '@ant-design/pro-table';
 import { Button } from 'antd';
-import React, { useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import RightDrawer from '../RightDrawer';
 import { ComponProps } from './type';
 
-const ComponTree: React.FC<ComponProps> = (props) => {
+const ComponTree: React.FC<ComponProps> = React.forwardRef((props, ref) => {
   const {
     columns,
     drawerTitle,
@@ -15,10 +15,18 @@ const ComponTree: React.FC<ComponProps> = (props) => {
     onFinish,
     proTableProps,
     FromProps,
+    newBtnTitle,
   } = props;
   const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
 
   const [cItem, setCItem] = useState<any>();
+
+  useImperativeHandle(ref, () => ({
+    edit: (record: any) => {
+      setCItem(record);
+      showDrawer();
+    },
+  }));
 
   const showDrawer = () => {
     setVisibleDrawer(true);
@@ -26,11 +34,6 @@ const ComponTree: React.FC<ComponProps> = (props) => {
 
   const onCloseDrawer = () => {
     setVisibleDrawer(false);
-  };
-
-  const edit = (record: any) => {
-    setCItem(record);
-    showDrawer();
   };
 
   return (
@@ -62,7 +65,7 @@ const ComponTree: React.FC<ComponProps> = (props) => {
               setCItem(undefined);
             }}
           >
-            新建
+            {newBtnTitle}
           </Button>,
         ]}
         {...proTableProps}
@@ -79,10 +82,11 @@ const ComponTree: React.FC<ComponProps> = (props) => {
       />
     </>
   );
-};
+});
 
 ComponTree.defaultProps = {
   drawerTitle: '新增',
+  newBtnTitle: '新增',
 };
 
 export default ComponTree;

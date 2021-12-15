@@ -1,18 +1,54 @@
-import ProForm, { ProFormText } from '@ant-design/pro-form';
-import { Radio, TreeSelect } from 'antd';
-import React from 'react';
+import ProForm, { ProFormSelect, ProFormText } from '@ant-design/pro-form';
+import { Radio } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { TProColumns } from '../type';
 
-const ComponFormItem: React.FC = () => {
+const ComponFormItem: React.FC<{ cRecord: TProColumns }> = (props) => {
+  const { cRecord } = props;
+
+  const [showIsLink, setShowIsLink] = useState<boolean>(true);
+
+  useEffect(() => {
+    cRecord?.type !== 'menu' && setShowIsLink(false);
+    cRecord?.type === 'menu' && setShowIsLink(true);
+  }, [cRecord?.type]);
+
   return (
     <>
+      <ProFormText width="md" name="parentId" label="上级菜单" disabled />
+      <ProFormSelect
+        width="md"
+        name="type"
+        label="组件类型"
+        placeholder="请输入选择组件类型"
+        rules={[{ required: true, message: '请输入选择组件类型!' }]}
+        onChange={(val: string) => {
+          val !== 'menu' && setShowIsLink(false);
+          val === 'menu' && setShowIsLink(true);
+        }}
+        valueEnum={{
+          menu: {
+            color: 'blue',
+            text: '菜单组件',
+          },
+          page: {
+            color: 'green',
+            text: '页面组件',
+          },
+          component: {
+            color: 'volcano',
+            text: '普通组件',
+          },
+        }}
+      ></ProFormSelect>
       <ProFormText
         width="md"
         name="name"
-        label="菜单名称"
+        label="组件名称"
         tooltip="最长为 16 位"
-        placeholder="请输入菜单名称"
+        placeholder="请输入组件名称"
         rules={[
-          { required: true, message: '请输入菜单名称!' },
+          { required: true, message: '请输入组件名称!' },
           {
             validator: (rule, value, callback) => {
               if (value.length > 16) {
@@ -47,15 +83,6 @@ const ComponFormItem: React.FC = () => {
           },
         ]}
       />
-      {/* <ProForm.Item label="上级菜单" name="lastMenu">
-      <TreeSelect
-        allowClear
-        className='input-fix-md'
-        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-        treeData={treeData}
-        placeholder="请选择"
-      />
-    </ProForm.Item> */}
       <ProFormText
         width="md"
         name="icon"
@@ -75,22 +102,24 @@ const ComponFormItem: React.FC = () => {
           },
         ]}
       />
-      <ProForm.Item name="isLink" label="是否外链">
-        <Radio.Group
-          optionType="button"
-          buttonStyle="solid"
-          options={[
-            {
-              label: '否',
-              value: 0,
-            },
-            {
-              label: '是',
-              value: 1,
-            },
-          ]}
-        />
-      </ProForm.Item>
+      {showIsLink && (
+        <ProForm.Item name="isLink" label="是否外链">
+          <Radio.Group
+            optionType="button"
+            buttonStyle="solid"
+            options={[
+              {
+                label: '否',
+                value: 0,
+              },
+              {
+                label: '是',
+                value: 1,
+              },
+            ]}
+          />
+        </ProForm.Item>
+      )}
     </>
   );
 };

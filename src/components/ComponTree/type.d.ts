@@ -16,6 +16,7 @@ export type ComponProps = {
   formRef: any;
   refTable: MutableRefObject<ActionType | undefined>;
   drawerTitle?: string; // 抽屉标题
+  newBtnTitle?: string;
   proTableProps: ProTableProps<TProColumns, TParams>; // proTable的属性
   FromProps?: ProFormProps; // DrawerForm的属性
 } & DrawerForm;
