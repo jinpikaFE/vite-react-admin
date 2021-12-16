@@ -3,6 +3,7 @@ const workercode = () => {
   self.onmessage = function (e) {
     // 取回调函数解析
     e.data.cb = new Function('return' + e.data?.cb)();
+    // e.data.data = JSON.parse(e.data.data);
     /**
    *
    * 实现树级递归，生成树形菜单

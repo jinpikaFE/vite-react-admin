@@ -22,6 +22,7 @@ import loaclRoutes from '@config/routes';
 import type { RouteConfig } from 'react-router-config';
 import { queryCompon } from '@/pages/authManage/ComponManage/services';
 import { TParams, TProColumns } from '@/pages/authManage/ComponManage/type';
+import { localeCompon } from '@/stores/compon';
 
 const defaultFooterDom = (
   <DefaultFooter
@@ -120,8 +121,10 @@ const BasicLayout: React.FC<{ route: RouteConfig }> = (props) => {
     const getMenu = async () => {
       const res = await queryCompon<TParams, TProColumns[]>();
       if (res) {
+        localeCompon.setComponData(res?.data);
+        // 使用toTree操作mobx全局的localeCompon.componData需要深拷贝
         const newData = toTree({
-          data: res?.data,
+          data: JSON.parse(JSON.stringify(localeCompon.componData)),
           key: '_id',
           parentKey: 'parentId',
           cb: (item) => item,

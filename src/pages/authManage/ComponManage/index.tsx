@@ -2,20 +2,20 @@ import React, { useRef, useState } from 'react';
 import ComponTree from '@/components/ComponTree';
 import ComponFormItem from './components/ComponFormItem';
 import { Button, message, Popconfirm } from 'antd';
-import { delCompon, queryCompon } from './services';
+import { delCompon } from './services';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { IconFont } from '@/types/constants';
-import type { TParams, TProColumns } from './type';
-import worker_script from '@/works/works';
-
-const myWorker = new Worker(worker_script);
+import type { TProColumns } from './type';
+import { localeCompon } from '@/stores/compon';
+import { toTree } from '@/utils/untils';
+import Authorized from '@/utils/Authorized';
+import NotFound from '@/components/NotFound';
+import { Link } from 'react-router-dom';
 
 const SideMenu: React.FC = () => {
   const refTable = useRef<ActionType>();
   const formRef = useRef();
   const childrenRef = useRef<any>(null);
-
-  const [dataSource, setDataSource] = useState<any[]>([]);
 
   const [cItem, setCItem] = useState<TProColumns | any>();
 
@@ -120,7 +120,35 @@ const SideMenu: React.FC = () => {
   ];
 
   const renderFormItemDom = () => {
-    return <ComponFormItem cRecord={cItem} />;
+    return (
+      // 在组件列表中复制对应的id
+      // 当前['admin1', 'test'] 在mock中添加admin即可显示
+      <>
+        {Authorized.check(
+          localeCompon.componData.find(
+            (item) => item._id === '61639dadec93bb0b6a96f530223',
+          )?.authority,
+          <ComponFormItem cRecord={cItem} />,
+          <NotFound
+            status="403"
+            title="403"
+            subTitle="对不起！暂无该组件访问权限！请联系管理员或更换账号登录"
+            extra={
+              (
+                <>
+                  <p>
+                    <Link to={'/15757182982'}>联系管理员</Link>
+                  </p>
+                  <Button type="primary">
+                    <Link to="/login">重新登录</Link>
+                  </Button>
+                </>
+              ) as React.ReactDOM | any
+            }
+          />,
+        )}
+      </>
+    );
   };
 
   const onFinish = async (values: any) => {
@@ -144,33 +172,16 @@ const SideMenu: React.FC = () => {
       newBtnTitle="添加一级组件"
       proTableProps={{
         headerTitle: '组件列表',
-        dataSource,
-        request: async (params, sorter, filter) => {
-          // 这里需要返回一个 Promise,在返回之前你可以进行数据转化
-          const res = await queryCompon<TParams, TProColumns[]>({
-            ...params,
-            ...sorter,
-            ...filter,
+        request: async () => {
+          const dataTemp = toTree({
+            data: JSON.parse(JSON.stringify(localeCompon.componData)),
+            key: '_id',
+            parentKey: 'parentId',
+            cb: (item) => item,
           });
-          if (res) {
-            // 利用web worker线层进行树级遍历
-            myWorker.postMessage({
-              data: res?.data,
-              key: '_id',
-              parentKey: 'parentId',
-              cb: ((item: any) => item).toString(),
-            });
-            new Promise((resolve) => {
-              myWorker.onmessage = (m) => {
-                setDataSource(m?.data);
-                myWorker.terminate();
-                resolve(m?.data);
-              };
-            }).then(() => myWorker.terminate());
-          }
           return {
-            data: undefined,
-            success: false,
+            data: dataTemp,
+            success: true,
             total: 0,
           };
         },

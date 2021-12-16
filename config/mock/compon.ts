@@ -62,7 +62,7 @@ export default [
             _id: '61639dadec93bb0b6a96f530223',
             type: 'component',
             name: '新增组件',
-            authority: ['admin', 'test'],
+            authority: ['admin1', 'test'],
             parentId: '61639dadec93bb0b6a96f530',
             registerTime: '2021-10-11T02:13:01.679Z',
           },

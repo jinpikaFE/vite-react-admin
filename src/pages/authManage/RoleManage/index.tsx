@@ -1,4 +1,5 @@
 import RightDrawer from '@/components/RightDrawer';
+import { localeCompon } from '@/stores/compon';
 import exportToExcel from '@/utils/exportToExcel';
 import { toTree } from '@/utils/untils';
 import { PlusOutlined } from '@ant-design/icons';
@@ -7,16 +8,8 @@ import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
 import { Button, message, Popconfirm, Tag, TreeSelect } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormatMessage } from 'react-intl-hooks';
-import { queryCompon } from '../ComponManage/services';
-import { TParams, TProColumns } from '../ComponManage/type';
 import RoleFormItem from './components/RoleFormItem';
-import {
-  createRole,
-  delRole,
-  queryRole,
-  queryRoleOne,
-  updateRole,
-} from './services';
+import { delRole, queryRole, queryRoleOne } from './services';
 import { FormRoleType } from './type';
 
 const RoleManager: React.FC = () => {
@@ -26,7 +19,6 @@ const RoleManager: React.FC = () => {
   const formRef = useRef<ProFormInstance | any>();
 
   const [treeData, setTreeData] = useState<any[]>([]);
-  const [componsData, setComponsData] = useState<any[]>([]);
 
   const [datasSource, setDatasSource] = useState<any[]>([]);
 
@@ -138,37 +130,26 @@ const RoleManager: React.FC = () => {
   ];
 
   useEffect(() => {
-    const getTableData = async () => {
-      const res = await queryCompon<TParams, TProColumns[]>();
-      setComponsData(res?.data);
-    };
-    getTableData();
-  }, []);
-
-  useEffect(() => {
-    const getData = async () => {
-      if (componsData) {
-        const dataTemp = toTree({
-          data: componsData,
-          key: '_id',
-          parentKey: 'parentId',
-          cb: (item: any) => {
-            item.title = formatMessage({
-              id: `component.create.${item.name}`,
-            }) as string;
-            item.value = item._id;
-            if (item?.isLink) {
-              item.disabled = true;
-              return item;
-            }
+    if (localeCompon.componData) {
+      const dataTemp = toTree({
+        data: JSON.parse(JSON.stringify(localeCompon.componData)),
+        key: '_id',
+        parentKey: 'parentId',
+        cb: (item: any) => {
+          item.title = formatMessage({
+            id: `component.create.${item.name}`,
+          }) as string;
+          item.value = item._id;
+          if (item?.isLink) {
+            item.disabled = true;
             return item;
-          },
-        });
-        setTreeData(dataTemp);
-      }
-    };
-    getData();
-  }, [componsData]);
+          }
+          return item;
+        },
+      });
+      setTreeData(dataTemp);
+    }
+  }, [localeCompon.componData]);
 
   const showDrawer = () => {
     setVisibleDrawer(true);
@@ -197,25 +178,10 @@ const RoleManager: React.FC = () => {
   };
 
   const onFinish = async (values: FormRoleType) => {
-    const newAuthority = values?.authority?.map((item: any) => item.value);
     if (cItem) {
-      const resRole = await updateRole(cItem?._id, {
-        ...values,
-        authority: newAuthority,
-      });
-      if (resRole) {
-        refTable?.current?.reload();
-        message.success(resRole.message || '更新成功');
-        onCloseDrawer();
-      }
+      // 编辑逻辑，后端要操作组件数据和角色数据
     } else {
-      const resRole = await createRole({ ...values, authority: newAuthority });
-
-      if (resRole) {
-        refTable?.current?.reload();
-        message.success(resRole.message || '创建成功');
-        onCloseDrawer();
-      }
+      // 新增逻辑，后端要操作组件数据和角色数据
     }
   };
 
@@ -227,15 +193,16 @@ const RoleManager: React.FC = () => {
         request={async (params, sorter, filter) => {
           // 这里需要返回一个 Promise,在返回之前你可以进行数据转化
           // 如果需要转化参数可以在这里进行修改
-          const res = await queryCompon<TParams, TProColumns[]>();
           const msg = await queryRole({ ...params, ...sorter, ...filter });
           const dataTemp = msg.data?.map((item: any) => {
             item.authority = [];
-            res?.data?.forEach((c_item: any) => {
-              if (c_item.authority.includes(item.name)) {
-                item.authority.push(c_item);
-              }
-            });
+            JSON.parse(JSON.stringify(localeCompon.componData))?.forEach(
+              (c_item: any) => {
+                if (c_item.authority.includes(item.name)) {
+                  item.authority.push(c_item);
+                }
+              },
+            );
             return item;
           });
           if (msg) {
