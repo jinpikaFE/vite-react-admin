@@ -19,6 +19,32 @@ export default [
               authority: 'admin',
             },
             {
+              path: '/authManage',
+              name: 'authManage',
+              icon: 'icon-manage',
+              authority: ['admin', 'user'],
+              routes: [
+                {
+                  path: '/authManage/componManage',
+                  name: 'componManage',
+                  icon: 'icon-manage',
+                  authority: ['admin', 'user'],
+                },
+                {
+                  path: '/authManage/roleManage',
+                  name: 'roleManage',
+                  icon: 'icon-manage',
+                  authority: ['admin', 'user'],
+                },
+                {
+                  path: '/authManage/userManage',
+                  name: 'userManage',
+                  icon: 'icon-manage',
+                  authority: ['admin', 'user'],
+                },
+              ],
+            },
+            {
               path: '/admin',
               name: 'admin',
               access: 'canAdmin',
@@ -74,18 +100,6 @@ export default [
                 {
                   path: '/list/sub-page',
                   name: '一级列表页面',
-                },
-                {
-                  path: '/list/sub-page2',
-                  name: '二级列表页面',
-                  component: './Welcome',
-                  authority: 'admin',
-                },
-                {
-                  path: '/list/sub-page3',
-                  name: '三级列表页面',
-                  component: './Welcome',
-                  authority: 'admin',
                 },
               ],
             },

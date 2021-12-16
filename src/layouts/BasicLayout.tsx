@@ -10,17 +10,19 @@ import ProLayout from '@ant-design/pro-layout';
 import { renderRoutes } from 'react-router-config';
 import '@ant-design/pro-layout/dist/layout.css';
 import { GithubOutlined } from '@ant-design/icons';
-import { queryMenu } from '@/services/global';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { Button, Input, Spin } from 'antd';
 import { useFormatMessage } from 'react-intl-hooks';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import proSettings from '@config/defaultSettings';
 import Authorized from '@/utils/Authorized';
-import { getAuthorityFromRouter } from '@/utils/untils';
+import { getAuthorityFromRouter, toTree } from '@/utils/untils';
 import NotFound from '@/components/NotFound';
 import loaclRoutes from '@config/routes';
 import type { RouteConfig } from 'react-router-config';
+import { queryCompon } from '@/pages/authManage/ComponManage/services';
+import { TParams, TProColumns } from '@/pages/authManage/ComponManage/type';
+import { localeCompon } from '@/stores/compon';
 
 const defaultFooterDom = (
   <DefaultFooter
@@ -117,9 +119,19 @@ const BasicLayout: React.FC<{ route: RouteConfig }> = (props) => {
 
   useEffect(() => {
     const getMenu = async () => {
-      const res = await queryMenu();
+      const res = await queryCompon<TParams, TProColumns[]>();
       if (res) {
-        setMenuData(res.data?.menuData); // res.data?.menuData
+        localeCompon.setComponData(res?.data);
+        // 使用toTree操作mobx全局的localeCompon.componData需要深拷贝
+        const newData = toTree({
+          data: JSON.parse(JSON.stringify(localeCompon.componData)),
+          key: '_id',
+          parentKey: 'parentId',
+          cb: (item) => item,
+          children: 'routes',
+          type: 'menu',
+        });
+        setMenuData(newData); // res.data?.menuData
       }
     };
     getMenu();
