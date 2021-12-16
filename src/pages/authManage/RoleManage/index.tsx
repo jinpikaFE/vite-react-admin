@@ -1,13 +1,15 @@
 import RightDrawer from '@/components/RightDrawer';
-import { queryMenu } from '@/services/global';
 import exportToExcel from '@/utils/exportToExcel';
 import { toTree } from '@/utils/untils';
 import { PlusOutlined } from '@ant-design/icons';
-import ProForm, { ProFormInstance, ProFormText } from '@ant-design/pro-form';
+import { ProFormInstance } from '@ant-design/pro-form';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Button, message, Popconfirm, Select, Tag, TreeSelect } from 'antd';
+import { Button, message, Popconfirm, Tag, TreeSelect } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormatMessage } from 'react-intl-hooks';
+import { queryCompon } from '../ComponManage/services';
+import { TParams, TProColumns } from '../ComponManage/type';
+import RoleFormItem from './components/RoleFormItem';
 import {
   createRole,
   delRole,
@@ -24,11 +26,19 @@ const RoleManager: React.FC = () => {
   const formRef = useRef<ProFormInstance | any>();
 
   const [treeData, setTreeData] = useState<any[]>([]);
-  const [menusData, setMenusData] = useState<any[]>([]);
+  const [componsData, setComponsData] = useState<any[]>([]);
 
   const [datasSource, setDatasSource] = useState<any[]>([]);
 
   const formatMessage = useFormatMessage();
+
+  const tProps = {
+    treeData,
+    treeDefaultExpandAll: true,
+    placeholder: '请选择',
+    allowClear: true,
+    dropdownStyle: { maxHeight: 400, overflow: 'auto' },
+  };
 
   const columns: ProColumns[] = [
     {
@@ -55,17 +65,7 @@ const RoleManager: React.FC = () => {
       title: '权限',
       dataIndex: 'authority',
       renderFormItem: () => {
-        return (
-          <Select allowClear>
-            {menusData?.map((item) => {
-              return (
-                <Select.Option value={item._id} key={item._id}>
-                  {formatMessage({ id: `menu.${item?.name}` }) as string}
-                </Select.Option>
-              );
-            })}
-          </Select>
-        );
+        return <TreeSelect {...tProps} />;
       },
       render: (text) => (
         <>
@@ -75,7 +75,11 @@ const RoleManager: React.FC = () => {
               color={item?.color}
               style={{ marginBottom: '5px' }}
             >
-              {formatMessage({ id: `menu.${item?.name}` }) as string}
+              {
+                formatMessage({
+                  id: `component.create.${item?.name}`,
+                }) as string
+              }
             </Tag>
           ))}
         </>
@@ -135,31 +139,36 @@ const RoleManager: React.FC = () => {
 
   useEffect(() => {
     const getTableData = async () => {
-      const res = await queryMenu();
-      setMenusData(res?.data);
+      const res = await queryCompon<TParams, TProColumns[]>();
+      setComponsData(res?.data);
     };
     getTableData();
   }, []);
 
   useEffect(() => {
-    if (visibleDrawer) {
-      const getData = async () => {
-        if (menusData) {
-          const dataTemp = toTree(menusData, '_id', 'lastMenu', (item: any) => {
-            item.title = formatMessage({ id: `menu.${item.name}` }) as string;
+    const getData = async () => {
+      if (componsData) {
+        const dataTemp = toTree({
+          data: componsData,
+          key: '_id',
+          parentKey: 'parentId',
+          cb: (item: any) => {
+            item.title = formatMessage({
+              id: `component.create.${item.name}`,
+            }) as string;
             item.value = item._id;
             if (item?.isLink) {
               item.disabled = true;
               return item;
             }
             return item;
-          });
-          setTreeData(dataTemp);
-        }
-      };
-      getData();
-    }
-  }, [visibleDrawer, cItem]);
+          },
+        });
+        setTreeData(dataTemp);
+      }
+    };
+    getData();
+  }, [componsData]);
 
   const showDrawer = () => {
     setVisibleDrawer(true);
@@ -183,49 +192,8 @@ const RoleManager: React.FC = () => {
     }
   };
 
-  const tProps = {
-    treeData,
-    treeDefaultExpandAll: true,
-    treeCheckable: true,
-    treeCheckStrictly: true,
-    showCheckedStrategy: TreeSelect.SHOW_ALL,
-    placeholder: '请选择',
-    allowClear: true,
-    className: 'input-fix-md',
-    dropdownStyle: { maxHeight: 400, overflow: 'auto' },
-  };
-
   const renderFormItemDom = () => {
-    return (
-      <>
-        <ProFormText
-          width="md"
-          name="name"
-          label="角色名"
-          tooltip="最长为 16 位"
-          placeholder="请输入角色名"
-          rules={[
-            { required: true, message: '请输入角色名!' },
-            {
-              validator: (rule, value, callback) => {
-                if (value.length > 16) {
-                  callback('角色名过长，最长为 16 位');
-                } else {
-                  callback();
-                }
-              },
-            },
-          ]}
-        />
-        <ProForm.Item
-          label="权限"
-          name="authority"
-          rules={[{ required: true, message: '请选择权限!' }]}
-        >
-          <TreeSelect {...tProps} />
-        </ProForm.Item>
-      </>
-    );
+    return <RoleFormItem treeData={treeData} />;
   };
 
   const onFinish = async (values: FormRoleType) => {
@@ -259,7 +227,7 @@ const RoleManager: React.FC = () => {
         request={async (params, sorter, filter) => {
           // 这里需要返回一个 Promise,在返回之前你可以进行数据转化
           // 如果需要转化参数可以在这里进行修改
-          const res = await queryMenu();
+          const res = await queryCompon<TParams, TProColumns[]>();
           const msg = await queryRole({ ...params, ...sorter, ...filter });
           const dataTemp = msg.data?.map((item: any) => {
             item.authority = [];
@@ -270,30 +238,9 @@ const RoleManager: React.FC = () => {
             });
             return item;
           });
-          const midDataTemp = JSON.parse(JSON.stringify(dataTemp));
           if (msg) {
-            const execlData = midDataTemp.map(
-              (item: {
-                authority: any[];
-                name?: string;
-                registerTime?: any;
-              }) => {
-                const tempArr: string[] = [];
-                item?.authority?.map((c_item) => {
-                  tempArr.push(
-                    formatMessage({ id: `menu.${c_item.name}` }) as string,
-                  );
-                });
-                item.authority = tempArr;
-                const { name, authority, registerTime } = item;
-                return {
-                  name,
-                  authority,
-                  registerTime: new Date(registerTime).toLocaleString(),
-                };
-              },
-            );
-            setDatasSource(execlData);
+            // execel导出数据
+            setDatasSource(msg.data);
             return {
               data: dataTemp,
               success: true,
