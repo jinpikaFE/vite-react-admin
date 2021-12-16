@@ -6,16 +6,17 @@ import { TProColumns } from '../type';
 const ComponFormItem: React.FC<{ cRecord: TProColumns }> = (props) => {
   const { cRecord } = props;
 
-  const [showIsLink, setShowIsLink] = useState<boolean>(true);
+  const [showNotMenu, setShowNotMenu] = useState<boolean>(true);
 
   useEffect(() => {
-    cRecord?.type !== 'menu' && setShowIsLink(false);
-    cRecord?.type === 'menu' && setShowIsLink(true);
+    cRecord?.type !== 'menu' && setShowNotMenu(false);
+    cRecord?.type === 'menu' && setShowNotMenu(true);
   }, [cRecord?.type]);
 
   return (
     <>
-      <ProFormText width="md" name="parentId" label="上级菜单" disabled />
+      <ProFormText width="md" name="parentId" label="上级组件" disabled />
+      <ProFormText width="md" name="parentName" label="上级组件名称" disabled />
       <ProFormSelect
         width="md"
         name="type"
@@ -23,8 +24,8 @@ const ComponFormItem: React.FC<{ cRecord: TProColumns }> = (props) => {
         placeholder="请输入选择组件类型"
         rules={[{ required: true, message: '请输入选择组件类型!' }]}
         onChange={(val: string) => {
-          val !== 'menu' && setShowIsLink(false);
-          val === 'menu' && setShowIsLink(true);
+          val !== 'menu' && setShowNotMenu(false);
+          val === 'menu' && setShowNotMenu(true);
         }}
         valueEnum={{
           menu: {
@@ -40,7 +41,7 @@ const ComponFormItem: React.FC<{ cRecord: TProColumns }> = (props) => {
             text: '普通组件',
           },
         }}
-      ></ProFormSelect>
+      />
       <ProFormText
         width="md"
         name="name"
@@ -60,49 +61,53 @@ const ComponFormItem: React.FC<{ cRecord: TProColumns }> = (props) => {
           },
         ]}
       />
-      <ProFormText
-        width="md"
-        name="path"
-        label="路由路径"
-        placeholder="路由路径，例‘/path/paths’,‘https://www.baidu.com/’"
-        rules={[
-          { required: true, message: '请输入路由路径!' },
-          {
-            validator: (rule, value, callback) => {
-              const match = new RegExp('^(/[a-zA-Z]+)+$', 'g');
-              const urlMatch = new RegExp(
-                '^https?://(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+.)+(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+)',
-                'g',
-              );
-              if (!(match.test(value) || urlMatch.test(value))) {
-                callback('请输入正确的路由');
-              } else {
-                callback();
-              }
+      {showNotMenu && (
+        <ProFormText
+          width="md"
+          name="path"
+          label="路由路径"
+          placeholder="路由路径，例‘/path/paths’,‘https://www.baidu.com/’"
+          rules={[
+            { required: true, message: '请输入路由路径!' },
+            {
+              validator: (rule, value, callback) => {
+                const match = new RegExp('^(/[a-zA-Z]+)+$', 'g');
+                const urlMatch = new RegExp(
+                  '^https?://(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+.)+(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+)',
+                  'g',
+                );
+                if (!(match.test(value) || urlMatch.test(value))) {
+                  callback('请输入正确的路由');
+                } else {
+                  callback();
+                }
+              },
             },
-          },
-        ]}
-      />
-      <ProFormText
-        width="md"
-        name="icon"
-        label="图标"
-        placeholder="请输入图标名"
-        rules={[
-          { required: true, message: '请输入图标名!' },
-          {
-            validator: (rule, value, callback) => {
-              const match = new RegExp('^[^\u4e00-\u9fa5]+$', 'g');
-              if (!match.test(value)) {
-                callback('请输入正确的图标名');
-              } else {
-                callback();
-              }
+          ]}
+        />
+      )}
+      {showNotMenu && (
+        <ProFormText
+          width="md"
+          name="icon"
+          label="图标"
+          placeholder="请输入图标名"
+          rules={[
+            { required: true, message: '请输入图标名!' },
+            {
+              validator: (rule, value, callback) => {
+                const match = new RegExp('^[^\u4e00-\u9fa5]+$', 'g');
+                if (!match.test(value)) {
+                  callback('请输入正确的图标名');
+                } else {
+                  callback();
+                }
+              },
             },
-          },
-        ]}
-      />
-      {showIsLink && (
+          ]}
+        />
+      )}
+      {showNotMenu && (
         <ProForm.Item name="isLink" label="是否外链">
           <Radio.Group
             optionType="button"

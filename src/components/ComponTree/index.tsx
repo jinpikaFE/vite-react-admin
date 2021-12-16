@@ -16,10 +16,10 @@ const ComponTree: React.FC<ComponProps> = React.forwardRef((props, ref) => {
     proTableProps,
     FromProps,
     newBtnTitle,
+    cItem,
+    setCItem,
   } = props;
   const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
-
-  const [cItem, setCItem] = useState<any>();
 
   useImperativeHandle(ref, () => ({
     edit: (record: any) => {
@@ -34,13 +34,14 @@ const ComponTree: React.FC<ComponProps> = React.forwardRef((props, ref) => {
 
   const onCloseDrawer = () => {
     setVisibleDrawer(false);
+    setCItem(undefined);
   };
 
   return (
     <>
       <ProTable
         // 前面为默认值可通过proTableProps覆盖
-        scroll={{ x: 700 }}
+        scroll={{ x: 1200 }}
         bordered
         actionRef={refTable}
         columns={columns}
@@ -62,7 +63,6 @@ const ComponTree: React.FC<ComponProps> = React.forwardRef((props, ref) => {
             type="primary"
             onClick={() => {
               showDrawer();
-              setCItem(undefined);
             }}
           >
             {newBtnTitle}

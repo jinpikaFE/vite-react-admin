@@ -14,6 +14,8 @@ import { MutableRefObject } from 'react';
 export type ComponProps = {
   columns: ProColumns[];
   formRef: any;
+  cItem: TProColumns;
+  setCItem: (cItem: TProColumns | undefined) => void;
   refTable: MutableRefObject<ActionType | undefined>;
   drawerTitle?: string; // 抽屉标题
   newBtnTitle?: string;

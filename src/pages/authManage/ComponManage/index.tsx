@@ -14,21 +14,30 @@ const SideMenu: React.FC = () => {
   const refTable = useRef<ActionType>();
   const formRef = useRef();
   const childrenRef = useRef<any>(null);
+
+  const [dataSource, setDataSource] = useState<any[]>([]);
+
+  const [cItem, setCItem] = useState<TProColumns | any>();
+
   const del = async (id: string) => {
     const res = await delCompon(id);
     refTable?.current?.reload();
     window.location.reload();
     message.success(res.message || '删除成功');
   };
-  const [dataSource, setDataSource] = useState<any[]>([]);
-
-  const [cRecord, setCRecord] = useState<TProColumns | any>();
 
   const columns: ProColumns<TProColumns>[] = [
     {
       title: '组件名称',
       dataIndex: 'name',
       copyable: true,
+    },
+    {
+      title: 'ID',
+      dataIndex: '_id',
+      copyable: true,
+      ellipsis: true,
+      width: '10%',
     },
     {
       title: '图标',
@@ -45,6 +54,7 @@ const SideMenu: React.FC = () => {
       title: '类型',
       dataIndex: 'type',
       valueType: 'select',
+      width: '10%',
       valueEnum: {
         menu: { text: '菜单组件', color: 'green' },
         page: {
@@ -61,17 +71,20 @@ const SideMenu: React.FC = () => {
       title: '创建时间',
       dataIndex: 'registerTime',
       valueType: 'dateTime',
+      width: '10%',
     },
     {
       title: '操作',
       valueType: 'option',
-      width: 50,
       render: (text, record) => [
         <Button
           type="link"
           key="addChild"
           onClick={() => {
-            childrenRef.current?.edit();
+            childrenRef.current?.edit({
+              parentId: record?._id,
+              parentName: record?.name,
+            });
           }}
         >
           添加子组件
@@ -80,7 +93,7 @@ const SideMenu: React.FC = () => {
           type="link"
           key="editable"
           onClick={() => {
-            setCRecord(record);
+            setCItem(record);
             childrenRef.current?.edit(record);
           }}
         >
@@ -107,14 +120,18 @@ const SideMenu: React.FC = () => {
   ];
 
   const renderFormItemDom = () => {
-    return <ComponFormItem cRecord={cRecord} />;
+    return <ComponFormItem cRecord={cItem} />;
   };
 
   const onFinish = async (values: any) => {
-    if (cRecord) {
+    console.log(values);
+
+    if (cItem && cItem?.name) {
       // 编辑逻辑
+      console.log('编辑逻辑');
     } else {
       // 新增逻辑
+      console.log('新增逻辑');
     }
   };
 
@@ -161,9 +178,11 @@ const SideMenu: React.FC = () => {
       FromProps={{
         initialValues: {
           isLink: 0,
-          parentId: cRecord?.parentId,
+          parentId: cItem?.parentId,
         },
       }}
+      cItem={cItem}
+      setCItem={setCItem}
       drawerTitle="新增组件"
       renderFormItemDom={renderFormItemDom}
       columns={columns}
