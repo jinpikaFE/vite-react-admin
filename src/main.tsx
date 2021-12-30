@@ -14,6 +14,17 @@ import locale_tw from './locales/zh-TW';
 import { localeLanguage } from '@/stores/language';
 import { Observer } from 'mobx-react';
 
+import { Inspector, InspectParams } from 'react-dev-inspector';
+
+const INSPECT_HOTKEY = ['control', 'shift', 'space'];
+const INSPECT_LISTEN_MODES = ['development', 'mock'];
+
+const InspectorWrapper = INSPECT_LISTEN_MODES.includes(
+  process.env.NODE_ENV ?? '',
+)
+  ? Inspector
+  : React.Fragment;
+
 const data = {
   zh: locale_cn,
   en: locale_en,
@@ -26,16 +37,25 @@ const data = {
 const language = navigator.language.split(/[-_]/)[0];
 
 ReactDOM.render(
-  <Observer>
-    {() => (
-      <IntlProvider
-        locale={language}
-        messages={(data as any)?.[localeLanguage?.localeLang || language]}
-        defaultLocale="zh"
-      >
-        <RouterView />
-      </IntlProvider>
-    )}
-  </Observer>,
+  <InspectorWrapper
+    keys={INSPECT_HOTKEY}
+    disableLaunchEditor={false}
+    onClickElement={(params: InspectParams) => {
+      // eslint-disable-next-line no-console
+      console.log(params);
+    }}
+  >
+    <Observer>
+      {() => (
+        <IntlProvider
+          locale={language}
+          messages={(data as any)?.[localeLanguage?.localeLang || language]}
+          defaultLocale="zh"
+        >
+          <RouterView />
+        </IntlProvider>
+      )}
+    </Observer>
+  </InspectorWrapper>,
   document.getElementById('root'),
 );
