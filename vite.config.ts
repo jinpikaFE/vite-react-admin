@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from 'vite';
 import reactRefresh from '@vitejs/plugin-react-refresh';
+import { inspectorServer } from 'react-dev-inspector/plugins/vite';
 import { viteMockServe } from 'vite-plugin-mock';
 import proxy from './config/proxy';
 import path from 'path';
@@ -10,6 +11,7 @@ export default ({ mode }) => {
   return defineConfig({
     plugins: [
       reactRefresh(),
+      inspectorServer(),
       viteMockServe({
         // default
         localEnabled: process.env.VITE_MODE === 'mock',
