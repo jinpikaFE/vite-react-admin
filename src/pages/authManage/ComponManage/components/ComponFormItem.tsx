@@ -23,9 +23,11 @@ const ComponFormItem: React.FC<{ cRecord: TProColumns }> = (props) => {
         label="组件类型"
         placeholder="请输入选择组件类型"
         rules={[{ required: true, message: '请输入选择组件类型!' }]}
-        onChange={(val: string) => {
-          val !== 'menu' && setShowNotMenu(false);
-          val === 'menu' && setShowNotMenu(true);
+        fieldProps={{
+          onChange: (val: string) => {
+            val !== 'menu' && setShowNotMenu(false);
+            val === 'menu' && setShowNotMenu(true);
+          },
         }}
         valueEnum={{
           menu: {
