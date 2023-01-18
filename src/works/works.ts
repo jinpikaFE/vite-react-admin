@@ -38,18 +38,18 @@ const workercode = () => {
       type?: string;
     }) => {
       // 删除 所有 children,以防止多次调用
-      data.forEach(function (item) {
+      data?.forEach(function (item) {
         delete item.children;
       });
 
       // 将数据存储为 以 id 为 KEY 的 map 索引数据列
       const map: any = {};
-      data.forEach(function (item) {
+      data?.forEach(function (item) {
         map[item?.[key]] = item;
       });
       //        console.log(map);
       const val: any[] = [];
-      data.forEach(function (item) {
+      data?.forEach(function (item) {
         // 以当前遍历项，的pid,去map对象中找到索引的id
         const parent = map?.[item?.[parentKey]];
         const newItem = cb(item);
