@@ -1,12 +1,12 @@
-import { ResultType } from '@/types/global';
+import { MockMethod } from 'vite-plugin-mock'
 
 export default [
   {
     url: '/api/users',
     method: 'get',
     response: ({ body }: any) => {
-      const resObj: ResultType<any> = {
-        code: 0,
+      const resObj: Global.ResultType = {
+        code: 200,
         message: '查询成功',
         data: [
           {
@@ -20,16 +20,17 @@ export default [
                 uid: 'avatar_1636015978030',
                 name: 'avatar_1636015978030.png',
                 status: 'done',
-                url: 'http://127.0.0.1:3003/asset/avatar_1636015978030.png',
-              },
+                url: 'http://127.0.0.1:3003/asset/avatar_1636015978030.png'
+              }
             ],
             password: 'RBjsYi5YeIHo6txm2CL1pg==',
             salt: 'IjTw',
-            registerTime: { $date: '2021-11-04T08:52:58.035Z' },
-          },
-        ],
-      };
-      return resObj;
+            registerTime: { $date: '2021-11-04T08:52:58.035Z' }
+          }
+        ]
+      }
+      return resObj
     },
-  },
-];
+    statusCode: 400
+  }
+] as MockMethod[]

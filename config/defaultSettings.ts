@@ -1,26 +1,10 @@
-import { ICON_URL } from '@/types/constants';
-import { Settings as ProSettings } from '@ant-design/pro-layout';
-import logo from '@/assets/logo.png';
+import { ProSettings } from '@ant-design/pro-components'
 
-type DefaultSettings = Partial<ProSettings> & {
-  pwa: boolean;
-  logo: string;
-};
-
-const proSettings: DefaultSettings = {
-  logo,
-  // 拂晓蓝
-  primaryColor: '#4569D4',
-  layout: 'side',
-  contentWidth: 'Fluid',
-  fixedHeader: false,
+/** prolayput 设置 */
+const Settings: ProSettings | undefined = {
   fixSiderbar: true,
-  colorWeak: false,
-  title: 'Jin Pi Ka',
-  pwa: false,
-  iconfontUrl: ICON_URL,
-};
+  layout: 'mix'
+  // splitMenus: true
+}
 
-export type { DefaultSettings };
-
-export default proSettings;
+export default Settings

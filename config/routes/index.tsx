@@ -1,105 +1,79 @@
-import React from 'react';
-import { lazy } from 'react';
-import type { RouteConfig } from 'react-router-config';
-import { Redirect } from 'react-router-dom';
+import NotFoundPage from '@/404'
+import App from '@/App'
+import ErrorPage from '@/ErrorPage'
+import Login from '@/pages/Login'
+import Test from '@/pages/Test'
+import TestChild from '@/pages/Test/TestChild'
+import { SmileFilled } from '@ant-design/icons'
+import { MenuDataItem } from '@ant-design/pro-components'
+import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
 
-const routes: RouteConfig[] = [
+export type ExtraRouteType = {
+  /** 是否需要菜单布局 */
+  layout?: string | 'hide'
+  /** 在菜单栏是否显示 */
+  hideInMenu?: boolean
+} & Partial<MenuDataItem>
+
+export const router = createBrowserRouter([
   {
     path: '/',
-    component: lazy(() => import('@/layouts/BlankLayout')) as any,
-    routes: [
-      {
-        path: '/',
-        exact: true,
-        render: () => {
-          return <Redirect to={'/login'} />;
-        },
-      },
+    /** 重定向 */
+    element: <Navigate replace to="/home" />
+  },
+  {
+    path: '/',
+    /** 承载布局 */
+    element: <App />,
+    errorElement: <ErrorPage />,
+    icon: <SmileFilled />,
+    children: [
+      /** 布局下路由，页面路由在该children配置 */
       {
         path: '/login',
-        component: lazy(() => import('@/pages/Login')),
+        name: '登录',
+        hideInMenu: true,
+        element: <Login />,
+        layout: 'hide'
       },
       {
-        path: '/',
-        component: lazy(() => import('@/layouts/BasicLayout')) as any,
-        routes: [
+        path: '/home',
+        name: '首页',
+        icon: <SmileFilled />,
+        children: [
           {
-            path: '/home',
-            component: lazy(() => import('@/pages/Home')),
+            path: 'oneOne',
+            name: '一级-1',
+            element: <Test />,
+            children: [
+              {
+                path: ':id',
+                name: '一级-1-二级',
+                element: <TestChild />
+              }
+            ]
           },
           {
-            path: '/authManage',
-            component: lazy(() => import('@/layouts/BlankLayout')) as any,
-            routes: [
-              {
-                path: '/authManage/componManage',
-                component: lazy(
-                  () => import('@/pages/authManage/ComponManage'),
-                ),
-              },
-              {
-                path: '/authManage/roleManage',
-                component: lazy(() => import('@/pages/authManage/RoleManage')),
-              },
-              {
-                path: '/authManage/userManage',
-                component: lazy(() => import('@/pages/authManage/UserManage')),
-              },
-            ],
+            path: 'oneTwo',
+            name: '一级-2',
+            element: <Test />
           },
-          // 本地路由定义过的，下一级末尾添加404，未定义过的，即使三级路由也会404
           {
-            path: '/admin',
-            component: lazy(() => import('@/layouts/BlankLayout')) as any,
-            routes: [
-              {
-                path: '/admin/auth1',
-                component: lazy(() => import('@/pages/admin/Auth1')),
-              },
-              {
-                path: '/admin/auth2',
-                component: lazy(() => import('@/pages/admin/Auth2')),
-              },
-              {
-                path: '/admin/auth3',
-                // 有子路由且空白布局时
-                component: lazy(() => import('@/layouts/BlankLayout')) as any,
-                routes: [
-                  {
-                    path: '/admin/auth3/test',
-                    // 有子路由且空白布局时
-                    component: lazy(() => import('@/pages/admin/Auth3')),
-                  },
-                  {
-                    path: '/admin/auth3/test3',
-                    // 有子路由且空白布局时
-                    component: lazy(() => import('@/pages/admin/Auth3/Auth31')),
-                  },
-                  {
-                    path: '*',
-                    component: lazy(() => import('@/components/NotFound')),
-                  },
-                ],
-              },
-              {
-                path: '*',
-                component: lazy(() => import('@/components/NotFound')),
-              },
-            ],
-          },
-          // 每一个层级末尾加404
-          {
-            path: '*',
-            component: lazy(() => import('@/components/NotFound')),
-          },
-        ],
+            path: 'hideInMenu',
+            name: 'hideInMenu',
+            hideInMenu: true,
+            element: <TestChild />
+          }
+        ]
       },
       {
-        path: '*',
-        component: lazy(() => import('@/components/NotFound')),
-      },
-    ],
+        path: 'layoutNone',
+        name: '布局隐藏',
+        hideInMenu: true,
+        layout: 'hide',
+        element: <TestChild />
+      }
+    ]
   },
-];
-
-export default routes;
+  { path: '*', element: <NotFoundPage /> }
+] as (RouteObject & ExtraRouteType)[])
