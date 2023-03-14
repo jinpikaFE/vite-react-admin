@@ -4,7 +4,7 @@
 
 分支 vite_4.0 版本为通用的模版，可进行 clone 直接使用
 
-分支 1.0 版本为vite2.0版本，功能更全，后续会对 vite_4.0版本进行内容补充
+分支 1.0 版本为 vite2.0 版本，功能更全，后续会对 vite_4.0 版本进行内容补充
 
 ## 相关技术
 
@@ -16,8 +16,10 @@
 | @ant-design/pro-components 2.4.0 | https://procomponents.ant.design/ | 中后台高阶组件   |
 | mobx 6.8.0                       | https://mobx.js.org/README.html   | 轻量级状态管理   |
 | typescript                       | -                                 | 代码类型规范     |
+| axios                            | -                                 | 数据请求         |
 | prettier                         | -                                 | 代码美化，格式化 |
 | eslint                           | -                                 | 代码规范         |
+| stylelint                        | -                                 | css 代码规范     |
 | husky                            | -                                 | git commit 检验  |
 | lint-staged                      | -                                 | git commit 检验  |
 
@@ -54,7 +56,7 @@
 
 ## 安装依赖
 
-推荐使用pnpm
+推荐使用 pnpm
 
 ```bash
 pnpm install
