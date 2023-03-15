@@ -7,7 +7,7 @@
  * https://pro.ant.design/docs/deploy
  */
 export default {
-  dev: {
+  development: {
     '/api/': {
       target: 'http://jinxinapp.cn',
       changeOrigin: true,

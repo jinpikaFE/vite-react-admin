@@ -4,7 +4,7 @@ import eslintPlugin from 'vite-plugin-eslint'
 import { viteMockServe } from 'vite-plugin-mock'
 
 import path from 'path'
-import proxy from '@config/proxy'
+import proxy from './config/proxy'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
