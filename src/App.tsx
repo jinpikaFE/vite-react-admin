@@ -6,8 +6,11 @@ import {
 } from '@ant-design/pro-components'
 import Settings from '@config/defaultSettings'
 import { ExtraRouteType, router } from '@config/routes'
+import { useAsyncEffect } from 'ahooks'
+import { observer } from 'mobx-react'
 import { useState } from 'react'
 import { Outlet, RouteObject, useNavigate } from 'react-router-dom'
+import { storeGlobalUser } from './store/globalUser'
 import defaultProps from './_defaultProps'
 const App = () => {
   const [pathname, setPathname] = useState(window.location.pathname)
@@ -25,6 +28,10 @@ const App = () => {
       return item
     }) as any
   }
+
+  useAsyncEffect(async () => {
+    await storeGlobalUser.getUserDetail()
+  }, [])
 
   return (
     <div
@@ -45,7 +52,7 @@ const App = () => {
           avatarProps={{
             src: 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
             size: 'small',
-            title: '七妮妮'
+            title: storeGlobalUser.userInfo.username
           }}
           menuFooterRender={props => {
             return (
@@ -87,4 +94,4 @@ const App = () => {
   )
 }
 
-export default App
+export default observer(App)

@@ -1,4 +1,4 @@
-import http from '@/server/'
+import http from '@/server'
 
 export async function getData(data?: { url: string; check_token: string }) {
   return http.request({

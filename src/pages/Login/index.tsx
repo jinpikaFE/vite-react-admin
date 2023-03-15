@@ -1,3 +1,5 @@
+import { login } from '@/apis/login'
+import { storage } from '@/utils/Storage'
 import {
   AlipayOutlined,
   LockOutlined,
@@ -15,6 +17,7 @@ import {
 import { Button, Divider, message, Space, Tabs } from 'antd'
 import type { CSSProperties } from 'react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 type LoginType = 'phone' | 'account'
 
@@ -27,6 +30,7 @@ const iconStyles: CSSProperties = {
 
 const Login = () => {
   const [loginType, setLoginType] = useState<LoginType>('account')
+  const navigate = useNavigate()
   return (
     <div style={{ backgroundColor: 'white', height: '100vh' }}>
       <LoginFormPage
@@ -34,6 +38,11 @@ const Login = () => {
         logo="https://github.githubassets.com/images/modules/logos_page/Octocat.png"
         title="Github"
         subTitle="全球最大的代码托管平台"
+        onFinish={async (val: Login.LoginEntity) => {
+          const res = await login(val)
+          storage.set('token', res?.data?.token)
+          navigate('/')
+        }}
         activityConfig={{
           style: {
             boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.2)',
