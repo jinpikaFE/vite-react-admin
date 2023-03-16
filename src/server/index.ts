@@ -85,7 +85,7 @@ const transform: AxiosTransform = {
       return res.data
     }
 
-    if (code === ResultEnum.ERROR) {
+    if (code >= 400 && code < 500) {
       Message.error(res?.data?.message || '系统内部错误')
       return Promise.reject(res?.data?.message || '系统内部错误')
     }

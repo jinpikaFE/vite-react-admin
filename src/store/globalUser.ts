@@ -11,6 +11,10 @@ class GlobalUser {
     const res = await getCurrentUserInfo()
     this.userInfo = res?.data
   }
+
+  setUserInfo(user: Partial<User.UserEntity>) {
+    this.userInfo = user
+  }
 }
 
 export const storeGlobalUser = new GlobalUser()
