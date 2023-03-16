@@ -35,8 +35,8 @@ const Login = () => {
     <div style={{ backgroundColor: 'white', height: '100vh' }}>
       <LoginFormPage
         backgroundImageUrl="https://gw.alipayobjects.com/zos/rmsportal/FfdJeJRQWjEeGTpqgBKj.png"
-        logo="https://github.githubassets.com/images/modules/logos_page/Octocat.png"
-        title="Github"
+        logo="https://jinpika-1308276765.cos.ap-shanghai.myqcloud.com/images/logo.png"
+        title="JinPiKa"
         subTitle="全球最大的代码托管平台"
         onFinish={async (val: Login.LoginEntity) => {
           const res = await login(val)

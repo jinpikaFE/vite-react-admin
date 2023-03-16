@@ -1,11 +1,14 @@
 import NotFoundPage from '@/404'
 import App from '@/App'
 import ErrorPage from '@/ErrorPage'
+import Home from '@/pages/Home'
 import Login from '@/pages/Login'
 import Test from '@/pages/Test'
 import TestChild from '@/pages/Test/TestChild'
-import { SmileFilled } from '@ant-design/icons'
+import { storage } from '@/utils/Storage'
+import { HomeFilled, SmileFilled } from '@ant-design/icons'
 import { MenuDataItem } from '@ant-design/pro-components'
+import { message } from 'antd'
 import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
 
 export type ExtraRouteType = {
@@ -14,6 +17,15 @@ export type ExtraRouteType = {
   /** 在菜单栏是否显示 */
   hideInMenu?: boolean
 } & Partial<MenuDataItem>
+
+const Permissions = ({ children }: any) => {
+  const token = storage.get('token')
+  if (token) {
+    return children
+  }
+  message.error('token不存在')
+  return <Navigate replace to="/login" />
+}
 
 export const router = createBrowserRouter([
   {
@@ -24,21 +36,24 @@ export const router = createBrowserRouter([
   {
     path: '/',
     /** 承载布局 */
-    element: <App />,
+    element: (
+      <Permissions>
+        <App />
+      </Permissions>
+    ),
     errorElement: <ErrorPage />,
     icon: <SmileFilled />,
     children: [
       /** 布局下路由，页面路由在该children配置 */
       {
-        path: '/login',
-        name: '登录',
-        hideInMenu: true,
-        element: <Login />,
-        layout: 'hide'
-      },
-      {
         path: '/home',
         name: '首页',
+        icon: <HomeFilled />,
+        element: <Home />
+      },
+      {
+        path: '/frist',
+        name: '嵌套路由',
         icon: <SmileFilled />,
         children: [
           {
@@ -74,6 +89,11 @@ export const router = createBrowserRouter([
         element: <TestChild />
       }
     ]
+  },
+  {
+    path: '/login',
+    name: '登录',
+    element: <Login />
   },
   { path: '*', element: <NotFoundPage /> }
 ] as (RouteObject & ExtraRouteType)[])

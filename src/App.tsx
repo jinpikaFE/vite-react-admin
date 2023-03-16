@@ -1,3 +1,5 @@
+import { Suspense } from 'react'
+import Loading from './components/loading'
 import BasicLayout from './layout/BasicLayout'
 
 const App = () => {
@@ -8,7 +10,9 @@ const App = () => {
         height: '100vh'
       }}
     >
-      <BasicLayout />
+      <Suspense fallback={<Loading />}>
+        <BasicLayout />
+      </Suspense>
     </div>
   )
 }

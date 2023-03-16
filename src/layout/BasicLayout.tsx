@@ -41,7 +41,6 @@ const BasicLayout: React.FC = () => {
           onClick={() => {
             storage.clear()
             navigate('login', { replace: true })
-            setShowLayout(false)
           }}
         >
           退出登录
@@ -58,7 +57,7 @@ const BasicLayout: React.FC = () => {
         pathname
       }}
       avatarProps={{
-        src: 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
+        src: 'https://jinpika-1308276765.cos.ap-shanghai.myqcloud.com/images/logo.png',
         size: 'small',
         title: storeGlobalUser.userInfo.username,
         render: (_, defaultDom) => {
