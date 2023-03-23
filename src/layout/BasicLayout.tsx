@@ -59,7 +59,7 @@ const BasicLayout: React.FC = () => {
       avatarProps={{
         src: 'https://jinpika-1308276765.cos.ap-shanghai.myqcloud.com/images/logo.png',
         size: 'small',
-        title: storeGlobalUser.userInfo.username,
+        title: storeGlobalUser.userInfo?.username,
         render: (_, defaultDom) => {
           return <Dropdown menu={{ items }}>{defaultDom}</Dropdown>
         }
