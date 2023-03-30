@@ -23,7 +23,7 @@ module.exports = {
     'no-debugger': 'warn', // 禁止出现debugger
     'no-duplicate-case': 'warn', // 禁止出现重复case
     'no-empty': 'warn', // 禁止出现空语句块
-    'no-extra-parens': 'warn', // 禁止不必要的括号
+    // 'no-extra-parens': 'warn', // 禁止不必要的括号
     'no-func-assign': 'warn', // 禁止对Function声明重新赋值
     'no-unreachable': 'warn', // 禁止出现[return|throw]之后的代码块
     'no-else-return': 'warn', // 禁止if语句中return语句之后有else块
@@ -55,8 +55,7 @@ module.exports = {
     'arrow-spacing': 'warn', // 要求箭头函数的箭头前后使用一致的空格
     'array-bracket-spacing': 'warn', // 要求数组方括号中使用一致的空格
     'brace-style': 'warn', // 要求在代码块中使用一致的大括号风格
-    camelcase: 'warn', // 要求使用骆驼拼写法命名约定
-    indent: ['warn', 2], // 要求使用JS一致缩进4个空格
+    // indent: ['warn', 2], // 要求使用JS一致缩进4个空格
     'max-depth': ['warn', 4], // 要求可嵌套的块的最大深度4
     'max-statements': ['warn', 100], // 要求函数块最多允许的的语句数量20
     'max-nested-callbacks': ['warn', 3], // 要求回调函数最大嵌套深度3
@@ -64,6 +63,7 @@ module.exports = {
     quotes: ['warn', 'single', 'avoid-escape'], // 要求统一使用单引号符号
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
-    'react/prop-types': 'off'
+    'react/prop-types': 'off',
+    'react/display-name': 'off'
   }
 }

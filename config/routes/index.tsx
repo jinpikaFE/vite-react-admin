@@ -1,12 +1,13 @@
 import NotFoundPage from '@/404'
 import App from '@/App'
 import ErrorPage from '@/ErrorPage'
+import UserManagement from '@/pages/accessManagement/UserManagement'
 import Home from '@/pages/Home'
 import Login from '@/pages/Login'
 import Test from '@/pages/Test'
 import TestChild from '@/pages/Test/TestChild'
 import { storage } from '@/utils/Storage'
-import { HomeFilled, SmileFilled } from '@ant-design/icons'
+import { HomeFilled, LockOutlined, SmileFilled } from '@ant-design/icons'
 import { MenuDataItem } from '@ant-design/pro-components'
 import { message } from 'antd'
 import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
@@ -78,6 +79,33 @@ export const router = createBrowserRouter([
             name: 'hideInMenu',
             hideInMenu: true,
             element: <TestChild />
+          }
+        ]
+      },
+      {
+        path: '/accessManagement',
+        name: '权限管理',
+        icon: <LockOutlined />,
+        children: [
+          {
+            path: 'userManagement',
+            name: '用户管理',
+            element: <UserManagement />
+          },
+          {
+            path: 'roleManagement',
+            name: '角色管理',
+            element: <Test />
+          },
+          {
+            path: 'componentManagement',
+            name: '组件管理',
+            element: <Test />
+          },
+          {
+            path: 'resourceManagement',
+            name: '资源管理管理',
+            element: <Test />
           }
         ]
       },

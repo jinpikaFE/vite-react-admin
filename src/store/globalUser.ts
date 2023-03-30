@@ -1,4 +1,4 @@
-import { getCurrentUserInfo } from '@/apis/admin'
+import { getCurrentUserInfo } from '@/apis/accessManagement/user'
 import { makeAutoObservable } from 'mobx'
 
 class GlobalUser {

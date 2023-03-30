@@ -6,4 +6,8 @@ declare namespace Global {
     code: number
     total?: number
   }
+  type PageParams = {
+    pageNum: number
+    pageSize: number
+  }
 }

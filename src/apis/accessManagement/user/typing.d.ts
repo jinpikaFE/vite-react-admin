@@ -7,4 +7,9 @@ declare namespace User {
     note: string
     email: string
   }
+
+  type UserListParams = {
+    /** 关键词 */
+    keyword?: string
+  } & Global.PageParams
 }
