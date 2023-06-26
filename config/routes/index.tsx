@@ -1,6 +1,8 @@
 import NotFoundPage from '@/404'
 import App from '@/App'
 import ErrorPage from '@/ErrorPage'
+import ResourceManangement from '@/pages/accessManagement/ResourceManangement'
+import RoleManangement from '@/pages/accessManagement/RoleManangement'
 import UserManagement from '@/pages/accessManagement/UserManagement'
 import Home from '@/pages/Home'
 import Login from '@/pages/Login'
@@ -95,7 +97,7 @@ export const router = createBrowserRouter([
           {
             path: 'roleManagement',
             name: '角色管理',
-            element: <Test />
+            element: <RoleManangement />
           },
           {
             path: 'componentManagement',
@@ -105,7 +107,7 @@ export const router = createBrowserRouter([
           {
             path: 'resourceManagement',
             name: '资源管理管理',
-            element: <Test />
+            element: <ResourceManangement />
           }
         ]
       },

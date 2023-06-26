@@ -1,7 +1,8 @@
 import { exportExecl } from '@/utils'
 import { ProColumns, ProFormInstance, ProTable, ProTableProps } from '@ant-design/pro-components'
 import { Button } from 'antd'
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
+import { forwardRef, useRef, useState, useEffect, useImperativeHandle } from 'react'
+import type { FC } from 'react'
 
 type IExcelTable = {
   columns: ProColumns<any, 'text'>[]
@@ -25,7 +26,7 @@ type IExcelTable = {
   setCustomKeys?: React.Dispatch<React.SetStateAction<any[]>>
 } & ProTableProps<any, any>
 
-const ExcelTable = forwardRef((props: IExcelTable, formRefMy: any) => {
+const ExcelTable: FC<IExcelTable> = forwardRef((props, formRefMy: any) => {
   const {
     columns,
     requestFn,
@@ -164,14 +165,14 @@ const ExcelTable = forwardRef((props: IExcelTable, formRefMy: any) => {
         }}
         dateFormatter="string"
         toolBarRender={
-          toolBarRenderFn
+          toolBarRenderFn || exportExeclReq
             ? () => [
                 exportExeclReq && (
                   <Button key="out" onClick={onExport} type="primary">
                     导出数据
                   </Button>
                 ),
-                ...toolBarRenderFn({ rowKeys: customKeys || selectedRowKeys })
+                ...(toolBarRenderFn?.({ rowKeys: customKeys || selectedRowKeys }) || [])
               ]
             : false
         }

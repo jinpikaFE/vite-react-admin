@@ -57,7 +57,7 @@ const BasicLayout: React.FC = () => {
         pathname
       }}
       avatarProps={{
-        src: 'https://jinpika-1308276765.cos.ap-shanghai.myqcloud.com/images/logo.png',
+        src: storeGlobalUser.userInfo?.icon,
         size: 'small',
         title: storeGlobalUser.userInfo?.username,
         render: (_, defaultDom) => {
@@ -72,8 +72,8 @@ const BasicLayout: React.FC = () => {
               paddingBlockStart: 12
             }}
           >
-            <div>© 2021 Made with love</div>
-            <div>by Ant Design</div>
+            <div>© 2023 Made with love</div>
+            <div>by JPK</div>
           </div>
         )
       }}

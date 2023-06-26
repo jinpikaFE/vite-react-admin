@@ -35,4 +35,4 @@ export default {
       rewrite: (path: string) => path.replace('^/', '')
     }
   }
-}
+} as any

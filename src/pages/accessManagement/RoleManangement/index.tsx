@@ -1,13 +1,13 @@
-import { getUserList } from '@/apis/accessManagement/user'
+import { getRoleList } from '@/apis/accessManagement/role'
 import ExcelTable from '@/components/exportExcel'
 
-const UserManagement: React.FC = () => {
+const RoleManangement: React.FC = () => {
   return (
     <ExcelTable
       columns={[
         /** table */
         {
-          title: '账号/姓名',
+          title: '角色名',
           dataIndex: 'keyword',
           hideInTable: true
         },
@@ -57,7 +57,7 @@ const UserManagement: React.FC = () => {
         }
       ]}
       requestFn={async (params: any) => {
-        const data = await getUserList({
+        const data = await getRoleList({
           ...params
         })
         return data
@@ -68,4 +68,4 @@ const UserManagement: React.FC = () => {
   )
 }
 
-export default UserManagement
+export default RoleManangement
