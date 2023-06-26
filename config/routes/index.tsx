@@ -2,6 +2,7 @@ import NotFoundPage from '@/404'
 import App from '@/App'
 import ErrorPage from '@/ErrorPage'
 import ResourceManangement from '@/pages/accessManagement/ResourceManangement'
+import Resource from '@/pages/accessManagement/ResourceManangement/Resource'
 import RoleManangement from '@/pages/accessManagement/RoleManangement'
 import UserManagement from '@/pages/accessManagement/UserManagement'
 import Home from '@/pages/Home'
@@ -106,8 +107,14 @@ export const router = createBrowserRouter([
           },
           {
             path: 'resourceManagement',
-            name: '资源管理管理',
+            name: '资源管理',
             element: <ResourceManangement />
+          },
+          {
+            path: 'resourceManagement/:resourceCategoryId/resource',
+            name: '资源列表',
+            element: <Resource />,
+            hideInMenu: true
           }
         ]
       },

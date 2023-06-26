@@ -4,7 +4,7 @@ import { PageContainer, ProLayout } from '@ant-design/pro-components'
 import { ExtraRouteType, router } from '@config/routes'
 import { useAsyncEffect } from 'ahooks'
 import { Dropdown, MenuProps } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Outlet, RouteObject, useNavigate } from 'react-router-dom'
 import defaultProps from '@/_defaultProps'
 import Settings from '@config/defaultSettings'
@@ -26,6 +26,10 @@ const BasicLayout: React.FC = () => {
       return item
     }) as any
   }
+
+  useEffect(() => {
+    setPathname(window.location.pathname)
+  }, [window.location.pathname])
 
   useAsyncEffect(async () => {
     if (pathname !== '/login') {
@@ -89,7 +93,6 @@ const BasicLayout: React.FC = () => {
       }}
       menuProps={{
         onClick: ({ key }) => {
-          setPathname(key || '/')
           navigate(key || '/')
         }
       }}

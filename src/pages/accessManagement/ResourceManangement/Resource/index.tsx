@@ -14,10 +14,8 @@ import {
 } from '@ant-design/pro-components'
 import { Button, Modal, Popconfirm, message } from 'antd'
 import { useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
 
-const ResourceManangement: React.FC = () => {
-  const navigate = useNavigate()
+const Resource: React.FC = () => {
   const actionRef = useRef<ActionType>()
   const modalFormRef = useRef<ProFormInstance>()
 
@@ -105,9 +103,6 @@ const ResourceManangement: React.FC = () => {
           key: 'option',
           valueType: 'option',
           render: (_, record) => [
-            <Button key="detail" type="link" onClick={() => navigate(`${record?.id}/resource`)}>
-              详情
-            </Button>,
             <Button key="edit" type="link" onClick={() => showModal(record)}>
               编辑
             </Button>,
@@ -133,15 +128,9 @@ const ResourceManangement: React.FC = () => {
           ]
         }
       ]}
-      headerTitle="资源分类"
       requestFn={async () => {
         const data = await getResourceCategoryList()
-        return {
-          code: data?.code,
-          data: {
-            list: data?.data
-          }
-        }
+        return data
       }}
       actionRef={actionRef}
       search={false}
@@ -155,4 +144,4 @@ const ResourceManangement: React.FC = () => {
   )
 }
 
-export default ResourceManangement
+export default Resource
