@@ -26,8 +26,11 @@ declare namespace Resource {
 
   /** 资源筛选参数 */
   type ResourceListParams = {
-    /** 关键词 */
-    keyword?: string
+    categoryId?: number
+    /** 资源名称 */
+    nameKeyword?: string
+    /** 资源路径 */
+    urlKeyword?: string
   } & Global.PageParams
 
   /** 资源分类实体 */

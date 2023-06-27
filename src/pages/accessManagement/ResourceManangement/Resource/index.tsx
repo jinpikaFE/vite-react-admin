@@ -1,21 +1,23 @@
 import {
-  addResourceCategory,
-  delResourceCategory,
-  editResourceCategory,
-  getResourceCategoryList
+  addResource,
+  delResource,
+  editResource,
+  getResourceList
 } from '@/apis/accessManagement/resource'
 import ExcelTable from '@/components/exportExcel'
 import {
   ActionType,
   ProForm,
-  ProFormDigit,
   ProFormInstance,
-  ProFormText
+  ProFormText,
+  ProFormTextArea
 } from '@ant-design/pro-components'
 import { Button, Modal, Popconfirm, message } from 'antd'
 import { useRef } from 'react'
+import { useParams } from 'react-router-dom'
 
 const Resource: React.FC = () => {
+  const urlParams: { resourceCategoryId: number } = useParams() as any
   const actionRef = useRef<ActionType>()
   const modalFormRef = useRef<ProFormInstance>()
 
@@ -23,9 +25,10 @@ const Resource: React.FC = () => {
     const val = await modalFormRef?.current?.validateFields()
     if (record) {
       // 编辑
-      const res = await editResourceCategory({
+      const res = await editResource({
         ...val,
-        id: record?.id
+        id: record?.id,
+        categoryId: urlParams?.resourceCategoryId
       })
       if (res?.code === 200) {
         message.success('编辑成功')
@@ -33,7 +36,7 @@ const Resource: React.FC = () => {
       }
     } else {
       // 新建
-      const res = await addResourceCategory(val)
+      const res = await addResource({ ...val, categoryId: urlParams?.resourceCategoryId })
       if (res?.code === 200) {
         message.success('新建成功')
         actionRef?.current?.reload()
@@ -56,13 +59,9 @@ const Resource: React.FC = () => {
           initialValues={record}
           formRef={modalFormRef}
         >
-          <ProFormText label="名称" name="name" rules={[{ required: true }]} />
-          <ProFormDigit
-            label="排序"
-            name="sort"
-            rules={[{ required: true }]}
-            fieldProps={{ precision: 0 }}
-          />
+          <ProFormText label="资源名称" name="name" rules={[{ required: true }]} />
+          <ProFormText label="资源URL" name="url" rules={[{ required: true }]} />
+          <ProFormTextArea label="描述" name="description" rules={[{ required: true }]} />
         </ProForm>
       )
     })
@@ -70,6 +69,16 @@ const Resource: React.FC = () => {
   return (
     <ExcelTable
       columns={[
+        {
+          title: '资源名称',
+          dataIndex: 'nameKeyword',
+          hideInTable: true
+        },
+        {
+          title: '资源路径',
+          dataIndex: 'urlKeyword',
+          hideInTable: true
+        },
         /** search */
         {
           title: '序号',
@@ -82,19 +91,18 @@ const Resource: React.FC = () => {
           hideInSearch: true
         },
         {
-          title: '排序',
-          dataIndex: 'sort',
+          title: '资源路径',
+          dataIndex: 'url',
+          hideInSearch: true
+        },
+        {
+          title: '描述',
+          dataIndex: 'description',
           hideInSearch: true
         },
         {
           title: '创建时间',
           dataIndex: 'createTime',
-          hideInSearch: true,
-          valueType: 'dateTime'
-        },
-        {
-          title: '更新时间',
-          dataIndex: 'updateTime',
           hideInSearch: true,
           valueType: 'dateTime'
         },
@@ -111,7 +119,7 @@ const Resource: React.FC = () => {
               placement="topRight"
               title="确定要删除吗?"
               onConfirm={async () => {
-                const res = await delResourceCategory({ id: record?.id })
+                const res = await delResource({ id: record?.id })
                 if (res?.code === 200) {
                   message.success('删除成功')
                   actionRef?.current?.reloadAndRest?.()
@@ -128,12 +136,14 @@ const Resource: React.FC = () => {
           ]
         }
       ]}
-      requestFn={async () => {
-        const data = await getResourceCategoryList()
+      requestFn={async params => {
+        const data = await getResourceList({
+          ...params,
+          categoryId: urlParams?.resourceCategoryId
+        })
         return data
       }}
       actionRef={actionRef}
-      search={false}
       rowSelection={false}
       toolBarRenderFn={() => [
         <Button key="add" onClick={() => showModal()}>

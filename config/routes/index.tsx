@@ -1,6 +1,7 @@
 import NotFoundPage from '@/404'
 import App from '@/App'
 import ErrorPage from '@/ErrorPage'
+import ComponManagement from '@/pages/accessManagement/ComponManagement'
 import ResourceManangement from '@/pages/accessManagement/ResourceManangement'
 import Resource from '@/pages/accessManagement/ResourceManangement/Resource'
 import RoleManangement from '@/pages/accessManagement/RoleManangement'
@@ -103,7 +104,7 @@ export const router = createBrowserRouter([
           {
             path: 'componentManagement',
             name: '组件管理',
-            element: <Test />
+            element: <ComponManagement />
           },
           {
             path: 'resourceManagement',

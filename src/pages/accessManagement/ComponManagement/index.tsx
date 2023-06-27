@@ -1,23 +1,16 @@
-import {
-  addResourceCategory,
-  delResourceCategory,
-  editResourceCategory,
-  getResourceCategoryList
-} from '@/apis/accessManagement/resource'
+import { addCompon, delCompon, editCompon, getComponTree } from '@/apis/accessManagement/compon'
 import ExcelTable from '@/components/exportExcel'
 import {
   ActionType,
   ProForm,
-  ProFormDigit,
   ProFormInstance,
-  ProFormText
+  ProFormText,
+  ProFormTextArea
 } from '@ant-design/pro-components'
 import { Button, Modal, Popconfirm, message } from 'antd'
 import { useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
 
-const ResourceManangement: React.FC = () => {
-  const navigate = useNavigate()
+const ComponManagement: React.FC = () => {
   const actionRef = useRef<ActionType>()
   const modalFormRef = useRef<ProFormInstance>()
 
@@ -25,7 +18,7 @@ const ResourceManangement: React.FC = () => {
     const val = await modalFormRef?.current?.validateFields()
     if (record) {
       // 编辑
-      const res = await editResourceCategory({
+      const res = await editCompon({
         ...val,
         id: record?.id
       })
@@ -35,7 +28,7 @@ const ResourceManangement: React.FC = () => {
       }
     } else {
       // 新建
-      const res = await addResourceCategory(val)
+      const res = await addCompon({ ...val })
       if (res?.code === 200) {
         message.success('新建成功')
         actionRef?.current?.reload()
@@ -58,13 +51,9 @@ const ResourceManangement: React.FC = () => {
           initialValues={record}
           formRef={modalFormRef}
         >
-          <ProFormText label="名称" name="name" rules={[{ required: true }]} />
-          <ProFormDigit
-            label="排序"
-            name="sort"
-            rules={[{ required: true }]}
-            fieldProps={{ precision: 0 }}
-          />
+          <ProFormText label="资源名称" name="name" rules={[{ required: true }]} />
+          <ProFormText label="资源URL" name="url" rules={[{ required: true }]} />
+          <ProFormTextArea label="描述" name="description" rules={[{ required: true }]} />
         </ProForm>
       )
     })
@@ -79,13 +68,38 @@ const ResourceManangement: React.FC = () => {
           hideInSearch: true
         },
         {
-          title: '分类名',
+          title: '组件名',
+          dataIndex: 'title',
+          hideInSearch: true
+        },
+        {
+          title: '级数',
+          dataIndex: 'level',
+          hideInSearch: true
+        },
+        {
+          title: '前端名称',
           dataIndex: 'name',
+          hideInSearch: true
+        },
+        {
+          title: '前端图标',
+          dataIndex: 'icon',
+          hideInSearch: true
+        },
+        {
+          title: '是否显示',
+          dataIndex: 'isShow',
           hideInSearch: true
         },
         {
           title: '排序',
           dataIndex: 'sort',
+          hideInSearch: true
+        },
+        {
+          title: '类型',
+          dataIndex: 'type',
           hideInSearch: true
         },
         {
@@ -95,19 +109,10 @@ const ResourceManangement: React.FC = () => {
           valueType: 'dateTime'
         },
         {
-          title: '更新时间',
-          dataIndex: 'updateTime',
-          hideInSearch: true,
-          valueType: 'dateTime'
-        },
-        {
           title: '操作',
           key: 'option',
           valueType: 'option',
           render: (_, record) => [
-            <Button key="detail" type="link" onClick={() => navigate(`${record?.id}/resource`)}>
-              资源列表
-            </Button>,
             <Button key="edit" type="link" onClick={() => showModal(record)}>
               编辑
             </Button>,
@@ -116,7 +121,7 @@ const ResourceManangement: React.FC = () => {
               placement="topRight"
               title="确定要删除吗?"
               onConfirm={async () => {
-                const res = await delResourceCategory({ id: record?.id })
+                const res = await delCompon({ id: record?.id })
                 if (res?.code === 200) {
                   message.success('删除成功')
                   actionRef?.current?.reloadAndRest?.()
@@ -133,9 +138,8 @@ const ResourceManangement: React.FC = () => {
           ]
         }
       ]}
-      headerTitle="资源分类"
-      requestFn={async () => {
-        const data = await getResourceCategoryList()
+      requestFn={async params => {
+        const data = await getComponTree()
         return {
           code: data?.code,
           data: {
@@ -143,8 +147,8 @@ const ResourceManangement: React.FC = () => {
           }
         }
       }}
-      actionRef={actionRef}
       search={false}
+      actionRef={actionRef}
       rowSelection={false}
       toolBarRenderFn={() => [
         <Button key="add" onClick={() => showModal()}>
@@ -155,4 +159,4 @@ const ResourceManangement: React.FC = () => {
   )
 }
 
-export default ResourceManangement
+export default ComponManagement
