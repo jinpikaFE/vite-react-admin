@@ -3,20 +3,30 @@ import ExcelTable from '@/components/exportExcel'
 import {
   ActionType,
   ProForm,
+  ProFormDigit,
   ProFormInstance,
-  ProFormText,
-  ProFormTextArea
+  ProFormRadio,
+  ProFormText
 } from '@ant-design/pro-components'
-import { Button, Modal, Popconfirm, message } from 'antd'
+import { Button, Modal, Popconfirm, Switch, message } from 'antd'
 import { useRef } from 'react'
 
 const ComponManagement: React.FC = () => {
   const actionRef = useRef<ActionType>()
   const modalFormRef = useRef<ProFormInstance>()
 
-  const onSubmit = async (record?: Resource.ResourceCategoryEntity) => {
+  const onSubmit = async (record?: Resource.ResourceCategoryEntity, isCreateNext?: boolean) => {
     const val = await modalFormRef?.current?.validateFields()
     if (record) {
+      if (isCreateNext) {
+        // 添加下级
+        const res = await addCompon({ ...val, parentId: record?.id })
+        if (res?.code === 200) {
+          message.success('添加成功')
+          actionRef?.current?.reload()
+        }
+        return
+      }
       // 编辑
       const res = await editCompon({
         ...val,
@@ -26,19 +36,19 @@ const ComponManagement: React.FC = () => {
         message.success('编辑成功')
         actionRef?.current?.reload()
       }
-    } else {
-      // 新建
-      const res = await addCompon({ ...val })
-      if (res?.code === 200) {
-        message.success('新建成功')
-        actionRef?.current?.reload()
-      }
+      return
+    }
+    // 新建
+    const res = await addCompon({ ...val })
+    if (res?.code === 200) {
+      message.success('新建成功')
+      actionRef?.current?.reload()
     }
   }
-  const showModal = (record?: Resource.ResourceCategoryEntity) => {
+  const showModal = (record?: Resource.ResourceCategoryEntity, isCreateNext?: boolean) => {
     Modal.confirm({
       title: record ? '编辑' : '添加',
-      onOk: async () => onSubmit(record),
+      onOk: async () => onSubmit(record, isCreateNext),
       okText: '确定',
       cancelText: '取消',
       width: 600,
@@ -48,12 +58,32 @@ const ComponManagement: React.FC = () => {
           wrapperCol={{ span: 10 }}
           submitter={false}
           layout="horizontal"
-          initialValues={record}
+          initialValues={{
+            isShow: 1,
+            ...(isCreateNext ? {} : record)
+          }}
           formRef={modalFormRef}
         >
-          <ProFormText label="资源名称" name="name" rules={[{ required: true }]} />
-          <ProFormText label="资源URL" name="url" rules={[{ required: true }]} />
-          <ProFormTextArea label="描述" name="description" rules={[{ required: true }]} />
+          <ProFormText label="菜单名" name="title" rules={[{ required: true }]} />
+          <ProFormText label="前端名" name="name" rules={[{ required: true }]} />
+          <ProFormText label="前端图标" name="icon" rules={[{ required: true }]} />
+          <ProFormRadio.Group
+            label="是否显示"
+            name="isShow"
+            rules={[{ required: true }]}
+            valueEnum={
+              new Map([
+                [1, '是'],
+                [0, '否']
+              ])
+            }
+          />
+          <ProFormDigit
+            fieldProps={{ precision: 0 }}
+            label="排序"
+            name="sort"
+            rules={[{ required: true }]}
+          />
         </ProForm>
       )
     })
@@ -90,7 +120,26 @@ const ComponManagement: React.FC = () => {
         {
           title: '是否显示',
           dataIndex: 'isShow',
-          hideInSearch: true
+          hideInSearch: true,
+          render(dom, entity) {
+            return (
+              <Switch
+                checked={Boolean(entity?.isShow)}
+                onChange={async val => {
+                  const res = await editCompon({
+                    id: entity.id,
+                    isShow: +val
+                  })
+                  if (res?.code === 200) {
+                    message.success('修改成功')
+                  } else {
+                    message.error('修改失败')
+                  }
+                  actionRef?.current?.reload()
+                }}
+              />
+            )
+          }
         },
         {
           title: '排序',
@@ -113,28 +162,33 @@ const ComponManagement: React.FC = () => {
           key: 'option',
           valueType: 'option',
           render: (_, record) => [
+            <Button key="edit" type="link" onClick={() => showModal(record, true)}>
+              添加下级组件
+            </Button>,
             <Button key="edit" type="link" onClick={() => showModal(record)}>
               编辑
             </Button>,
-            <Popconfirm
-              key="delete"
-              placement="topRight"
-              title="确定要删除吗?"
-              onConfirm={async () => {
-                const res = await delCompon({ id: record?.id })
-                if (res?.code === 200) {
-                  message.success('删除成功')
-                  actionRef?.current?.reloadAndRest?.()
-                }
-              }}
-              okText="确定"
-              okType="danger"
-              cancelText="取消"
-            >
-              <Button type="link" danger key="delete">
-                删除
-              </Button>
-            </Popconfirm>
+            !record?.children && (
+              <Popconfirm
+                key="delete"
+                placement="topRight"
+                title="确定要删除吗?"
+                onConfirm={async () => {
+                  const res = await delCompon({ id: record?.id })
+                  if (res?.code === 200) {
+                    message.success('删除成功')
+                    actionRef?.current?.reloadAndRest?.()
+                  }
+                }}
+                okText="确定"
+                okType="danger"
+                cancelText="取消"
+              >
+                <Button type="link" danger key="delete">
+                  删除
+                </Button>
+              </Popconfirm>
+            )
           ]
         }
       ]}
@@ -152,7 +206,7 @@ const ComponManagement: React.FC = () => {
       rowSelection={false}
       toolBarRenderFn={() => [
         <Button key="add" onClick={() => showModal()}>
-          添加
+          添加一级组件
         </Button>
       ]}
     />
