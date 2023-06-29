@@ -156,13 +156,8 @@ const transform: AxiosTransform = {
       if (!isString(params)) {
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         formatDate && formatRequestDate(params)
-        if (Reflect.has(config, 'data') && config.data && Object.keys(config.data).length) {
-          config.data = data
-          config.params = params
-        } else {
-          // config.data = params;
-          config.params = undefined
-        }
+        config.data = data
+        config.params = params
         if (joinParamsToUrl) {
           config.url = setObjToUrlParams(
             config.url as string,
