@@ -15,3 +15,26 @@ export async function getUserList(params: User.UserListParams) {
     params
   })
 }
+
+export async function addUser(data: User.UserEntity) {
+  return http.request({
+    url: '/api/v1/admin/register',
+    method: 'post',
+    data
+  })
+}
+
+export async function editUser(data: Partial<User.UserEntity>) {
+  return http.request({
+    url: `/api/v1/admin/update/${data?.id}`,
+    method: 'post',
+    data
+  })
+}
+
+export async function delUser(data: Pick<User.UserEntity, 'id'>) {
+  return http.request({
+    url: `/api/v1/admin/delete/${data?.id}`,
+    method: 'post'
+  })
+}
