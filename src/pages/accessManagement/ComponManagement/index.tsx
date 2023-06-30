@@ -24,8 +24,9 @@ const ComponManagement: React.FC = () => {
         if (res?.code === 200) {
           message.success('添加成功')
           actionRef?.current?.reload()
+          return Promise.resolve()
         }
-        return
+        return Promise.reject()
       }
       // 编辑
       const res = await editCompon({
@@ -35,15 +36,18 @@ const ComponManagement: React.FC = () => {
       if (res?.code === 200) {
         message.success('编辑成功')
         actionRef?.current?.reload()
+        return Promise.resolve()
       }
-      return
+      return Promise.reject()
     }
     // 新建
     const res = await addCompon({ ...val })
     if (res?.code === 200) {
       message.success('新建成功')
       actionRef?.current?.reload()
+      return Promise.resolve()
     }
+    return Promise.reject()
   }
   const showModal = (record?: Resource.ResourceCategoryEntity, isCreateNext?: boolean) => {
     Modal.confirm({
@@ -178,7 +182,9 @@ const ComponManagement: React.FC = () => {
                   if (res?.code === 200) {
                     message.success('删除成功')
                     actionRef?.current?.reloadAndRest?.()
+                    return Promise.resolve()
                   }
+                  return Promise.reject()
                 }}
                 okText="确定"
                 okType="danger"

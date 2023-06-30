@@ -36,15 +36,18 @@ const UserManagement: React.FC = () => {
       if (res?.code === 200) {
         message.success('编辑成功')
         actionRef?.current?.reload()
+        return Promise.resolve()
       }
-    } else {
-      // 新建
-      const res = await addUser({ ...resVal })
-      if (res?.code === 200) {
-        message.success('新建成功')
-        actionRef?.current?.reload()
-      }
+      return Promise.reject()
     }
+    // 新建
+    const res = await addUser({ ...resVal })
+    if (res?.code === 200) {
+      message.success('新建成功')
+      actionRef?.current?.reload()
+      return Promise.resolve()
+    }
+    return Promise.reject()
   }
   const showModal = (record?: User.UserEntity) => {
     Modal.confirm({
@@ -232,7 +235,9 @@ const UserManagement: React.FC = () => {
                 if (res?.code === 200) {
                   message.success('删除成功')
                   actionRef?.current?.reloadAndRest?.()
+                  return Promise.resolve()
                 }
+                return Promise.reject()
               }}
               okText="确定"
               okType="danger"
