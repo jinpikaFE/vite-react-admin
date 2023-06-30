@@ -28,11 +28,11 @@ export async function editRole(data: Role.RoleEntity) {
 }
 
 /** 批量删除角色 */
-export async function delRole(data: { ids: string[] }) {
+export async function delRole(params: { ids: string[] }) {
   return http.request({
     url: '/api/v1/role/delete',
-    method: 'post',
-    data
+    method: 'delete',
+    params
   })
 }
 

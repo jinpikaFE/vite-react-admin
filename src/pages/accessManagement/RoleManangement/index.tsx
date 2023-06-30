@@ -1,3 +1,5 @@
+import { getComponTree } from '@/apis/accessManagement/compon'
+import { getResourceCategoryList } from '@/apis/accessManagement/resource'
 import {
   addRole,
   delRole,
@@ -9,26 +11,30 @@ import ExcelTable from '@/components/exportExcel'
 import {
   ActionType,
   ProForm,
+  ProFormCascader,
   ProFormInstance,
   ProFormRadio,
   ProFormText,
-  ProFormTextArea
+  ProFormTextArea,
+  ProFormTreeSelect
 } from '@ant-design/pro-components'
-import { Button, Modal, Popconfirm, Switch, message } from 'antd'
+import { Button, Cascader, Modal, Popconfirm, Switch, TreeSelect, message } from 'antd'
 import { useRef } from 'react'
-import { useParams } from 'react-router-dom'
 
 const RoleManangement: React.FC = () => {
-  const urlParams: { resourceCategoryId: number } = useParams() as any
   const actionRef = useRef<ActionType>()
   const modalFormRef = useRef<ProFormInstance>()
 
   const onSubmit = async (record?: Resource.ResourceCategoryEntity) => {
     const val = await modalFormRef?.current?.validateFields()
+    const relVal = {
+      ...val
+    }
+
     if (record) {
       // 编辑
       const res = await editRole({
-        ...val,
+        ...relVal,
         id: record?.id
       })
       if (res?.code === 200) {
@@ -37,27 +43,32 @@ const RoleManangement: React.FC = () => {
       }
     } else {
       // 新建
-      const res = await addRole({ ...val })
+      const res = await addRole({ ...relVal })
       if (res?.code === 200) {
         message.success('新建成功')
         actionRef?.current?.reload()
       }
     }
   }
-  const showModal = (record?: Resource.ResourceCategoryEntity) => {
+  const showModal = (record?: Role.RoleEntity) => {
     Modal.confirm({
       title: record ? '编辑' : '添加',
       onOk: async () => onSubmit(record),
       okText: '确定',
       cancelText: '取消',
-      width: 600,
+      width: 800,
       content: (
         <ProForm
           labelCol={{ span: 6 }}
-          wrapperCol={{ span: 10 }}
+          wrapperCol={{ span: 12 }}
           submitter={false}
           layout="horizontal"
-          initialValues={record}
+          initialValues={{
+            status: 1,
+            ...record,
+            menus: record?.menus?.map(item => item?.id),
+            resources: record?.resources?.map(item => item?.id)
+          }}
           formRef={modalFormRef}
         >
           <ProFormText label="角色名称" name="name" rules={[{ required: true }]} />
@@ -72,6 +83,55 @@ const RoleManangement: React.FC = () => {
                 [0, '否']
               ])
             }
+          />
+          <ProFormTreeSelect
+            label="分配资源"
+            name="resources"
+            allowClear
+            fieldProps={{
+              multiple: true,
+              showCheckedStrategy: TreeSelect.SHOW_CHILD,
+              fieldNames: {
+                label: 'name',
+                value: 'id',
+                children: 'resources'
+              },
+              treeCheckable: true
+            }}
+            rules={[{ required: true, message: '请选择' }]}
+            request={async () => {
+              const res = await getResourceCategoryList()
+              if (res?.code === 200) {
+                return res?.data?.map((r: any) => ({
+                  ...r,
+                  id: `categoryId${r?.id}`,
+                  disabled: !(r?.resources?.length > 0)
+                }))
+              }
+              return []
+            }}
+          />
+          <ProFormTreeSelect
+            label="分配组件"
+            name="menus"
+            allowClear
+            fieldProps={{
+              multiple: true,
+              showCheckedStrategy: TreeSelect.SHOW_CHILD,
+              fieldNames: {
+                label: 'title',
+                value: 'id'
+              },
+              treeCheckable: true
+            }}
+            rules={[{ required: true, message: '请选择' }]}
+            request={async () => {
+              const res = await getComponTree()
+              if (res?.code === 200) {
+                return res?.data
+              }
+              return []
+            }}
           />
         </ProForm>
       )
@@ -144,7 +204,7 @@ const RoleManangement: React.FC = () => {
               placement="topRight"
               title="确定要删除吗?"
               onConfirm={async () => {
-                const res = await delRole({ ids: [record?.id] })
+                const res = await delRole({ ids: record?.id })
                 if (res?.code === 200) {
                   message.success('删除成功')
                   actionRef?.current?.reloadAndRest?.()

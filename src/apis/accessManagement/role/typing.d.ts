@@ -29,6 +29,8 @@ declare namespace Role {
      * 更新时间
      */
     updateTime?: Date
+    menus?: Compon.ComponEntity[]
+    resources?: Resource.ResourceEntity[]
   }
 
   type RoleListParams = {
