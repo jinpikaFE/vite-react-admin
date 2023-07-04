@@ -6,10 +6,17 @@ import {
   ProFormDigit,
   ProFormInstance,
   ProFormRadio,
+  ProFormSelect,
   ProFormText
 } from '@ant-design/pro-components'
 import { Button, Modal, Popconfirm, Switch, message } from 'antd'
 import { useRef } from 'react'
+
+enum ComponType {
+  MENU,
+  PAGE,
+  COMPON
+}
 
 const ComponManagement: React.FC = () => {
   const actionRef = useRef<ActionType>()
@@ -71,6 +78,18 @@ const ComponManagement: React.FC = () => {
           <ProFormText label="菜单名" name="title" rules={[{ required: true }]} />
           <ProFormText label="前端名" name="name" rules={[{ required: true }]} />
           <ProFormText label="前端图标" name="icon" rules={[{ required: true }]} />
+          <ProFormSelect
+            label="类型"
+            name="type"
+            rules={[{ required: true, message: '请选择' }]}
+            valueEnum={
+              new Map([
+                [ComponType.MENU, '菜单'],
+                [ComponType.PAGE, '页面'],
+                [ComponType.COMPON, '组件']
+              ])
+            }
+          />
           <ProFormRadio.Group
             label="是否显示"
             name="isShow"
@@ -126,23 +145,26 @@ const ComponManagement: React.FC = () => {
           dataIndex: 'isShow',
           hideInSearch: true,
           render(dom, entity) {
-            return (
-              <Switch
-                checked={Boolean(entity?.isShow)}
-                onChange={async val => {
-                  const res = await editCompon({
-                    id: entity.id,
-                    isShow: +val
-                  })
-                  if (res?.code === 200) {
-                    message.success('修改成功')
-                  } else {
-                    message.error('修改失败')
-                  }
-                  actionRef?.current?.reload()
-                }}
-              />
-            )
+            if (entity?.type === ComponType.MENU) {
+              return (
+                <Switch
+                  checked={Boolean(entity?.isShow)}
+                  onChange={async val => {
+                    const res = await editCompon({
+                      id: entity.id,
+                      isShow: +val
+                    })
+                    if (res?.code === 200) {
+                      message.success('修改成功')
+                    } else {
+                      message.error('修改失败')
+                    }
+                    actionRef?.current?.reload()
+                  }}
+                />
+              )
+            }
+            return '-'
           }
         },
         {
@@ -153,7 +175,12 @@ const ComponManagement: React.FC = () => {
         {
           title: '类型',
           dataIndex: 'type',
-          hideInSearch: true
+          hideInSearch: true,
+          valueEnum: new Map([
+            [ComponType.MENU, '菜单'],
+            [ComponType.PAGE, '页面'],
+            [ComponType.COMPON, '组件']
+          ])
         },
         {
           title: '创建时间',
