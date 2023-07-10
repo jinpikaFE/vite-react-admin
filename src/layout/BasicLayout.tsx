@@ -1,7 +1,7 @@
 import { storeGlobalUser } from '@/store/globalUser'
 import { storage } from '@/utils/Storage'
 import { PageContainer, ProLayout } from '@ant-design/pro-components'
-import { ExtraRouteType, router } from '@config/routes'
+import { RouteType, router } from '@config/routes'
 import { useAsyncEffect } from 'ahooks'
 import { Dropdown, MenuProps } from 'antd'
 import { useEffect, useState } from 'react'
@@ -15,9 +15,7 @@ const BasicLayout: React.FC = () => {
   const navigate = useNavigate()
   const [showLayout, setShowLayout] = useState<boolean>(true)
 
-  const reduceRouter = (
-    routers: (RouteObject & ExtraRouteType)[]
-  ): (RouteObject & ExtraRouteType)[] => {
+  const reduceRouter = (routers: RouteType[]): RouteType[] => {
     return routers?.map(item => {
       if (item?.children) {
         const { children, ...extra } = item
@@ -80,9 +78,6 @@ const BasicLayout: React.FC = () => {
             <div>by JPK</div>
           </div>
         )
-      }}
-      menuItemRender={(item, dom) => {
-        return item?.hideInMenu ? undefined : dom
       }}
       menuRender={(props, defaultDom) => {
         if ((props?.layout as string) === 'hide') {

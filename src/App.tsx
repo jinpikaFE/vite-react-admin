@@ -10,9 +10,9 @@ const App = () => {
         height: '100vh'
       }}
     >
-      <Suspense fallback={<Loading />}>
-        <BasicLayout />
-      </Suspense>
+      {/* <Suspense fallback={<Loading />}> */}
+      <BasicLayout />
+      {/* </Suspense> */}
     </div>
   )
 }

@@ -34,6 +34,7 @@ declare namespace User {
      * 用户名
      */
     username: string
+    menus?: Menu.MenuEntity[]
   }
 
   type UserListParams = {
