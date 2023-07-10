@@ -5,23 +5,41 @@ import { RouteType, router } from '@config/routes'
 import { useAsyncEffect } from 'ahooks'
 import { Dropdown, MenuProps } from 'antd'
 import { useEffect, useState } from 'react'
-import { Outlet, RouteObject, useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import defaultProps from '@/_defaultProps'
 import Settings from '@config/defaultSettings'
 import { observer } from 'mobx-react'
+
+enum ComponTypeEnum {
+  MENU,
+  PAGE,
+  COMPON
+}
 
 const BasicLayout: React.FC = () => {
   const [pathname, setPathname] = useState(window.location.pathname)
   const navigate = useNavigate()
   const [showLayout, setShowLayout] = useState<boolean>(true)
 
+  /** 处理菜单权限隐藏菜单 */
   const reduceRouter = (routers: RouteType[]): RouteType[] => {
+    const authMenus = storeGlobalUser?.userInfo?.menus
+      ?.filter(item => item?.type === ComponTypeEnum.MENU)
+      ?.map(item => item?.title)
     return routers?.map(item => {
       if (item?.children) {
         const { children, ...extra } = item
-        return { ...extra, routes: reduceRouter(item?.children) }
+        return {
+          ...extra,
+          routes: reduceRouter(item?.children),
+          hideInMenu:
+            item?.hideInMenu || !item?.children?.find(citem => authMenus?.includes(citem?.name))
+        }
       }
-      return item
+      return {
+        ...item,
+        hideInMenu: item?.hideInMenu || !authMenus?.includes(item?.name)
+      }
     }) as any
   }
 

@@ -1,14 +1,7 @@
 import Permission from '@/components/permissions/Permission'
 import { MenuDataItem } from '@ant-design/pro-components'
-import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
+import { createBrowserRouter, RouteObject } from 'react-router-dom'
 import { routers } from './routers'
-import { storeGlobalUser } from '@/store/globalUser'
-
-enum ComponTypeEnum {
-  MENU,
-  PAGE,
-  COMPON
-}
 
 export type RouteType = {
   /** 是否需要菜单布局 */
@@ -25,20 +18,6 @@ export type RouteType = {
   children?: RouteType[]
 } & Partial<MenuDataItem> &
   RouteObject
-
-const reduceHiden = (citem: any) => {
-  if (citem?.children) {
-    for (let index = 0; index < citem?.children.length; index++) {
-      const element = citem?.children[index]
-      if (!citem?.hideInMenu) {
-        return false
-      }
-      reduceHiden(element)
-    }
-  }
-
-  return citem?.hideInMenu
-}
 
 const reduceRoute: (params: RouteType[]) => RouteType[] = (routesParams: RouteType[]) => {
   return routesParams?.map(item => {
@@ -64,7 +43,5 @@ const reduceRoute: (params: RouteType[]) => RouteType[] = (routesParams: RouteTy
 }
 
 const relRouters = reduceRoute(routers)
-
-console.log(relRouters)
 
 export const router = createBrowserRouter(relRouters)
