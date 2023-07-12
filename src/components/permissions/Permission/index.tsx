@@ -13,14 +13,23 @@ const Permission: React.FC<{
     isToken?: boolean | undefined
   } & boolean
 }> = ({ children, name, permissionObj }) => {
-  const [isAuth, setIsAuth] = useState<boolean | undefined>(false)
+  const [isAuth, setIsAuth] = useState<boolean | undefined>(undefined)
 
   /** 解决Permission 在 数据加载之前渲染导致权限不实时更新问题 */
   useEffect(() => {
-    setIsAuth(storeGlobalUser?.userInfo?.menus?.map(item => item?.title)?.includes(name) || true)
+    setTimeout(() => {
+      setIsAuth(!!storeGlobalUser?.userInfo?.menus?.map(item => item?.title)?.includes(name))
+    }, 10)
   }, [storeGlobalUser?.userInfo])
 
-  if ((permissionObj === true || permissionObj?.isPagePermission) && !isAuth) {
+  if (isAuth === undefined) {
+    /**
+     * todo
+     */
+    return 'loading...'
+  }
+
+  if ((permissionObj === true || permissionObj?.isPagePermission) && isAuth === false) {
     return (
       <NotFound
         status="403"

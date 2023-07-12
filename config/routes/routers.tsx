@@ -78,6 +78,11 @@ export const routers = [
         permissionObj: true,
         children: [
           {
+            path: '/accessManagement',
+            /** 重定向 */
+            element: <Navigate replace to="/accessManagement/userManagement" />
+          },
+          {
             path: 'userManagement',
             name: '用户管理',
             permissionObj: true,
@@ -99,14 +104,29 @@ export const routers = [
             path: 'resourceManagement',
             name: '资源管理',
             permissionObj: true,
-            element: <ResourceManangement />
-          },
-          {
-            path: 'resourceManagement/:resourceCategoryId/resource',
-            name: '资源列表',
-            permissionObj: true,
-            element: <Resource />,
-            hideInMenu: true
+            children: [
+              {
+                path: '/accessManagement/resourceManagement',
+                /** 重定向 */
+                element: (
+                  <Navigate replace to="/accessManagement/resourceManagement/resourceCategory" />
+                )
+              },
+              {
+                path: 'resourceCategory',
+                name: '资源分类',
+                permissionObj: true,
+                element: <ResourceManangement />,
+                hideInMenu: true
+              },
+              {
+                path: 'resourceCategory/:resourceCategoryId/resource',
+                name: '资源列表',
+                permissionObj: true,
+                element: <Resource />,
+                hideInMenu: true
+              }
+            ]
           }
         ]
       },
