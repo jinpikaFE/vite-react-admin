@@ -24,8 +24,9 @@ const BasicLayout: React.FC = () => {
   /** 处理菜单权限隐藏菜单 */
   const reduceRouter = (routers: RouteType[]): RouteType[] => {
     const authMenus = storeGlobalUser?.userInfo?.menus
-      ?.filter(item => item?.type === ComponTypeEnum.MENU)
+      ?.filter(item => item?.type === ComponTypeEnum.MENU || item?.type === ComponTypeEnum.PAGE)
       ?.map(item => item?.title)
+
     return routers?.map(item => {
       if (item?.children) {
         const { children, ...extra } = item
