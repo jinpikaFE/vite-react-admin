@@ -17,10 +17,12 @@ const Permission: React.FC<{
 
   /** 解决Permission 在 数据加载之前渲染导致权限不实时更新问题 */
   useEffect(() => {
+    console.log(name)
+
     setTimeout(() => {
       setIsAuth(!!storeGlobalUser?.userInfo?.menus?.map(item => item?.title)?.includes(name))
     }, 10)
-  }, [storeGlobalUser?.userInfo])
+  }, [storeGlobalUser?.userInfo, window.location.pathname])
 
   if (isAuth === undefined) {
     /**

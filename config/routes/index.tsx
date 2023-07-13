@@ -19,17 +19,28 @@ export type RouteType = {
 } & Partial<MenuDataItem> &
   RouteObject
 
+/** 只给最低层级套 Permission 组件 */
+const renderElement = (item: RouteType) => {
+  if (item?.element) {
+    if (item?.children) {
+      return item?.element
+    }
+    return (
+      <Permission name={item?.name} permissionObj={item?.permissionObj}>
+        {item?.element}
+      </Permission>
+    )
+  }
+  return undefined
+}
+
 const reduceRoute: (params: RouteType[]) => RouteType[] = (routesParams: RouteType[]) => {
   return routesParams?.map(item => {
     let curRouter = item
     if (item?.permissionObj) {
       curRouter = {
         ...curRouter,
-        element: item?.element ? (
-          <Permission name={item?.name} permissionObj={item?.permissionObj}>
-            {item?.element}
-          </Permission>
-        ) : undefined
+        element: renderElement(item)
       }
     }
     if (item?.children) {
