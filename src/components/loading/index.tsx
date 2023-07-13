@@ -1,23 +1,15 @@
 import React from 'react'
-import { Image } from 'antd'
-// import loading from '@/assets/loading.gif'
+import styles from './index.module.less'
 
-const Loading: React.FC<{ imgUrl?: string }> = props => {
-  const { imgUrl } = props
+const Loading: React.FC = props => {
   return (
-    <div style={{ width: '100%', height: '100vh', overflow: 'hidden' }}>
-      <Image
-        src={imgUrl}
-        width="100%"
-        style={{
-          width: '100%',
-          height: '100vh',
-          overflow: 'hidden',
-          objectFit: 'cover',
-          objectPosition: 'center'
-        }}
-        preview={false}
-      />
+    <div className={styles.box}>
+      <div className={styles.container}>
+        <span>Loading...</span>
+        <div className={styles.circle}>
+          <div className={styles.ring}></div>
+        </div>
+      </div>
     </div>
   )
 }
