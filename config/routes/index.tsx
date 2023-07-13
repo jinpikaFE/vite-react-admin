@@ -1,127 +1,58 @@
-import NotFoundPage from '@/404'
-import App from '@/App'
-import ErrorPage from '@/ErrorPage'
-import UserManagement from '@/pages/accessManagement/UserManagement'
-import Home from '@/pages/Home'
-import Login from '@/pages/Login'
-import Test from '@/pages/Test'
-import TestChild from '@/pages/Test/TestChild'
-import { storage } from '@/utils/Storage'
-import { HomeFilled, LockOutlined, SmileFilled } from '@ant-design/icons'
+import Permission from '@/components/permissions/Permission'
 import { MenuDataItem } from '@ant-design/pro-components'
-import { message } from 'antd'
-import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
+import { createBrowserRouter, RouteObject } from 'react-router-dom'
+import { routers } from './routers'
 
-export type ExtraRouteType = {
+export type RouteType = {
   /** 是否需要菜单布局 */
   layout?: string | 'hide'
   /** 在菜单栏是否显示 */
   hideInMenu?: boolean
-} & Partial<MenuDataItem>
+  /** 权限控制 true 则都控制 */
+  permissionObj?: {
+    /** 是否进行页面权限控制，控制取后端数据 */
+    isPagePermission?: boolean
+    /** 判断token是否存在控制 */
+    isToken?: boolean
+  } & true
+  children?: RouteType[]
+} & Partial<MenuDataItem> &
+  RouteObject
 
-const Permissions = ({ children }: any) => {
-  const token = storage.get('token')
-  if (token) {
-    return children
+/** 只给最低层级套 Permission 组件 */
+const renderElement = (item: RouteType) => {
+  if (item?.element) {
+    if (item?.children) {
+      return item?.element
+    }
+    return (
+      <Permission name={item?.name} permissionObj={item?.permissionObj}>
+        {item?.element}
+      </Permission>
+    )
   }
-  message.error('token不存在')
-  return <Navigate replace to="/login" />
+  return undefined
 }
 
-export const router = createBrowserRouter([
-  {
-    path: '/',
-    /** 重定向 */
-    element: <Navigate replace to="/home" />
-  },
-  {
-    path: '/',
-    /** 承载布局 */
-    element: (
-      <Permissions>
-        <App />
-      </Permissions>
-    ),
-    errorElement: <ErrorPage />,
-    icon: <SmileFilled />,
-    children: [
-      /** 布局下路由，页面路由在该children配置 */
-      {
-        path: '/home',
-        name: '首页',
-        icon: <HomeFilled />,
-        element: <Home />
-      },
-      {
-        path: '/frist',
-        name: '嵌套路由',
-        icon: <SmileFilled />,
-        children: [
-          {
-            path: 'oneOne',
-            name: '一级-1',
-            element: <Test />,
-            children: [
-              {
-                path: ':id',
-                name: '一级-1-二级',
-                element: <TestChild />
-              }
-            ]
-          },
-          {
-            path: 'oneTwo',
-            name: '一级-2',
-            element: <Test />
-          },
-          {
-            path: 'hideInMenu',
-            name: 'hideInMenu',
-            hideInMenu: true,
-            element: <TestChild />
-          }
-        ]
-      },
-      {
-        path: '/accessManagement',
-        name: '权限管理',
-        icon: <LockOutlined />,
-        children: [
-          {
-            path: 'userManagement',
-            name: '用户管理',
-            element: <UserManagement />
-          },
-          {
-            path: 'roleManagement',
-            name: '角色管理',
-            element: <Test />
-          },
-          {
-            path: 'componentManagement',
-            name: '组件管理',
-            element: <Test />
-          },
-          {
-            path: 'resourceManagement',
-            name: '资源管理管理',
-            element: <Test />
-          }
-        ]
-      },
-      {
-        path: 'layoutNone',
-        name: '布局隐藏',
-        hideInMenu: true,
-        layout: 'hide',
-        element: <TestChild />
+const reduceRoute: (params: RouteType[]) => RouteType[] = (routesParams: RouteType[]) => {
+  return routesParams?.map(item => {
+    let curRouter = item
+    if (item?.permissionObj) {
+      curRouter = {
+        ...curRouter,
+        element: renderElement(item)
       }
-    ]
-  },
-  {
-    path: '/login',
-    name: '登录',
-    element: <Login />
-  },
-  { path: '*', element: <NotFoundPage /> }
-] as (RouteObject & ExtraRouteType)[])
+    }
+    if (item?.children) {
+      curRouter = {
+        ...curRouter,
+        children: reduceRoute(item?.children) as any
+      }
+    }
+    return curRouter
+  })
+}
+
+const relRouters = reduceRoute(routers)
+
+export const router = createBrowserRouter(relRouters)

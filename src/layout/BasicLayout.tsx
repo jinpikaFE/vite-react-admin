@@ -1,29 +1,49 @@
 import { storeGlobalUser } from '@/store/globalUser'
 import { storage } from '@/utils/Storage'
 import { PageContainer, ProLayout } from '@ant-design/pro-components'
-import { ExtraRouteType, router } from '@config/routes'
+import { RouteType, router } from '@config/routes'
 import { useAsyncEffect } from 'ahooks'
 import { Dropdown, MenuProps } from 'antd'
 import { useEffect, useState } from 'react'
-import { Outlet, RouteObject, useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import defaultProps from '@/_defaultProps'
 import Settings from '@config/defaultSettings'
 import { observer } from 'mobx-react'
+import React from 'react'
+
+export enum ComponTypeEnum {
+  MENU,
+  PAGE,
+  COMPON
+}
+
+export const GlobalUserInfo = React.createContext<Partial<User.UserEntity>>({})
 
 const BasicLayout: React.FC = () => {
   const [pathname, setPathname] = useState(window.location.pathname)
   const navigate = useNavigate()
   const [showLayout, setShowLayout] = useState<boolean>(true)
 
-  const reduceRouter = (
-    routers: (RouteObject & ExtraRouteType)[]
-  ): (RouteObject & ExtraRouteType)[] => {
+  /** 处理菜单权限隐藏菜单 */
+  const reduceRouter = (routers: RouteType[]): RouteType[] => {
+    const authMenus = storeGlobalUser?.userInfo?.menus
+      ?.filter(item => item?.type === ComponTypeEnum.MENU || item?.type === ComponTypeEnum.PAGE)
+      ?.map(item => item?.title)
+
     return routers?.map(item => {
       if (item?.children) {
         const { children, ...extra } = item
-        return { ...extra, routes: reduceRouter(item?.children) }
+        return {
+          ...extra,
+          routes: reduceRouter(item?.children),
+          hideInMenu:
+            item?.hideInMenu || !item?.children?.find(citem => authMenus?.includes(citem?.name))
+        }
       }
-      return item
+      return {
+        ...item,
+        hideInMenu: item?.hideInMenu || !authMenus?.includes(item?.name)
+      }
     }) as any
   }
 
@@ -53,57 +73,58 @@ const BasicLayout: React.FC = () => {
     }
   ]
 
-  return showLayout ? (
-    <ProLayout
-      {...defaultProps}
-      route={reduceRouter(router?.routes)?.[1]}
-      location={{
-        pathname
-      }}
-      avatarProps={{
-        src: 'https://jinpika-1308276765.cos.ap-shanghai.myqcloud.com/images/logo.png',
-        size: 'small',
-        title: storeGlobalUser.userInfo?.username,
-        render: (_, defaultDom) => {
-          return <Dropdown menu={{ items }}>{defaultDom}</Dropdown>
-        }
-      }}
-      menuFooterRender={props => {
-        return (
-          <div
-            style={{
-              textAlign: 'center',
-              paddingBlockStart: 12
-            }}
-          >
-            <div>© 2023 Made with love</div>
-            <div>by JPK</div>
-          </div>
-        )
-      }}
-      menuItemRender={(item, dom) => {
-        return item?.hideInMenu ? undefined : dom
-      }}
-      menuRender={(props, defaultDom) => {
-        if ((props?.layout as string) === 'hide') {
-          setShowLayout(false)
-          return null
-        }
-        return defaultDom
-      }}
-      menuProps={{
-        onClick: ({ key }) => {
-          navigate(key || '/')
-        }
-      }}
-      {...Settings}
-    >
-      <PageContainer>
+  return (
+    <GlobalUserInfo.Provider value={storeGlobalUser.userInfo}>
+      {showLayout ? (
+        <ProLayout
+          {...defaultProps}
+          route={reduceRouter(router?.routes)?.[1]}
+          location={{
+            pathname
+          }}
+          avatarProps={{
+            src: storeGlobalUser.userInfo?.icon,
+            size: 'small',
+            title: storeGlobalUser.userInfo?.username,
+            render: (_, defaultDom) => {
+              return <Dropdown menu={{ items }}>{defaultDom}</Dropdown>
+            }
+          }}
+          menuFooterRender={props => {
+            return (
+              <div
+                style={{
+                  textAlign: 'center',
+                  paddingBlockStart: 12
+                }}
+              >
+                <div>© 2023 Made with love</div>
+                <div>by JPK</div>
+              </div>
+            )
+          }}
+          menuRender={(props, defaultDom) => {
+            if ((props?.layout as string) === 'hide') {
+              setShowLayout(false)
+              return null
+            }
+            return defaultDom
+          }}
+          menuProps={{
+            onClick: ({ key }) => {
+              navigate(key || '/')
+            }
+          }}
+          {...Settings}
+        >
+          <PageContainer>
+            <Outlet />
+          </PageContainer>
+        </ProLayout>
+      ) : (
         <Outlet />
-      </PageContainer>
-    </ProLayout>
-  ) : (
-    <Outlet />
+      )}
+    </GlobalUserInfo.Provider>
   )
 }
 

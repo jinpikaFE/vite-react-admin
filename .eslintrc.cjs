@@ -64,6 +64,7 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
     'react/prop-types': 'off',
-    'react/display-name': 'off'
+    'react/display-name': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off'
   }
 }
