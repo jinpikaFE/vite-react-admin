@@ -1,0 +1,103 @@
+.container {
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: rgb(255, 251, 251);
+    font-size: 16px;
+    background: linear-gradient(
+      30deg,
+      transparent 10%,
+      rgb(255, 136, 0) 10% 95%,
+      rgb(0, 255, 149) 95%
+    );
+    border: 0 !important;
+    box-shadow: 5px 0 0 rgb(0, 204, 255);
+    cursor: pointer;
+  }
+
+  button {
+
+    .btn();
+    
+    position: relative;
+
+    &::after {
+      .btn();
+
+      position: absolute;
+      top: 0;
+      left: 0;
+      text-shadow: -5px -2px 0 rgb(0, 183, 255), 5px 2px 0 rgb(0, 255, 115);
+      visibility: hidden;
+      content: 'Button';
+    }
+
+    &:hover {
+      &::after {
+        animation: san 1s;
+        animation-timing-function: steps(1, end);
+      }
+    }
+  }
+
+  @keyframes san {
+    0% {
+      transform: translate(-6px, 5px);
+      visibility: visible;
+      clip-path: inset(20% -5px 60% 0);
+    }
+
+    10% {
+      transform: translate(6px, -5px);
+      clip-path: inset(50% -5px 30% 0);
+    }
+
+    20% {
+      transform: translate(5px, 0);
+      clip-path: inset(20% -5px 60% 0);
+    }
+
+    30% {
+      transform: translate(-8px, 5px);
+      clip-path: inset(80% -5px 5% 0);
+    }
+
+    40% {
+      transform: translate(-4px, -3px);
+      clip-path: inset(0 -5px 80% 0);
+    }
+
+    50% {
+      transform: translate(-6px, -5px);
+      clip-path: inset(50% -5px 30% 0);
+    }
+
+    60% {
+      transform: translate(-7px, 5px);
+      clip-path: inset(80% -5px 5% 0);
+    }
+
+    70% {
+      transform: translate(3px, 6px);
+      clip-path: inset(0 -5px 80% 0);
+    }
+
+    80% {
+      transform: translate(5px, 5px);
+      clip-path: inset(50% -5px 30% 0);
+    }
+
+    90% {
+      transform: translate(6px, -5px);
+      clip-path: inset(20% -5px 60% 0);
+    }
+
+    100% {
+      transform: translate(1px, 5px);
+      clip-path: inset(0 -5px 80% 0);
+    }
+  }
+}

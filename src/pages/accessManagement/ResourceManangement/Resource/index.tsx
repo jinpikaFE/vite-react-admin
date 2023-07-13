@@ -4,6 +4,7 @@ import {
   editResource,
   getResourceList
 } from '@/apis/accessManagement/resource'
+import PunkEffectButton2 from '@/components/ButtonDy/PunkEffectButton2'
 import ExcelTable from '@/components/exportExcel'
 import {
   ActionType,
@@ -151,9 +152,9 @@ const Resource: React.FC = () => {
       actionRef={actionRef}
       rowSelection={false}
       toolBarRenderFn={() => [
-        <Button key="add" onClick={() => showModal()}>
+        <PunkEffectButton2 key="add" onClick={() => showModal()}>
           添加
-        </Button>
+        </PunkEffectButton2>
       ]}
     />
   )

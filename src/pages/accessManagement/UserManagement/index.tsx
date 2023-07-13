@@ -16,6 +16,7 @@ import { observer } from 'mobx-react'
 import { getRoleList } from '@/apis/accessManagement/role'
 import FormUploadNew from '@/components/formUploadNew'
 import { PlusOutlined } from '@ant-design/icons'
+import PunkEffectButton2 from '@/components/ButtonDy/PunkEffectButton2'
 
 const UserManagement: React.FC = () => {
   const actionRef = useRef<ActionType>()
@@ -264,9 +265,9 @@ const UserManagement: React.FC = () => {
       actionRef={actionRef}
       rowSelection={false}
       toolBarRenderFn={() => [
-        <Button key="add" onClick={() => showModal()}>
+        <PunkEffectButton2 key="add" onClick={() => showModal()}>
           添加
-        </Button>
+        </PunkEffectButton2>
       ]}
     />
   )

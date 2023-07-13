@@ -1,4 +1,5 @@
 import { addCompon, delCompon, editCompon, getComponTree } from '@/apis/accessManagement/compon'
+import PunkEffectButton2 from '@/components/ButtonDy/PunkEffectButton2'
 import ExcelTable from '@/components/exportExcel'
 import {
   ActionType,
@@ -238,9 +239,9 @@ const ComponManagement: React.FC = () => {
       actionRef={actionRef}
       rowSelection={false}
       toolBarRenderFn={() => [
-        <Button key="add" onClick={() => showModal()}>
+        <PunkEffectButton2 key="add" onClick={() => showModal()}>
           添加一级组件
-        </Button>
+        </PunkEffectButton2>
       ]}
     />
   )
