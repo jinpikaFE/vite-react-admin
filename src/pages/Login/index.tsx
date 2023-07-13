@@ -1,4 +1,6 @@
 import { login } from '@/apis/login'
+import { ComponTypeEnum } from '@/layout/BasicLayout'
+import { storeGlobalUser } from '@/store/globalUser'
 import { storage } from '@/utils/Storage'
 import {
   AlipayOutlined,
@@ -14,6 +16,8 @@ import {
   ProFormCheckbox,
   ProFormText
 } from '@ant-design/pro-components'
+import { RouteType } from '@config/routes'
+import { routers } from '@config/routes/routers'
 import { Button, Divider, message, Space, Tabs } from 'antd'
 import type { CSSProperties } from 'react'
 import { useState } from 'react'
@@ -41,7 +45,36 @@ const Login = () => {
         onFinish={async (val: Login.LoginEntity) => {
           const res = await login(val)
           storage.set('token', res?.data?.token)
-          navigate('/')
+
+          /** 跳转有权限的第一个菜单 */
+          await storeGlobalUser.getUserDetail()
+          const flattenRoutes: (routes: RouteType[]) => RouteType[] = (routes: RouteType[]) => {
+            const flattenedRoutes: RouteType[] = []
+            function traverse(routes: RouteType[]) {
+              routes.forEach(route => {
+                flattenedRoutes.push(route)
+                if (route.children) {
+                  traverse(route.children)
+                }
+              })
+            }
+
+            traverse(routes)
+
+            return flattenedRoutes
+          }
+          const resRoutes = flattenRoutes(routers)
+          const findPath =
+            resRoutes?.[
+              resRoutes?.findIndex(
+                item =>
+                  item?.name ===
+                  storeGlobalUser?.userInfo?.menus?.filter(
+                    citem => citem?.type === ComponTypeEnum.MENU
+                  )?.[0]?.title
+              )
+            ]?.path
+          navigate(findPath || '/')
         }}
         activityConfig={{
           style: {

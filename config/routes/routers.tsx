@@ -43,13 +43,13 @@ export const routers = [
         permissionObj: true,
         children: [
           {
-            path: 'oneOne',
+            path: '/frist/oneOne',
             name: '一级-1',
             element: <Test />,
             permissionObj: true,
             children: [
               {
-                path: ':id',
+                path: '/frist/oneOne/:id',
                 name: '一级-1-二级',
                 permissionObj: true,
                 element: <TestChild />
@@ -57,13 +57,13 @@ export const routers = [
             ]
           },
           {
-            path: 'oneTwo',
+            path: '/frist/oneTwo',
             name: '一级-2',
             permissionObj: true,
             element: <Test />
           },
           {
-            path: 'hideInMenu',
+            path: '/frist/hideInMenu',
             name: 'hideInMenu',
             permissionObj: true,
             hideInMenu: true,
@@ -83,25 +83,25 @@ export const routers = [
             element: <Navigate replace to="/accessManagement/userManagement" />
           },
           {
-            path: 'userManagement',
+            path: '/accessManagement/userManagement',
             name: '用户管理',
             permissionObj: true,
             element: <UserManagement />
           },
           {
-            path: 'roleManagement',
+            path: '/accessManagement/roleManagement',
             name: '角色管理',
             permissionObj: true,
             element: <RoleManangement />
           },
           {
-            path: 'componentManagement',
+            path: '/accessManagement/componentManagement',
             name: '组件管理',
             permissionObj: true,
             element: <ComponManagement />
           },
           {
-            path: 'resourceManagement',
+            path: '/accessManagement/resourceManagement',
             name: '资源管理',
             permissionObj: true,
             children: [
@@ -113,14 +113,14 @@ export const routers = [
                 )
               },
               {
-                path: 'resourceCategory',
+                path: '/accessManagement/resourceManagement/resourceCategory',
                 name: '资源分类',
                 permissionObj: true,
                 element: <ResourceManangement />,
                 hideInMenu: true
               },
               {
-                path: 'resourceCategory/:resourceCategoryId/resource',
+                path: '/accessManagement/resourceManagement/resourceCategory/:resourceCategoryId/resource',
                 name: '资源列表',
                 permissionObj: true,
                 element: <Resource />,
@@ -131,7 +131,7 @@ export const routers = [
         ]
       },
       {
-        path: 'layoutNone',
+        path: '/layoutNone',
         name: '布局隐藏',
         hideInMenu: true,
         layout: 'hide',

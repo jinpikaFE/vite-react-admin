@@ -11,7 +11,7 @@ import Settings from '@config/defaultSettings'
 import { observer } from 'mobx-react'
 import React from 'react'
 
-enum ComponTypeEnum {
+export enum ComponTypeEnum {
   MENU,
   PAGE,
   COMPON
