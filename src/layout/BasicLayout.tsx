@@ -9,12 +9,15 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import defaultProps from '@/_defaultProps'
 import Settings from '@config/defaultSettings'
 import { observer } from 'mobx-react'
+import React from 'react'
 
 enum ComponTypeEnum {
   MENU,
   PAGE,
   COMPON
 }
+
+export const GlobalUserInfo = React.createContext<Partial<User.UserEntity>>({})
 
 const BasicLayout: React.FC = () => {
   const [pathname, setPathname] = useState(window.location.pathname)
@@ -70,54 +73,58 @@ const BasicLayout: React.FC = () => {
     }
   ]
 
-  return showLayout ? (
-    <ProLayout
-      {...defaultProps}
-      route={reduceRouter(router?.routes)?.[1]}
-      location={{
-        pathname
-      }}
-      avatarProps={{
-        src: storeGlobalUser.userInfo?.icon,
-        size: 'small',
-        title: storeGlobalUser.userInfo?.username,
-        render: (_, defaultDom) => {
-          return <Dropdown menu={{ items }}>{defaultDom}</Dropdown>
-        }
-      }}
-      menuFooterRender={props => {
-        return (
-          <div
-            style={{
-              textAlign: 'center',
-              paddingBlockStart: 12
-            }}
-          >
-            <div>© 2023 Made with love</div>
-            <div>by JPK</div>
-          </div>
-        )
-      }}
-      menuRender={(props, defaultDom) => {
-        if ((props?.layout as string) === 'hide') {
-          setShowLayout(false)
-          return null
-        }
-        return defaultDom
-      }}
-      menuProps={{
-        onClick: ({ key }) => {
-          navigate(key || '/')
-        }
-      }}
-      {...Settings}
-    >
-      <PageContainer>
+  return (
+    <GlobalUserInfo.Provider value={storeGlobalUser.userInfo}>
+      {showLayout ? (
+        <ProLayout
+          {...defaultProps}
+          route={reduceRouter(router?.routes)?.[1]}
+          location={{
+            pathname
+          }}
+          avatarProps={{
+            src: storeGlobalUser.userInfo?.icon,
+            size: 'small',
+            title: storeGlobalUser.userInfo?.username,
+            render: (_, defaultDom) => {
+              return <Dropdown menu={{ items }}>{defaultDom}</Dropdown>
+            }
+          }}
+          menuFooterRender={props => {
+            return (
+              <div
+                style={{
+                  textAlign: 'center',
+                  paddingBlockStart: 12
+                }}
+              >
+                <div>© 2023 Made with love</div>
+                <div>by JPK</div>
+              </div>
+            )
+          }}
+          menuRender={(props, defaultDom) => {
+            if ((props?.layout as string) === 'hide') {
+              setShowLayout(false)
+              return null
+            }
+            return defaultDom
+          }}
+          menuProps={{
+            onClick: ({ key }) => {
+              navigate(key || '/')
+            }
+          }}
+          {...Settings}
+        >
+          <PageContainer>
+            <Outlet />
+          </PageContainer>
+        </ProLayout>
+      ) : (
         <Outlet />
-      </PageContainer>
-    </ProLayout>
-  ) : (
-    <Outlet />
+      )}
+    </GlobalUserInfo.Provider>
   )
 }
 
