@@ -2,6 +2,7 @@
 
 interface ImportMetaEnv {
   readonly VITE_MODE: string
+  readonly VITE_MONITOR_URL: string
   // 更多环境变量...
 }
 
