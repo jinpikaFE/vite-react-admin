@@ -10,6 +10,8 @@ import {
 import { getMonitorList } from '@/apis/home'
 import PunkEffectButton2 from '@/components/ButtonDy/PunkEffectButton2'
 import ExcelTable from '@/components/exportExcel'
+import { getFirstDayOfMonth } from '@/utils/date'
+import { formatToDateTime } from '@/utils/dateUtil'
 import {
   ActionType,
   ProForm,
@@ -34,6 +36,19 @@ const Home: React.FC = () => {
           dataIndex: 'keyword',
           hideInTable: true
         },
+        {
+          title: '时间',
+          dataIndex: 'time',
+          hideInTable: true,
+          valueType: 'dateTimeRange',
+          initialValue: [getFirstDayOfMonth(new Date()), formatToDateTime(new Date())],
+          search: {
+            transform: val => ({
+              startTime: val?.[0],
+              endTime: val?.[1]
+            })
+          }
+        },
         /** search */
         {
           title: '序号',
@@ -54,7 +69,8 @@ const Home: React.FC = () => {
       rowKey="_time"
       requestFn={async params => {
         const data = await getMonitorList({
-          ...params
+          ...params,
+          type: 'performance'
         })
         return data
       }}
