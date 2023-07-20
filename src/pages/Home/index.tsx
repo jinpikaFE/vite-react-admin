@@ -1,28 +1,8 @@
-import { getComponTree } from '@/apis/accessManagement/compon'
-import { getResourceCategoryList } from '@/apis/accessManagement/resource'
-import {
-  addRole,
-  delRole,
-  editRole,
-  editRoleStatus,
-  getRoleList
-} from '@/apis/accessManagement/role'
 import { getMonitorList } from '@/apis/home'
-import PunkEffectButton2 from '@/components/ButtonDy/PunkEffectButton2'
 import ExcelTable from '@/components/exportExcel'
 import { getFirstDayOfMonth } from '@/utils/date'
 import { formatToDateTime } from '@/utils/dateUtil'
-import {
-  ActionType,
-  ProForm,
-  ProFormCascader,
-  ProFormInstance,
-  ProFormRadio,
-  ProFormText,
-  ProFormTextArea,
-  ProFormTreeSelect
-} from '@ant-design/pro-components'
-import { Button, Cascader, Modal, Popconfirm, Switch, TreeSelect, message } from 'antd'
+import { ActionType } from '@ant-design/pro-components'
 import { useRef } from 'react'
 
 const Home: React.FC = () => {
@@ -30,6 +10,7 @@ const Home: React.FC = () => {
 
   return (
     <ExcelTable
+      headerTitle="性能监控"
       columns={[
         {
           title: '角色名称2',
@@ -51,14 +32,16 @@ const Home: React.FC = () => {
         },
         /** search */
         {
-          title: '序号',
-          dataIndex: 'id',
-          hideInSearch: true
+          title: '访问标识',
+          dataIndex: 'uuid',
+          hideInSearch: true,
+          ellipsis: true
         },
         {
-          title: '角色名称',
-          dataIndex: 'name',
-          hideInSearch: true
+          title: '错误页面',
+          dataIndex: 'pageUrl',
+          hideInSearch: true,
+          ellipsis: true
         },
         {
           title: '描述',
@@ -66,11 +49,18 @@ const Home: React.FC = () => {
           hideInSearch: true
         }
       ]}
+      form={{
+        syncToUrl: false
+      }}
+      pagination={{
+        pageSize: 10
+      }}
       rowKey="_time"
       requestFn={async params => {
         const data = await getMonitorList({
           ...params,
-          type: 'performance'
+          type: 'performance',
+          apikey: 'vite-react-ts-admin'
         })
         return data
       }}
