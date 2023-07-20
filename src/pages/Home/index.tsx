@@ -13,8 +13,8 @@ const Home: React.FC = () => {
       headerTitle="性能监控"
       columns={[
         {
-          title: '角色名称2',
-          dataIndex: 'keyword',
+          title: '名称',
+          dataIndex: 'name',
           hideInTable: true
         },
         {
@@ -47,6 +47,12 @@ const Home: React.FC = () => {
           title: '描述',
           dataIndex: 'description',
           hideInSearch: true
+        },
+        {
+          title: '时间',
+          dataIndex: '_time',
+          hideInSearch: true,
+          valueType: 'dateTime'
         }
       ]}
       form={{
