@@ -1,9 +1,9 @@
-import PerformanceTable from './components/performanceTable'
+import PvTable from './components/pvTable'
 
 const Home: React.FC = () => {
   return (
     <>
-      <PerformanceTable />
+      <PvTable />
     </>
   )
 }

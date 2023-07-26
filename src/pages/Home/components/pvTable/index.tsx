@@ -11,7 +11,7 @@ const PerformanceTable: React.FC = () => {
 
   return (
     <ExcelTable
-      headerTitle="性能监控"
+      headerTitle="PV"
       columns={[
         {
           title: '指标名称',
