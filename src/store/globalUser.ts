@@ -16,7 +16,17 @@ class GlobalUser {
     webSee.init({
       dsn: `${import.meta.env.VITE_MONITOR_URL}/v1/monitor`,
       apikey: import.meta.env.VITE_APP_NAME,
-      userId: res?.data?.username
+      userId: res?.data?.username,
+      handleHttpStatus(data) {
+        const { response } = data
+        // code为200，接口正常，反之亦然
+        const { code } = typeof response === 'string' ? JSON.parse(response) : response
+        if (code === 200) {
+          return true
+        }
+
+        return false
+      }
     })
 
     webSee.use(performance, {})
