@@ -3,13 +3,14 @@ import webSee from '@websee/core'
 import performance from '@websee/performance'
 import recordscreen from '@websee/recordscreen'
 import BasicLayout from './layout/BasicLayout'
+import { storeGlobalUser } from './store/globalUser'
 
 const App = () => {
   useEffect(() => {
     webSee.init({
       dsn: `${import.meta.env.VITE_MONITOR_URL}/v1/monitor`,
-      apikey: 'vite-react-ts-admin',
-      userId: '89757'
+      apikey: import.meta.env.VITE_APP_NAME,
+      userId: import.meta.env.VITE_APP_NAME
     })
 
     webSee.use(performance, {})
