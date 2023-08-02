@@ -13,9 +13,10 @@ import { setObjToUrlParams } from '@/utils/urlUtils'
 import type { RequestOptions, Result } from './types'
 
 import { Modal, message as Message, notification } from 'antd'
+import { storage } from '@/utils/Storage'
 
 const urlPrefix = import.meta.env.REACT_APP_API_PREFIX // 接口前缀
-import { storage } from '@/utils/Storage'
+const baseUrl = import.meta.env.VITE_APP_URL // 接口地址
 
 /**
  * @description: 数据处理，方便区分多种处理方式
@@ -241,6 +242,7 @@ const transform: AxiosTransform = {
 }
 
 const Axios = new VAxios({
+  baseURL: baseUrl,
   timeout: 100 * 1000,
   // 接口前缀
   prefixUrl: urlPrefix,
