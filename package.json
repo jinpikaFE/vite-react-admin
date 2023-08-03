@@ -6,6 +6,7 @@
   "scripts": {
     "start": "vite",
     "start:mock": "vite --mode mock",
+    "start:production": "vite --mode production",
     "build": "vite build",
     "preview": "vite preview",
     "lint:script": "eslint --ext .js,.jsx,.ts,.tsx --fix  ./",
