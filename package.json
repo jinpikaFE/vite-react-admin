@@ -6,7 +6,8 @@
   "scripts": {
     "start": "vite",
     "start:mock": "vite --mode mock",
-    "build": "tsc && vite build",
+    "start:production": "vite --mode production",
+    "build": "vite build",
     "preview": "vite preview",
     "lint:script": "eslint --ext .js,.jsx,.ts,.tsx --fix  ./",
     "lint:style": "stylelint --fix  **/*.{css,less,scss}"
@@ -27,6 +28,9 @@
     "@ant-design/icons": "^5.0.1",
     "@ant-design/pro-components": "^2.4.0",
     "@types/qs": "^6.9.7",
+    "@websee/core": "^4.0.2",
+    "@websee/performance": "^4.0.2",
+    "@websee/recordscreen": "^4.0.2",
     "ahooks": "^3.7.5",
     "antd": "^5.2.3",
     "axios": "^1.3.4",

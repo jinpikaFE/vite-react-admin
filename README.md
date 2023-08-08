@@ -1,3 +1,7 @@
+# 体验地址
+
+[Vite-React-Ts-Amin](http://vite-admin.jinxinapp.cn/login)
+
 # Vite-React-Ts-Amin
 
 进行 vite 4.0 升级

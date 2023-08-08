@@ -13,6 +13,7 @@ const Test: React.FC = () => {
         type="primary"
         onClick={() => {
           storeCount.increment()
+          throw new Error('主动抛出错误')
         }}
       >
         erro

@@ -51,5 +51,9 @@ export default defineConfig(({ mode }) => ({
   },
   server: {
     proxy: proxy[mode]
+  },
+  build: {
+    // 打包出map文件
+    sourcemap: true
   }
 }))
