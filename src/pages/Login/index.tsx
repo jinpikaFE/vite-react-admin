@@ -176,7 +176,7 @@ const Login = () => {
                 size: 'large',
                 prefix: <UserOutlined className={'prefixIcon'} />
               }}
-              placeholder={'用户名: admin or user'}
+              placeholder={'用户名: user'}
               rules={[
                 {
                   required: true,
@@ -190,7 +190,7 @@ const Login = () => {
                 size: 'large',
                 prefix: <LockOutlined className={'prefixIcon'} />
               }}
-              placeholder={'密码: ant.design'}
+              placeholder={'密码: user'}
               rules={[
                 {
                   required: true,
