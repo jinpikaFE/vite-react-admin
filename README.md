@@ -1,6 +1,7 @@
 # 体验地址
 
-[Vite-React-Ts-Amin](http://monitor-vite-admin.jinxinapp.cn/login)
+[Vite-React-Ts-Amin](http://vite-admin.jinxinapp.cn/)
+[monitor-vite-admin](http://monitor-vite-admin.jinxinapp.cn/login) - 用于对上面网页监控，前端统一脚手架。上面地址因为资源问题，可能服务会挂。
 
 # Vite-React-Ts-Amin
 
