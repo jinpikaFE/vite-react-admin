@@ -1,6 +1,6 @@
 # 体验地址
 
-[Vite-React-Ts-Amin](http://vite-admin.jinxinapp.cn/login)
+[Vite-React-Ts-Amin](http://monitor-vite-admin.jinxinapp.cn/login)
 
 # Vite-React-Ts-Amin
 
