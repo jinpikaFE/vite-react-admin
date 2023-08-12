@@ -15,7 +15,7 @@ const App = () => {
 
   useEffect(() => {
     webSee.init({
-      dsn: `${import.meta.env.VITE_MONITOR_URL}/v1/monitor`,
+      dsn: `${import.meta.env.VITE_MONITOR_URL}/v1/mgb/monitor`,
       apikey: import.meta.env.VITE_APP_NAME,
       userId: import.meta.env.VITE_APP_NAME
     })

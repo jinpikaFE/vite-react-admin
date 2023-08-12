@@ -14,7 +14,7 @@ class GlobalUser {
     const res = await getCurrentUserInfo()
     this.userInfo = res?.data
     webSee.init({
-      dsn: `${import.meta.env.VITE_MONITOR_URL}/v1/monitor`,
+      dsn: `${import.meta.env.VITE_MONITOR_URL}/v1/mgb/monitor`,
       apikey: import.meta.env.VITE_APP_NAME,
       userId: res?.data?.username,
       handleHttpStatus(data) {
