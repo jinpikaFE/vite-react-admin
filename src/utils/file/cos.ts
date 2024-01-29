@@ -1,5 +1,6 @@
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { message } from 'antd'
+import { DATE_FORMAT } from '../dateUtil'
 
 /**
  * 腾讯云cos上传
@@ -41,7 +42,7 @@ export const uploadByCos = (
       })
     }
   })
-  const fileName = `${prefix}/${moment().format('YYYY-MM-DD')}/${
+  const fileName = `${prefix}/${dayjs().format(DATE_FORMAT)}/${
     new Date().getTime() + Math.random().toString().slice(-6) + '.' + file?.name
   }`.replace(/\s*/g, '')
 

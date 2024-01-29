@@ -22,7 +22,7 @@ export function formatRequestDate(params: Record<string, any>) {
   }
 
   for (const key in params) {
-    if (params[key] && params[key]._isAMomentObject) {
+    if (params[key] && params[key]._isAdayjsObject) {
       params[key] = params[key].format(DATE_TIME_FORMAT)
     }
     if (isString(key)) {

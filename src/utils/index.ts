@@ -1,4 +1,5 @@
-import moment from 'moment'
+import dayjs from 'dayjs'
+import { DATE_TIME_FORMAT } from './dateUtil'
 
 function typeOf(obj: Record<string, any>) {
   const toString = Object.prototype.toString
@@ -166,7 +167,7 @@ const exportExecl = (data: any) => {
 
   // 设置href属性为文件路径，download属性可以设置文件名称
   ele.href = url
-  ele.download = moment().format('YYYY-MM-DD HH:mm:ss') + '列表数据.xlsx'
+  ele.download = dayjs().format(DATE_TIME_FORMAT) + '列表数据.xlsx'
   // const fileName = decodeURI(
   //   data.headers['content-disposition'].split(';')[1].split('filename=')[1],
   // );

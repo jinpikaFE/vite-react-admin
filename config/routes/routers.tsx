@@ -134,7 +134,7 @@ export const routers = [
         path: '/layoutNone',
         name: '布局隐藏',
         hideInMenu: true,
-        layout: 'hide',
+        hideLayout: true,
         element: <TestChild />
       }
     ]

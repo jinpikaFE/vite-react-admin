@@ -5,7 +5,6 @@ import { Link, Navigate } from 'react-router-dom'
 import { useContext, useState } from 'react'
 import { useAsyncEffect } from 'ahooks'
 import { GlobalUserInfo } from '@/layout/BasicLayout'
-import Loading from '@/components/loading'
 import TankShaking from '@/components/TankShaking'
 
 const Permission: React.FC<{
