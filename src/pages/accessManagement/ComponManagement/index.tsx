@@ -194,7 +194,7 @@ const ComponManagement: React.FC = () => {
           key: 'option',
           valueType: 'option',
           render: (_, record) => [
-            <Button key="edit" type="link" onClick={() => showModal(record, true)}>
+            <Button key="add" type="link" onClick={() => showModal(record, true)}>
               添加下级组件
             </Button>,
             <Button key="edit" type="link" onClick={() => showModal(record)}>

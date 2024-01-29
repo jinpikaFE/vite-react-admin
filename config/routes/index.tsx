@@ -4,8 +4,8 @@ import { createBrowserRouter, RouteObject } from 'react-router-dom'
 import { routers } from './routers'
 
 export type RouteType = {
-  /** 是否需要菜单布局 */
-  layout?: string | 'hide'
+  /** 是否隐藏菜单布局 */
+  hideLayout?: boolean
   /** 在菜单栏是否显示 */
   hideInMenu?: boolean
   /** 权限控制 true 则都控制 */

@@ -5,11 +5,12 @@ import { RouteType, router } from '@config/routes'
 import { useAsyncEffect } from 'ahooks'
 import { Dropdown, MenuProps } from 'antd'
 import { useEffect, useState } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, matchRoutes, useLocation, useNavigate } from 'react-router-dom'
 import defaultProps from '@/_defaultProps'
 import Settings from '@config/defaultSettings'
 import { observer } from 'mobx-react'
 import React from 'react'
+import { routers } from '@config/routes/routers'
 
 export enum ComponTypeEnum {
   MENU,
@@ -19,10 +20,13 @@ export enum ComponTypeEnum {
 
 export const GlobalUserInfo = React.createContext<Partial<User.UserEntity>>({})
 
-const BasicLayout: React.FC = () => {
+const BasicLayout: React.FC = props => {
   const [pathname, setPathname] = useState(window.location.pathname)
   const navigate = useNavigate()
-  const [showLayout, setShowLayout] = useState<boolean>(true)
+  const location = useLocation()
+  const matchRoute = matchRoutes(routers, location)
+
+  const [showLayout, setShowLayout] = useState(false)
 
   /** 处理菜单权限隐藏菜单 */
   const reduceRouter = (routers: RouteType[]): RouteType[] => {
@@ -49,6 +53,7 @@ const BasicLayout: React.FC = () => {
 
   useEffect(() => {
     setPathname(window.location.pathname)
+    setShowLayout(!matchRoute?.[matchRoute?.length - 1]?.route?.hideLayout)
   }, [window.location.pathname])
 
   useAsyncEffect(async () => {
@@ -102,13 +107,6 @@ const BasicLayout: React.FC = () => {
                 <div>by JPK</div>
               </div>
             )
-          }}
-          menuRender={(props, defaultDom) => {
-            if ((props?.layout as string) === 'hide') {
-              setShowLayout(false)
-              return null
-            }
-            return defaultDom
           }}
           menuProps={{
             onClick: ({ key }) => {
