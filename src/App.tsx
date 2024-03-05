@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react'
-import webSee from '@websee/core'
-import performance from '@websee/performance'
-import recordscreen from '@websee/recordscreen'
 import BasicLayout from './layout/BasicLayout'
 import { useLocation } from 'react-router-dom'
 import { useAsyncEffect } from 'ahooks'
 import { getIpInfo } from './apis'
 import { storeMonitor } from './store/monitor'
+import { WebSee } from './utils/webSee'
 
 const App = () => {
   const [isHandled, setIsHandled] = useState(false)
@@ -14,14 +12,7 @@ const App = () => {
   const [pvStartTime, setPvStartTime] = useState<number>()
 
   useEffect(() => {
-    webSee.init({
-      dsn: `${import.meta.env.VITE_MONITOR_URL}/v1/mgb/monitor`,
-      apikey: import.meta.env.VITE_APP_NAME,
-      userId: import.meta.env.VITE_APP_NAME
-    })
-
-    webSee.use(performance, {})
-    webSee.use(recordscreen, {})
+    new WebSee(import.meta.env.VITE_APP_NAME)
   }, [])
 
   /** 获取ip 记录uv */
@@ -42,12 +33,12 @@ const App = () => {
     const handlePageClose = (event: Event) => {
       if (!isHandled) {
         // Your cleanup logic or confirmation message here
-        webSee.log({
+        WebSee.Log({
           type: 'uv',
           message: storeMonitor.uvInfo
         })
         /** 最后离开记录pv */
-        webSee.log({
+        WebSee.Log({
           type: 'pv',
           message: {
             startTime: pvStartTime,
@@ -83,7 +74,7 @@ const App = () => {
     const startTime = new Date().getTime()
     setPvStartTime(startTime)
     return () => {
-      webSee.log({
+      WebSee.Log({
         type: 'pv',
         message: {
           startTime,

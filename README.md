@@ -1,25 +1,20 @@
 # 体验地址
 
-[Vite-React-Ts-Amin](http://vite-admin.jinxinapp.cn/)
+[在线预览](http://vite-admin.jinxinapp.cn/)
 
 [monitor-vite-admin](http://monitor-vite-admin.jinxinapp.cn/login) - 用于对上面网页监控，前端统一脚手架。上面地址因为资源问题，可能服务会挂。
 
-# Vite-React-Ts-Amin
+## Vite-React-Amin
 
-进行 vite 4.0 升级
-
-- 分支 vite_4.0 版本为通用的模版，可进行 clone 直接使用
-- 分支 vite_4.0_tiny 版本为轻量版本，只涉及layout布局，代码规划，基础路由等基本功能。
-- 分支 1.0 版本为 vite2.0 版本，功能更全，后续会对 vite_4.0 版本进行内容补充
+- 分支 tiny 版本为轻量版本，只涉及layout布局，代码规划，基础路由等基本功能。
 - 预览请使用mock模式启动 npm run start:mock
-- master 也已经升级为vite5
-- vite_4.0 后端接口修改为 [spring-for-vite](https://github.com/jinpikaFE/spring-for-vite) 基于[mall-tiny](https://github.com/macrozheng/mall-tiny)框架编写
+- master 升级为vite5.x
 
 ## 相关技术
 
 | 技术                             | 官网                              | 描述             |
 | -------------------------------- | --------------------------------- | ---------------- |
-| Vite 4.X                         | https://cn.vitejs.dev/            | 基础脚手架       |
+| Vite 5.X                         | https://cn.vitejs.dev/            | 基础脚手架       |
 | React Router 6.X                 | https://reactrouter.com/en/main   | react 路由管理   |
 | ant-design 5.X                   | https://ant.design/index-cn       | ui 组件          |
 | @ant-design/pro-components 2.4.0 | https://procomponents.ant.design/ | 中后台高阶组件   |
