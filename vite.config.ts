@@ -30,15 +30,15 @@ export default defineConfig(({ mode }) => ({
         replacement: path.resolve(__dirname, 'src/components')
       },
       { find: '@config', replacement: path.resolve(__dirname, 'config') },
-      {
-        find: '@antd/dist/reset.css',
-        replacement: path.join(__dirname, 'node_modules/antd/dist/reset.css')
-      }
-      // { find: 'antd', replacement: path.join(__dirname, 'node_modules/antd/dist/antd.js') },
       // {
-      //   find: '@ant-design/icons',
-      //   replacement: path.join(__dirname, 'node_modules/@ant-design/icons/dist/index.umd.js')
+      //   find: '@antd/dist/reset.css',
+      //   replacement: path.join(__dirname, 'node_modules/antd/dist/reset.css')
       // }
+      // // { find: 'antd', replacement: path.join(__dirname, 'node_modules/antd/dist/antd.js') },
+      // // {
+      // //   find: '@ant-design/icons',
+      // //   replacement: path.join(__dirname, 'node_modules/@ant-design/icons/dist/index.umd.js')
+      // // }
     ]
   },
   css: {
