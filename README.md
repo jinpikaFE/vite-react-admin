@@ -7,7 +7,7 @@
 ## Vite-React-Amin
 
 - 分支 tiny 版本为轻量版本，只涉及layout布局，代码规划，基础路由等基本功能。
-- 预览请使用mock模式启动 npm run start:mock
+- 预览请使用mock模式启动 npm run start:mock。
 - master 升级为vite5.x
 
 ## 相关技术
