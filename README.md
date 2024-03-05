@@ -12,7 +12,7 @@
 - 分支 vite_4.0_tiny 版本为轻量版本，只涉及layout布局，代码规划，基础路由等基本功能。
 - 分支 1.0 版本为 vite2.0 版本，功能更全，后续会对 vite_4.0 版本进行内容补充
 - 预览请使用mock模式启动 npm run start:mock
-- master 也已经同步vite_4.0
+- master 也已经升级为vite5
 - vite_4.0 后端接口修改为 [spring-for-vite](https://github.com/jinpikaFE/spring-for-vite) 基于[mall-tiny](https://github.com/macrozheng/mall-tiny)框架编写
 
 ## 相关技术
