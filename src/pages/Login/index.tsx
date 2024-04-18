@@ -1,5 +1,6 @@
 import { login } from '@/apis/login'
 import { ComponTypeEnum } from '@/layout/BasicLayout'
+import { storeGlobalRouter } from '@/store/globalRouter'
 import { storeGlobalUser } from '@/store/globalUser'
 import { storage } from '@/utils/Storage'
 import {
@@ -17,7 +18,6 @@ import {
   ProFormText
 } from '@ant-design/pro-components'
 import { RouteType } from '@config/routes'
-import { routers } from '@config/routes/routers'
 import { Button, Divider, message, Space, Tabs } from 'antd'
 import type { CSSProperties } from 'react'
 import { useState } from 'react'
@@ -63,7 +63,7 @@ const Login = () => {
 
             return flattenedRoutes
           }
-          const resRoutes = flattenRoutes(routers)
+          const resRoutes = flattenRoutes(storeGlobalRouter.routers)
           const findPath =
             resRoutes?.[
               resRoutes?.findIndex(

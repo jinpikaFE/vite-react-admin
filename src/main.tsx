@@ -1,32 +1,61 @@
 import React, { Suspense, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
-import { RouterProvider } from 'react-router-dom'
-import { router } from '../config/routes'
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import Loading from './components/loading'
+import { useAsyncEffect } from 'ahooks'
+import { storeGlobalUser } from './store/globalUser'
+import { RouteType, getRouter } from '@config/routes'
+import { storeGlobalRouter } from './store/globalRouter'
+import App from './App'
+import ErrorPage from './ErrorPage'
+import { SmileFilled } from '@ant-design/icons'
+import NotFoundPage from './404'
+import Login from './pages/Login'
+import { getRoutes } from '@config/routes/routers'
 
-type RouterType = typeof router
+const routers = [
+  {
+    path: '/',
+    /** 重定向 */
+    element: <Navigate replace to="/home" />
+  },
+  {
+    path: '/',
+    /** 承载布局 */
+    element: <App />,
+    errorElement: <ErrorPage />,
+    icon: <SmileFilled />,
+    children: []
+  },
+  {
+    path: '/login',
+    name: '登录',
+    element: <Login />
+  },
+  { path: '*', element: <NotFoundPage /> }
+] as RouteType[]
 
-const App = () => {
-  const [routerConfig, setRouterConfig] = useState<RouterType>() // 用于存储路由配置的状态
+const AppRoot = () => {
+  const [loading, setLoading] = useState(true)
+  useAsyncEffect(async () => {
+    await storeGlobalUser.getUserDetail()
 
-  useEffect(() => {
-    // 发送异步请求来获取路由配置
-    fetch('/api/v1/routes')
-      .then(response => response.json())
-      .then(data => {
-        setRouterConfig(data.routes) // 将获取到的路由配置存储到状态中
-      })
-      .catch(error => {
-        console.error('Error fetching routes:', error)
-      })
+    routers[1].children = getRoutes(storeGlobalUser?.userInfo?.menus)
+
+    storeGlobalRouter.setRouters(routers)
+    setLoading(false)
   }, [])
+
+  if (loading) {
+    return <Loading />
+  }
 
   return (
     <Suspense fallback={<Loading />}>
-      <RouterProvider router={router as RouterType} fallbackElement={<Loading />} />
+      <RouterProvider router={createBrowserRouter(routers)} fallbackElement={<Loading />} />
     </Suspense>
   )
 }
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(<App />)
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(<AppRoot />)

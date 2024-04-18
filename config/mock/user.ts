@@ -50,100 +50,112 @@ export default [
           icon: 'http://jinpika-1308276765.cos.ap-shanghai.myqcloud.com/bootdemo-file/20221220/src=http___desk-fd.zol-img.com.cn_t_s960x600c5_g2_M00_00_0B_ChMlWl6yKqyILFoCACn-5rom2uIAAO4DgEODxAAKf7-298.jpg&refer=http___desk-fd.zol-img.com.png',
           menus: [
             {
-              id: 29,
-              parentId: null,
-              createTime: '2022-12-20T01:57:55.000+00:00',
-              title: '首页',
-              level: 0,
-              sort: 3,
-              name: 'About',
-              icon: 'ant-design:api-outlined',
-              isShow: 1,
-              type: 0
+              path: '/home',
+              name: '首页',
+              icon: 'HomeFilled',
+              component: '/src/pages/Home/index.tsx',
+              permissionObj: true
             },
             {
-              id: 35,
-              parentId: '34',
-              createTime: '2022-12-20T02:10:15.000+00:00',
-              title: '用户管理',
-              level: 1,
-              sort: 10,
-              name: 'User',
-              icon: 'ant-design:team-outlined',
-              isShow: 1,
-              type: 0
+              path: '/frist',
+              name: '嵌套路由',
+              icon: 'SmileFilled',
+              permissionObj: true,
+              children: [
+                {
+                  path: '/frist/oneOne',
+                  name: '一级-1',
+                  component: '/src/pages/Test/index.tsx',
+                  permissionObj: true,
+                  children: [
+                    {
+                      path: '/frist/oneOne/:id',
+                      name: '一级-1-二级',
+                      permissionObj: true,
+                      component: '/src/pages/Test/TestChild/index.tsx'
+                    }
+                  ]
+                },
+                {
+                  path: '/frist/oneTwo',
+                  name: '一级-2',
+                  permissionObj: true,
+                  component: '/src/pages/Test/index.tsx'
+                },
+                {
+                  path: '/frist/hideInMenu',
+                  name: 'hideInMenu',
+                  permissionObj: true,
+                  hideInMenu: true,
+                  component: '/src/pages/Test/TestChild/index.tsx'
+                }
+              ]
             },
             {
-              id: 36,
-              parentId: '34',
-              createTime: '2022-12-20T02:11:13.000+00:00',
-              title: '角色管理',
-              level: 1,
-              sort: 10,
-              name: 'Role',
-              icon: 'ant-design:apartment-outlined',
-              isShow: 1,
-              type: 0
+              path: '/accessManagement',
+              name: '权限管理',
+              icon: 'LockOutlined',
+              permissionObj: true,
+              children: [
+                {
+                  path: '/accessManagement',
+                  /** 重定向 */
+                  redirect: '/accessManagement/userManagement'
+                },
+                {
+                  path: '/accessManagement/userManagement',
+                  name: '用户管理',
+                  permissionObj: true,
+                  component: '/src/pages/accessManagement/UserManagement/index.tsx'
+                },
+                {
+                  path: '/accessManagement/roleManagement',
+                  name: '角色管理',
+                  permissionObj: true,
+                  component: '/src/pages/accessManagement/RoleManangement/index.tsx'
+                },
+                {
+                  path: '/accessManagement/componentManagement',
+                  name: '组件管理',
+                  permissionObj: true,
+                  component: '/src/pages/accessManagement/ComponManagement/index.tsx'
+                },
+                {
+                  path: '/accessManagement/resourceManagement',
+                  name: '资源管理',
+                  permissionObj: true,
+                  children: [
+                    {
+                      path: '/accessManagement/resourceManagement',
+                      /** 重定向 */
+                      redirect: '/accessManagement/resourceManagement/resourceCategory'
+                    },
+                    {
+                      path: '/accessManagement/resourceManagement/resourceCategory',
+                      name: '资源分类',
+                      permissionObj: true,
+                      component: '/src/pages/accessManagement/ComponManagement/index.tsx',
+                      hideInMenu: true
+                    },
+                    {
+                      path: '/accessManagement/resourceManagement/resourceCategory/:resourceCategoryId/resource',
+                      name: '资源列表',
+                      permissionObj: true,
+                      component:
+                        '/src/pages/accessManagement/ResourceManangement/Resource/index.tsx',
+                      hideInMenu: true
+                    }
+                  ]
+                }
+              ]
             },
             {
-              id: 37,
-              parentId: '34',
-              createTime: '2022-12-20T02:11:55.000+00:00',
-              title: '组件管理',
-              level: 1,
-              sort: 1,
-              name: 'Menu',
-              icon: 'ant-design:bars-outlined',
-              isShow: 1,
-              type: 0
-            },
-            {
-              id: 39,
-              parentId: '38',
-              createTime: '2022-12-20T02:16:28.000+00:00',
-              title: '资源列表',
-              level: 0,
-              sort: 1,
-              name: 'ResourceList',
-              icon: 'ant-design:aim-outlined',
-              isShow: 0,
-              type: 1
-            },
-            {
-              id: 40,
-              parentId: '38',
-              createTime: '2022-12-20T03:22:03.000+00:00',
-              title: '资源分类',
-              level: 0,
-              sort: 2,
-              name: 'ResourceCategory',
-              icon: 'ant-design:appstore-outlined',
-              isShow: 1,
-              type: 1
-            },
-            {
-              id: 42,
-              parentId: '41',
-              createTime: '2023-07-10T08:24:21.000+00:00',
-              title: '一级-1-二级',
-              level: 2,
-              sort: 3,
-              name: '一级-1-二级',
-              icon: '2',
-              isShow: 1,
-              type: 0
-            },
-            {
-              id: 43,
-              parentId: '31',
-              createTime: '2023-07-10T08:24:37.000+00:00',
-              title: '一级-2',
-              level: 1,
-              sort: 444,
-              name: '一级-2',
-              icon: '23',
-              isShow: 1,
-              type: 0
+              path: '/layoutNone',
+              name: '布局隐藏',
+              // permissionObj: true,
+              hideInMenu: false,
+              hideLayout: true,
+              component: '/src/pages/Test/TestChild/index.tsx'
             }
           ],
           username: 'admin'
