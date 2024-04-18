@@ -3,7 +3,8 @@ import PvTable from './components/pvTable'
 const Home: React.FC = () => {
   return (
     <>
-      <PvTable />
+    首页
+      {/* <PvTable /> */}
     </>
   )
 }

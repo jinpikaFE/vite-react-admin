@@ -7,6 +7,8 @@ import { SmileFilled } from '@ant-design/icons'
 import { ComponentType, lazy } from 'react'
 import { Navigate } from 'react-router-dom'
 import { IconCom } from './constatns'
+import Permission from '@/components/permissions/Permission'
+import React from 'react'
 
 const routesConfig: RouteType[] = [
   {
@@ -111,11 +113,27 @@ const routesConfig: RouteType[] = [
   {
     path: '/layoutNone',
     name: '布局隐藏',
+    permissionObj: true,
     hideInMenu: true,
     hideLayout: true,
     component: '/src/pages/Test/TestChild/index.tsx'
   }
 ]
+
+/** 只给最低层级套 Permission 组件 */
+const renderElement = (item: RouteType) => {
+  if (item?.element) {
+    if (item?.children) {
+      return item?.element
+    }
+    return (
+      <Permission name={item?.name} permissionObj={item?.permissionObj}>
+        {item?.element}
+      </Permission>
+    )
+  }
+  return <></>
+}
 
 const modules = import.meta.glob('@/pages/**/*.tsx')
 console.log(modules)
@@ -123,6 +141,7 @@ console.log(modules)
 const getRoutes = (r: RouteType[]): any[] => {
   return r?.map(item => {
     let curRouter = item
+
     if (item?.component) {
       curRouter = {
         ...curRouter,
@@ -130,8 +149,17 @@ const getRoutes = (r: RouteType[]): any[] => {
         async lazy() {
           const Page = await lazy(modules[item.component] as any)
           console.log(Page)
+          const element = React.createElement(Page)
 
-          return { Component: Page }
+          if (item?.permissionObj) {
+            console.log(curRouter)
+
+            return {
+              element: renderElement({ ...item, element })
+            }
+          }
+
+          return { element }
         }
       }
     }

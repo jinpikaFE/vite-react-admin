@@ -15,21 +15,24 @@ const Permission: React.FC<{
     isToken?: boolean | undefined
   } & boolean
 }> = ({ children, name, permissionObj }) => {
+  /** 使用context 解决 useeffect 监听不到mobx问题 */
   const globalUserInfoContext = useContext(GlobalUserInfo)
   const [isAuth, setIsAuth] = useState<boolean | undefined>(undefined)
 
   /** 解决Permission 在 数据加载之前渲染导致权限不实时更新问题 */
   useAsyncEffect(async () => {
-    console.log(name)
-    setIsAuth(!!globalUserInfoContext?.menus?.map(item => item?.title)?.includes(name))
+    if (globalUserInfoContext?.menus) {
+      console.log(name)
+      setIsAuth(!!globalUserInfoContext?.menus?.map(item => item?.title)?.includes(name))
+    }
   }, [globalUserInfoContext, window.location.pathname])
 
-  if (isAuth === undefined) {
-    /**
-     * todo
-     */
-    return <TankShaking />
-  }
+  // if (isAuth === undefined) {
+  //   /**
+  //    * todo
+  //    */
+  //   return <TankShaking />
+  // }
 
   if ((permissionObj === true || permissionObj?.isPagePermission) && isAuth === false) {
     return (
