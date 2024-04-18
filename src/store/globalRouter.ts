@@ -4,6 +4,7 @@ import { RouteType } from '@config/routes'
 import { makeAutoObservable } from 'mobx'
 
 class GlobalRouter {
+  loading = true
   routers: RouteType[] = []
   constructor() {
     makeAutoObservable(this)
@@ -11,6 +12,9 @@ class GlobalRouter {
 
   setRouters(routers: RouteType[]) {
     this.routers = routers
+  }
+  setLoading(loading: boolean) {
+    this.loading = loading
   }
 }
 

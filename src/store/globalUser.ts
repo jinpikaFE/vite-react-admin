@@ -1,4 +1,5 @@
 import { getCurrentUserInfo } from '@/apis/accessManagement/user'
+import { storage } from '@/utils/Storage'
 import { WebSee } from '@/utils/webSee'
 import { makeAutoObservable } from 'mobx'
 
@@ -9,9 +10,11 @@ class GlobalUser {
   }
 
   async getUserDetail() {
-    const res = await getCurrentUserInfo()
-    this.userInfo = res?.data
-    new WebSee(res?.data?.username)
+    if (storage.get('token')) {
+      const res = await getCurrentUserInfo()
+      this.userInfo = res?.data
+      new WebSee(res?.data?.username)
+    }
   }
 
   setUserInfo(user: Partial<User.UserEntity>) {

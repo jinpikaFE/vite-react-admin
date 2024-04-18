@@ -1,5 +1,5 @@
 import { login } from '@/apis/login'
-import { ComponTypeEnum } from '@/layout/BasicLayout'
+import { RouterGlobalContext } from '@/main'
 import { storeGlobalRouter } from '@/store/globalRouter'
 import { storeGlobalUser } from '@/store/globalUser'
 import { storage } from '@/utils/Storage'
@@ -17,10 +17,9 @@ import {
   ProFormCheckbox,
   ProFormText
 } from '@ant-design/pro-components'
-import { RouteType } from '@config/routes'
 import { Button, Divider, message, Space, Tabs } from 'antd'
 import type { CSSProperties } from 'react'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 type LoginType = 'phone' | 'account'
@@ -33,6 +32,7 @@ const iconStyles: CSSProperties = {
 }
 
 const Login = () => {
+  const routerGlobalContext = useContext(RouterGlobalContext)
   const [loginType, setLoginType] = useState<LoginType>('account')
   const navigate = useNavigate()
   return (
@@ -45,36 +45,8 @@ const Login = () => {
         onFinish={async (val: Login.LoginEntity) => {
           const res = await login(val)
           storage.set('token', res?.data?.token)
-
-          /** 跳转有权限的第一个菜单 */
-          await storeGlobalUser.getUserDetail()
-          const flattenRoutes: (routes: RouteType[]) => RouteType[] = (routes: RouteType[]) => {
-            const flattenedRoutes: RouteType[] = []
-            function traverse(routes: RouteType[]) {
-              routes.forEach(route => {
-                flattenedRoutes.push(route)
-                if (route.children) {
-                  traverse(route.children)
-                }
-              })
-            }
-
-            traverse(routes)
-
-            return flattenedRoutes
-          }
-          const resRoutes = flattenRoutes(storeGlobalRouter.routers)
-          const findPath =
-            resRoutes?.[
-              resRoutes?.findIndex(
-                item =>
-                  item?.name ===
-                  storeGlobalUser?.userInfo?.menus?.filter(
-                    citem => citem?.type === ComponTypeEnum.MENU
-                  )?.[0]?.title
-              )
-            ]?.path
-          navigate(findPath || '/')
+          routerGlobalContext.setLoading?.(true)
+          navigate('/')
         }}
         activityConfig={{
           style: {
