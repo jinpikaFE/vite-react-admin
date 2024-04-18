@@ -1,19 +1,162 @@
 import { RouteType } from '.'
 import NotFoundPage from '@/404'
 import App from '@/App'
-import Permission from '@/components/permissions/Permission'
 import ErrorPage from '@/ErrorPage'
-import ComponManagement from '@/pages/accessManagement/ComponManagement'
-import ResourceManangement from '@/pages/accessManagement/ResourceManangement'
-import Resource from '@/pages/accessManagement/ResourceManangement/Resource'
-import RoleManangement from '@/pages/accessManagement/RoleManangement'
-import UserManagement from '@/pages/accessManagement/UserManagement'
-import Home from '@/pages/Home'
 import Login from '@/pages/Login'
-import Test from '@/pages/Test'
-import TestChild from '@/pages/Test/TestChild'
-import { HomeFilled, LockOutlined, SmileFilled } from '@ant-design/icons'
+import { SmileFilled } from '@ant-design/icons'
+import { ComponentType, lazy } from 'react'
 import { Navigate } from 'react-router-dom'
+import { IconCom } from './constatns'
+
+const routesConfig: RouteType[] = [
+  {
+    path: '/home',
+    name: '首页',
+    icon: 'HomeFilled',
+    component: '/src/pages/Home/index.tsx',
+    permissionObj: true
+  },
+  {
+    path: '/frist',
+    name: '嵌套路由',
+    icon: 'SmileFilled',
+    permissionObj: true,
+    children: [
+      {
+        path: '/frist/oneOne',
+        name: '一级-1',
+        component: '/src/pages/Test/index.tsx',
+        permissionObj: true,
+        children: [
+          {
+            path: '/frist/oneOne/:id',
+            name: '一级-1-二级',
+            permissionObj: true,
+            component: '/src/pages/Test/TestChild/index.tsx'
+          }
+        ]
+      },
+      {
+        path: '/frist/oneTwo',
+        name: '一级-2',
+        permissionObj: true,
+        component: '/src/pages/Test/index.tsx'
+      },
+      {
+        path: '/frist/hideInMenu',
+        name: 'hideInMenu',
+        permissionObj: true,
+        hideInMenu: true,
+        component: '/src/pages/Test/TestChild/index.tsx'
+      }
+    ]
+  },
+  {
+    path: '/accessManagement',
+    name: '权限管理',
+    icon: 'LockOutlined',
+    permissionObj: true,
+    children: [
+      {
+        path: '/accessManagement',
+        /** 重定向 */
+        redirect: '/accessManagement/userManagement'
+      },
+      {
+        path: '/accessManagement/userManagement',
+        name: '用户管理',
+        permissionObj: true,
+        component: '/src/pages/accessManagement/UserManagement/index.tsx'
+      },
+      {
+        path: '/accessManagement/roleManagement',
+        name: '角色管理',
+        permissionObj: true,
+        component: '/src/pages/accessManagement/RoleManangement/index.tsx'
+      },
+      {
+        path: '/accessManagement/componentManagement',
+        name: '组件管理',
+        permissionObj: true,
+        component: '/src/pages/accessManagement/ComponManagement/index.tsx'
+      },
+      {
+        path: '/accessManagement/resourceManagement',
+        name: '资源管理',
+        permissionObj: true,
+        children: [
+          {
+            path: '/accessManagement/resourceManagement',
+            /** 重定向 */
+            redirect: '/accessManagement/resourceManagement/resourceCategory'
+          },
+          {
+            path: '/accessManagement/resourceManagement/resourceCategory',
+            name: '资源分类',
+            permissionObj: true,
+            component: '/src/pages/accessManagement/ComponManagement/index.tsx',
+            hideInMenu: true
+          },
+          {
+            path: '/accessManagement/resourceManagement/resourceCategory/:resourceCategoryId/resource',
+            name: '资源列表',
+            permissionObj: true,
+            component: '/src/pages/accessManagement/ResourceManangement/Resource/index.tsx',
+            hideInMenu: true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '/layoutNone',
+    name: '布局隐藏',
+    hideInMenu: true,
+    hideLayout: true,
+    component: '/src/pages/Test/TestChild/index.tsx'
+  }
+]
+
+const modules = import.meta.glob('@/pages/**/*.tsx')
+console.log(modules)
+
+const getRoutes = (r: RouteType[]): any[] => {
+  return r?.map(item => {
+    let curRouter = item
+    if (item?.component) {
+      curRouter = {
+        ...curRouter,
+        component: undefined,
+        async lazy() {
+          const Page = await lazy(modules[item.component] as any)
+          console.log(Page)
+
+          return { Component: Page }
+        }
+      }
+    }
+
+    if (item?.icon) {
+      curRouter = {
+        ...curRouter,
+        icon: IconCom[item.icon as string]
+      }
+    }
+
+    if (item?.redirect) {
+      curRouter = {
+        ...curRouter,
+        redirect: undefined,
+        element: <Navigate replace to={item?.redirect} />
+      }
+    }
+
+    return {
+      ...curRouter,
+      children: item?.children ? getRoutes(item?.children) : undefined
+    }
+  })
+}
 
 export const routers = [
   {
@@ -27,117 +170,7 @@ export const routers = [
     element: <App />,
     errorElement: <ErrorPage />,
     icon: <SmileFilled />,
-    children: [
-      /** 布局下路由，页面路由在该children配置 */
-      {
-        path: '/home',
-        name: '首页',
-        icon: <HomeFilled />,
-        element: <Home />,
-        permissionObj: true
-      },
-      {
-        path: '/frist',
-        name: '嵌套路由',
-        icon: <SmileFilled />,
-        permissionObj: true,
-        children: [
-          {
-            path: '/frist/oneOne',
-            name: '一级-1',
-            element: <Test />,
-            permissionObj: true,
-            children: [
-              {
-                path: '/frist/oneOne/:id',
-                name: '一级-1-二级',
-                permissionObj: true,
-                element: <TestChild />
-              }
-            ]
-          },
-          {
-            path: '/frist/oneTwo',
-            name: '一级-2',
-            permissionObj: true,
-            element: <Test />
-          },
-          {
-            path: '/frist/hideInMenu',
-            name: 'hideInMenu',
-            permissionObj: true,
-            hideInMenu: true,
-            element: <TestChild />
-          }
-        ]
-      },
-      {
-        path: '/accessManagement',
-        name: '权限管理',
-        icon: <LockOutlined />,
-        permissionObj: true,
-        children: [
-          {
-            path: '/accessManagement',
-            /** 重定向 */
-            element: <Navigate replace to="/accessManagement/userManagement" />
-          },
-          {
-            path: '/accessManagement/userManagement',
-            name: '用户管理',
-            permissionObj: true,
-            element: <UserManagement />
-          },
-          {
-            path: '/accessManagement/roleManagement',
-            name: '角色管理',
-            permissionObj: true,
-            element: <RoleManangement />
-          },
-          {
-            path: '/accessManagement/componentManagement',
-            name: '组件管理',
-            permissionObj: true,
-            element: <ComponManagement />
-          },
-          {
-            path: '/accessManagement/resourceManagement',
-            name: '资源管理',
-            permissionObj: true,
-            children: [
-              {
-                path: '/accessManagement/resourceManagement',
-                /** 重定向 */
-                element: (
-                  <Navigate replace to="/accessManagement/resourceManagement/resourceCategory" />
-                )
-              },
-              {
-                path: '/accessManagement/resourceManagement/resourceCategory',
-                name: '资源分类',
-                permissionObj: true,
-                element: <ResourceManangement />,
-                hideInMenu: true
-              },
-              {
-                path: '/accessManagement/resourceManagement/resourceCategory/:resourceCategoryId/resource',
-                name: '资源列表',
-                permissionObj: true,
-                element: <Resource />,
-                hideInMenu: true
-              }
-            ]
-          }
-        ]
-      },
-      {
-        path: '/layoutNone',
-        name: '布局隐藏',
-        hideInMenu: true,
-        hideLayout: true,
-        element: <TestChild />
-      }
-    ]
+    children: [...getRoutes(routesConfig)]
   },
   {
     path: '/login',

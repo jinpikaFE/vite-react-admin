@@ -1,8 +1,10 @@
-import { Outlet } from 'react-router-dom'
 import { StepBackwardOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import { storeCount } from '@/store/count'
 import { observer } from 'mobx-react'
+import { Suspense } from 'react'
+import Loading from '@/components/loading'
+import MyOutlet from '@/components/myOutlet'
 
 const Test: React.FC = () => {
   return (
@@ -18,7 +20,7 @@ const Test: React.FC = () => {
       >
         erro
       </Button>
-      <Outlet />
+      <MyOutlet />
     </>
   )
 }

@@ -16,6 +16,8 @@ export type RouteType = {
     isToken?: boolean
   } & true
   children?: RouteType[]
+  /** 重定向 */
+  redirect?: string
 } & Partial<MenuDataItem> &
   RouteObject
 
@@ -55,4 +57,4 @@ const reduceRoute: (params: RouteType[]) => RouteType[] = (routesParams: RouteTy
 
 const relRouters = reduceRoute(routers)
 
-export const router = createBrowserRouter(relRouters)
+export const router = createBrowserRouter(routers)

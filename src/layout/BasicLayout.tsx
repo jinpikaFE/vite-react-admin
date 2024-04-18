@@ -5,12 +5,13 @@ import { RouteType, router } from '@config/routes'
 import { useAsyncEffect } from 'ahooks'
 import { Dropdown, MenuProps } from 'antd'
 import { useEffect, useState } from 'react'
-import { Outlet, matchRoutes, useLocation, useNavigate } from 'react-router-dom'
+import { matchRoutes, useLocation, useNavigate } from 'react-router-dom'
 import defaultProps from '@/_defaultProps'
 import Settings from '@config/defaultSettings'
 import { observer } from 'mobx-react'
 import React from 'react'
 import { routers } from '@config/routes/routers'
+import MyOutlet from '@/components/myOutlet'
 
 export enum ComponTypeEnum {
   MENU,
@@ -116,11 +117,11 @@ const BasicLayout: React.FC = props => {
           {...Settings}
         >
           <PageContainer>
-            <Outlet />
+            <MyOutlet />
           </PageContainer>
         </ProLayout>
       ) : (
-        <Outlet />
+        <MyOutlet />
       )}
     </GlobalUserInfo.Provider>
   )
