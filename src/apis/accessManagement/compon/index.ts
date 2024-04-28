@@ -17,7 +17,7 @@ export async function delCompon({ id }: Pick<Compon.ComponEntity, 'id'>) {
 }
 
 /** 编辑组件 */
-export async function editCompon({ id, ...extraData }: Compon.ComponEntity) {
+export async function editCompon({ id, ...extraData }: Partial<Compon.ComponEntity>) {
   return http.request({
     url: `/api/v1/menu/update/${id}`,
     method: 'post',

@@ -72,6 +72,8 @@ const ComponManagement: React.FC = () => {
           layout="horizontal"
           initialValues={{
             isShow: 1,
+            hideLayout: 0,
+            hideInMenu: 0,
             ...(isCreateNext ? {} : record)
           }}
           formRef={modalFormRef}
@@ -94,6 +96,28 @@ const ComponManagement: React.FC = () => {
           <ProFormRadio.Group
             label="是否显示"
             name="isShow"
+            rules={[{ required: true }]}
+            valueEnum={
+              new Map([
+                [1, '是'],
+                [0, '否']
+              ])
+            }
+          />
+          <ProFormRadio.Group
+            label="是否隐藏菜单"
+            name="hideLayout"
+            rules={[{ required: true }]}
+            valueEnum={
+              new Map([
+                [1, '是'],
+                [0, '否']
+              ])
+            }
+          />
+          <ProFormRadio.Group
+            label="是否在菜单中隐藏"
+            name="hideInMenu"
             rules={[{ required: true }]}
             valueEnum={
               new Map([
