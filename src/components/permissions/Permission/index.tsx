@@ -10,11 +10,8 @@ import TankShaking from '@/components/TankShaking'
 const Permission: React.FC<{
   children: any
   name?: string
-  permissionObj?: {
-    isPagePermission?: boolean | undefined
-    isToken?: boolean | undefined
-  } & boolean
-}> = ({ children, name, permissionObj }) => {
+  isToken?: boolean
+}> = ({ children, name, isToken }) => {
   // /** 使用context 解决 useeffect 监听不到mobx问题 */
   // const globalUserInfoContext = useContext(GlobalUserInfo)
   // const [isAuth, setIsAuth] = useState<boolean | undefined>(undefined)
@@ -35,7 +32,7 @@ const Permission: React.FC<{
   // // }
 
   const token = storage.get('token')
-  if ((permissionObj === true || permissionObj?.isToken) && token) {
+  if (isToken && token) {
     return children
   }
   message.error('token不存在')

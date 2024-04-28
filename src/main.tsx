@@ -26,7 +26,53 @@ const routers = [
     element: <App />,
     errorElement: <ErrorPage />,
     icon: <SmileFilled />,
-    children: []
+    children: [
+      /** 不进行动态路由的获取则在此处写死 */
+      // getRoutes([
+      //   {
+      //     path: '/home',
+      //     name: '首页',
+      //     icon: 'HomeFilled',
+      //     component: '/src/pages/Home/index.tsx',
+      //     isToken: true
+      //   },
+      //   {
+      //     path: '/frist',
+      //     name: '嵌套路由',
+      //     icon: 'SmileFilled',
+      //     isToken: true,
+      //     children: [
+      //       {
+      //         path: '/frist/oneOne',
+      //         name: '一级-1',
+      //         component: '/src/pages/Test/index.tsx',
+      //         isToken: true,
+      //         children: [
+      //           {
+      //             path: '/frist/oneOne/:id',
+      //             name: '一级-1-二级',
+      //             isToken: true,
+      //             component: '/src/pages/Test/TestChild/index.tsx'
+      //           }
+      //         ]
+      //       },
+      //       {
+      //         path: '/frist/oneTwo',
+      //         name: '一级-2',
+      //         isToken: true,
+      //         component: '/src/pages/Test/index.tsx'
+      //       },
+      //       {
+      //         path: '/frist/hideInMenu',
+      //         name: 'hideInMenu',
+      //         isToken: true,
+      //         hideInMenu: true,
+      //         component: '/src/pages/Test/TestChild/index.tsx'
+      //       }
+      //     ]
+      //   }
+      // ])
+    ]
   },
   {
     path: '/login',
@@ -42,21 +88,18 @@ export const RouterGlobalContext = React.createContext<{
 }>({ loading: true })
 
 const AppRoot = () => {
-  const [routerConfig,setRouterConfig] = useState(routers)
+  const [routerConfig, setRouterConfig] = useState(routers)
   const [loading, setLoading] = useState(true)
   useAsyncEffect(async () => {
     await storeGlobalUser.getUserDetail()
 
-    routers[1].children = getRoutes(storeGlobalUser?.userInfo?.menus)
+    /** 不进行动态获取则删除改行 */
+    routers[1].children = getRoutes(storeGlobalUser?.userInfo?.menus as any[])
+    /** end */
     setRouterConfig(routers)
     storeGlobalRouter.setRouters(routers)
     setLoading(false)
   }, [loading])
-
-  useEffect(()=>{
-    console.log(loading);
-    
-  },[loading])
 
   if (loading) {
     return <Loading />

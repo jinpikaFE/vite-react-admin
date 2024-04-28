@@ -54,24 +54,24 @@ export default [
               name: '首页',
               icon: 'HomeFilled',
               component: '/src/pages/Home/index.tsx',
-              permissionObj: true
+              isToken: true
             },
             {
               path: '/frist',
               name: '嵌套路由',
               icon: 'SmileFilled',
-              permissionObj: true,
+              isToken: true,
               children: [
                 {
                   path: '/frist/oneOne',
                   name: '一级-1',
                   component: '/src/pages/Test/index.tsx',
-                  permissionObj: true,
+                  isToken: true,
                   children: [
                     {
                       path: '/frist/oneOne/:id',
                       name: '一级-1-二级',
-                      permissionObj: true,
+                      isToken: true,
                       component: '/src/pages/Test/TestChild/index.tsx'
                     }
                   ]
@@ -79,13 +79,13 @@ export default [
                 {
                   path: '/frist/oneTwo',
                   name: '一级-2',
-                  permissionObj: true,
+                  isToken: true,
                   component: '/src/pages/Test/index.tsx'
                 },
                 {
                   path: '/frist/hideInMenu',
                   name: 'hideInMenu',
-                  permissionObj: true,
+                  isToken: true,
                   hideInMenu: true,
                   component: '/src/pages/Test/TestChild/index.tsx'
                 }
@@ -95,7 +95,7 @@ export default [
               path: '/accessManagement',
               name: '权限管理',
               icon: 'LockOutlined',
-              permissionObj: true,
+              isToken: true,
               children: [
                 {
                   path: '/accessManagement',
@@ -105,25 +105,25 @@ export default [
                 {
                   path: '/accessManagement/userManagement',
                   name: '用户管理',
-                  permissionObj: true,
+                  isToken: true,
                   component: '/src/pages/accessManagement/UserManagement/index.tsx'
                 },
                 {
                   path: '/accessManagement/roleManagement',
                   name: '角色管理',
-                  permissionObj: true,
+                  isToken: true,
                   component: '/src/pages/accessManagement/RoleManangement/index.tsx'
                 },
                 {
                   path: '/accessManagement/componentManagement',
                   name: '组件管理',
-                  permissionObj: true,
+                  isToken: true,
                   component: '/src/pages/accessManagement/ComponManagement/index.tsx'
                 },
                 {
                   path: '/accessManagement/resourceManagement',
                   name: '资源管理',
-                  permissionObj: true,
+                  isToken: true,
                   children: [
                     {
                       path: '/accessManagement/resourceManagement',
@@ -133,14 +133,14 @@ export default [
                     {
                       path: '/accessManagement/resourceManagement/resourceCategory',
                       name: '资源分类',
-                      permissionObj: true,
+                      isToken: true,
                       component: '/src/pages/accessManagement/ComponManagement/index.tsx',
                       hideInMenu: true
                     },
                     {
                       path: '/accessManagement/resourceManagement/resourceCategory/:resourceCategoryId/resource',
                       name: '资源列表',
-                      permissionObj: true,
+                      isToken: true,
                       component:
                         '/src/pages/accessManagement/ResourceManangement/Resource/index.tsx',
                       hideInMenu: true
@@ -152,7 +152,7 @@ export default [
             {
               path: '/layoutNone',
               name: '布局隐藏',
-              // permissionObj: true,
+              // isToken: true,
               hideInMenu: false,
               hideLayout: true,
               component: '/src/pages/Test/TestChild/index.tsx'

@@ -1,10 +1,5 @@
 import { RouteType } from '.'
-import NotFoundPage from '@/404'
-import App from '@/App'
-import ErrorPage from '@/ErrorPage'
-import Login from '@/pages/Login'
-import { SmileFilled } from '@ant-design/icons'
-import { ComponentType, lazy } from 'react'
+import { lazy } from 'react'
 import { Navigate } from 'react-router-dom'
 import { IconCom } from './constatns'
 import Permission from '@/components/permissions/Permission'
@@ -16,24 +11,24 @@ import React from 'react'
 //     name: '首页',
 //     icon: 'HomeFilled',
 //     component: '/src/pages/Home/index.tsx',
-//     permissionObj: true
+//     isToken: true
 //   },
 //   {
 //     path: '/frist',
 //     name: '嵌套路由',
 //     icon: 'SmileFilled',
-//     permissionObj: true,
+//     isToken: true,
 //     children: [
 //       {
 //         path: '/frist/oneOne',
 //         name: '一级-1',
 //         component: '/src/pages/Test/index.tsx',
-//         permissionObj: true,
+//         isToken: true,
 //         children: [
 //           {
 //             path: '/frist/oneOne/:id',
 //             name: '一级-1-二级',
-//             permissionObj: true,
+//             isToken: true,
 //             component: '/src/pages/Test/TestChild/index.tsx'
 //           }
 //         ]
@@ -41,13 +36,13 @@ import React from 'react'
 //       {
 //         path: '/frist/oneTwo',
 //         name: '一级-2',
-//         permissionObj: true,
+//         isToken: true,
 //         component: '/src/pages/Test/index.tsx'
 //       },
 //       {
 //         path: '/frist/hideInMenu',
 //         name: 'hideInMenu',
-//         permissionObj: true,
+//         isToken: true,
 //         hideInMenu: true,
 //         component: '/src/pages/Test/TestChild/index.tsx'
 //       }
@@ -57,7 +52,7 @@ import React from 'react'
 //     path: '/accessManagement',
 //     name: '权限管理',
 //     icon: 'LockOutlined',
-//     permissionObj: true,
+//     isToken: true,
 //     children: [
 //       {
 //         path: '/accessManagement',
@@ -67,25 +62,25 @@ import React from 'react'
 //       {
 //         path: '/accessManagement/userManagement',
 //         name: '用户管理',
-//         permissionObj: true,
+//         isToken: true,
 //         component: '/src/pages/accessManagement/UserManagement/index.tsx'
 //       },
 //       {
 //         path: '/accessManagement/roleManagement',
 //         name: '角色管理',
-//         permissionObj: true,
+//         isToken: true,
 //         component: '/src/pages/accessManagement/RoleManangement/index.tsx'
 //       },
 //       {
 //         path: '/accessManagement/componentManagement',
 //         name: '组件管理',
-//         permissionObj: true,
+//         isToken: true,
 //         component: '/src/pages/accessManagement/ComponManagement/index.tsx'
 //       },
 //       {
 //         path: '/accessManagement/resourceManagement',
 //         name: '资源管理',
-//         permissionObj: true,
+//         isToken: true,
 //         children: [
 //           {
 //             path: '/accessManagement/resourceManagement',
@@ -95,14 +90,14 @@ import React from 'react'
 //           {
 //             path: '/accessManagement/resourceManagement/resourceCategory',
 //             name: '资源分类',
-//             permissionObj: true,
+//             isToken: true,
 //             component: '/src/pages/accessManagement/ComponManagement/index.tsx',
 //             hideInMenu: true
 //           },
 //           {
 //             path: '/accessManagement/resourceManagement/resourceCategory/:resourceCategoryId/resource',
 //             name: '资源列表',
-//             permissionObj: true,
+//             isToken: true,
 //             component: '/src/pages/accessManagement/ResourceManangement/Resource/index.tsx',
 //             hideInMenu: true
 //           }
@@ -113,7 +108,7 @@ import React from 'react'
 //   {
 //     path: '/layoutNone',
 //     name: '布局隐藏',
-//     // permissionObj: true,
+//     // isToken: true,
 //     hideInMenu: true,
 //     hideLayout: true,
 //     component: '/src/pages/Test/TestChild/index.tsx'
@@ -127,7 +122,7 @@ const renderElement = (item: RouteType) => {
       return item?.element
     }
     return (
-      <Permission name={item?.name} permissionObj={item?.permissionObj}>
+      <Permission name={item?.name} isToken={item?.isToken}>
         {item?.element}
       </Permission>
     )
@@ -151,7 +146,7 @@ export const getRoutes = (r: RouteType[]): any[] => {
 
           const element = React.createElement(Page)
 
-          if (item?.permissionObj) {
+          if (item?.isToken) {
             return {
               element: renderElement({ ...item, element })
             }
