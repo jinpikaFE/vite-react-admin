@@ -12,14 +12,13 @@ import ExcelTable from '@/components/exportExcel'
 import {
   ActionType,
   ProForm,
-  ProFormCascader,
   ProFormInstance,
   ProFormRadio,
   ProFormText,
   ProFormTextArea,
   ProFormTreeSelect
 } from '@ant-design/pro-components'
-import { Button, Cascader, Modal, Popconfirm, Switch, TreeSelect, message } from 'antd'
+import { Button, Modal, Popconfirm, Switch, TreeSelect, message } from 'antd'
 import { useRef } from 'react'
 
 const RoleManangement: React.FC = () => {

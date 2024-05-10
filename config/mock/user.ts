@@ -57,6 +57,13 @@ export default [
               isToken: true
             },
             {
+              path: '/profile',
+              name: '个人中心',
+              icon: 'HomeFilled',
+              component: '/src/pages/Profile/index.tsx',
+              isToken: true
+            },
+            {
               path: '/frist',
               name: '嵌套路由',
               icon: 'SmileFilled',

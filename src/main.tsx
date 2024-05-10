@@ -14,6 +14,8 @@ import NotFoundPage from './404'
 import Login from './pages/Login'
 import { getRoutes } from '@config/routes/routers'
 
+import './styles/index.less'
+
 const routers = [
   {
     path: '/',
