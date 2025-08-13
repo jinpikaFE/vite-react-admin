@@ -3,7 +3,7 @@ import PvTable from './components/pvTable'
 const Home: React.FC = () => {
   return (
     <>
-      <PvTable />
+      welcome
     </>
   )
 }

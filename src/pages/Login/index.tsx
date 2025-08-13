@@ -1,4 +1,4 @@
-import { login } from '@/apis/login'
+import { login, getCaptcha } from '@/apis/login'
 import { ComponTypeEnum } from '@/layout/BasicLayout'
 import { storeGlobalUser } from '@/store/globalUser'
 import { storage } from '@/utils/Storage'
@@ -6,6 +6,7 @@ import {
   AlipayOutlined,
   LockOutlined,
   MobileOutlined,
+  SafetyCertificateOutlined,
   TaobaoOutlined,
   UserOutlined,
   WeiboOutlined
@@ -20,8 +21,9 @@ import { RouteType } from '@config/routes'
 import { routers } from '@config/routes/routers'
 import { Button, Divider, message, Space, Tabs } from 'antd'
 import type { CSSProperties } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { v4 as uuidv4 } from 'uuid'
 
 type LoginType = 'phone' | 'account'
 
@@ -34,17 +36,33 @@ const iconStyles: CSSProperties = {
 
 const Login = () => {
   const [loginType, setLoginType] = useState<LoginType>('account')
+  const [captchaImg, setCaptchaImg] = useState<string>('')
   const navigate = useNavigate()
+
+  const fetchCaptcha = async () => {
+    try {
+      const res = await getCaptcha()
+      setCaptchaImg(res?.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchCaptcha()
+  }, [])
   return (
     <div style={{ backgroundColor: 'white', height: '100vh' }}>
       <LoginFormPage
         backgroundImageUrl="https://gw.alipayobjects.com/zos/rmsportal/FfdJeJRQWjEeGTpqgBKj.png"
         logo="https://jinpika-1308276765.cos.ap-shanghai.myqcloud.com/images/logo.png"
         title="JinPiKa"
-        subTitle="全球最大的代码托管平台"
+        subTitle="ViteReact 通用脚手架"
         onFinish={async (val: Login.LoginEntity) => {
-          const res = await login(val)
-          storage.set('token', res?.data?.token)
+          // 验证码与UUID绑定，增加破解难度
+          const res = await login({ ...val, uuid: uuidv4() })
+
+          storage.set('token', res?.token)
 
           /** 跳转有权限的第一个菜单 */
           await storeGlobalUser.getUserDetail()
@@ -176,7 +194,7 @@ const Login = () => {
                 size: 'large',
                 prefix: <UserOutlined className={'prefixIcon'} />
               }}
-              placeholder={'用户名: user'}
+              placeholder={'用户名: admin'}
               rules={[
                 {
                   required: true,
@@ -190,11 +208,34 @@ const Login = () => {
                 size: 'large',
                 prefix: <LockOutlined className={'prefixIcon'} />
               }}
-              placeholder={'密码: user'}
+              placeholder={'密码: 123456'}
               rules={[
                 {
                   required: true,
                   message: '请输入密码！'
+                }
+              ]}
+            />
+            <ProFormText
+              name="code"
+              fieldProps={{
+                size: 'large',
+                prefix: <SafetyCertificateOutlined className={'prefixIcon'} />,
+                addonAfter: (
+                  <img
+                    src={captchaImg}
+                    alt="captcha"
+                    style={{ height: 32, cursor: 'pointer' }}
+                    onClick={fetchCaptcha}
+                    title="点击刷新验证码"
+                  />
+                )
+              }}
+              placeholder={'请输入验证码'}
+              rules={[
+                {
+                  required: true,
+                  message: '请输入验证码！'
                 }
               ]}
             />

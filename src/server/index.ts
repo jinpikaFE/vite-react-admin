@@ -17,6 +17,7 @@ import { storage } from '@/utils/Storage'
 
 const urlPrefix = import.meta.env.REACT_APP_API_PREFIX // 接口前缀
 const baseUrl = import.meta.env.VITE_APP_URL // 接口地址
+const VITE_API_TARGET = import.meta.env.VITE_API_TARGET // 代理地址
 
 /**
  * @description: 数据处理，方便区分多种处理方式
@@ -188,7 +189,8 @@ const transform: AxiosTransform = {
       }
     }
     if (config.headers) {
-      config.headers.source = 'simcere_back'
+      config.headers.source = 'vite_react_admin'
+      config.headers.proxy_url = VITE_API_TARGET + config.url
     }
     return config
   },

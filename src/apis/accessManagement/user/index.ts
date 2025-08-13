@@ -2,8 +2,8 @@ import http from '@/server'
 
 /** 获取当前登录用户信息 */
 export async function getCurrentUserInfo() {
-  return http.request({
-    url: '/api/v1/admin/info',
+  return http.request<any>({
+    url: '/api/v1/getinfo',
     method: 'get'
   })
 }

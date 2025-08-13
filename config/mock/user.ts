@@ -18,7 +18,7 @@ export default [
     }
   },
   {
-    url: '/api/v1/admin/info',
+    url: '/api/v1/getinfo',
     method: 'get',
     response: ({ body }: any) => {
       const resObj: Global.ResultType = {

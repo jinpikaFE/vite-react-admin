@@ -17,16 +17,16 @@ const App = () => {
 
   /** 获取ip 记录uv */
   useAsyncEffect(async () => {
-    const res = await getIpInfo()
-    if (res?.code === 200) {
-      storeMonitor.setUvInfo({
-        ip: res?.data?.ip,
-        startTime: new Date().getTime(),
-        area: `${res?.data?.countryName || ''}${res?.data?.provinceName || ''}${
-          res?.data?.cityName || ''
-        }`
-      })
-    }
+    // const res = await getIpInfo()
+    // if (res?.code === 200) {
+    //   storeMonitor.setUvInfo({
+    //     ip: res?.data?.ip,
+    //     startTime: new Date().getTime(),
+    //     area: `${res?.data?.countryName || ''}${res?.data?.provinceName || ''}${
+    //       res?.data?.cityName || ''
+    //     }`
+    //   })
+    // }
   }, [])
 
   useEffect(() => {

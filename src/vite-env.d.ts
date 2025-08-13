@@ -5,6 +5,7 @@ interface ImportMetaEnv {
   readonly VITE_MONITOR_URL: string
   readonly VITE_JINPIKAAI_URL: string
   readonly VITE_APP_URL: string
+  readonly VITE_API_TARGET: string
   // 更多环境变量...
 }
 
