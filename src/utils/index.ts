@@ -22,10 +22,10 @@ function typeOf(obj: Record<string, any>) {
 // 生成uuid
 function uuid(len: number, radix?: number) {
   const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
-  // eslint-disable-next-line @typescript-eslint/no-shadow
+
   const uuid = []
   let i
-  // eslint-disable-next-line no-param-reassign
+
   radix = radix || chars.length
 
   if (len) {

@@ -8,17 +8,17 @@
 
 - 分支 tiny 版本为轻量版本，只涉及layout布局，代码规划，基础路由等基本功能。
 - 预览请使用mock模式启动 npm run start:mock。
-- master 升级为vite5.x
+- master 升级为vite7.x，全面升级所有依赖包到最新版本
 
 ## 相关技术
 
 | 技术                             | 官网                              | 描述             |
 | -------------------------------- | --------------------------------- | ---------------- |
-| Vite 5.X                         | https://cn.vitejs.dev/            | 基础脚手架       |
-| React Router 7.8                 | https://reactrouter.com/en/main   | react 路由管理   |
-| ant-design 5.X                   | https://ant.design/index-cn       | ui 组件          |
-| @ant-design/pro-components 2.4.0 | https://procomponents.ant.design/ | 中后台高阶组件   |
-| mobx 6.8.0                       | https://mobx.js.org/README.html   | 轻量级状态管理   |
+| Vite 5.X                         | <https://cn.vitejs.dev/>            | 基础脚手架       |
+| React Router 7.8                 | <https://reactrouter.com/en/main>   | react 路由管理   |
+| ant-design 5.X                   | <https://ant.design/index-cn>       | ui 组件          |
+| @ant-design/pro-components 2.4.0 | <https://procomponents.ant.design/> | 中后台高阶组件   |
+| mobx 6.8.0                       | <https://mobx.js.org/README.html>   | 轻量级状态管理   |
 | typescript                       | -                                 | 代码类型规范     |
 | axios                            | -                                 | 数据请求         |
 | prettier                         | -                                 | 代码美化，格式化 |
@@ -26,6 +26,31 @@
 | stylelint                        | -                                 | css 代码规范     |
 | husky                            | -                                 | git commit 检验  |
 | lint-staged                      | -                                 | git commit 检验  |
+
+## 最新升级记录 (2025年8月)
+
+### 主要版本升级
+
+- **React 18.2.0 → 19.1.1**: 升级到最新版本，支持新的并发特性
+- **Vite 5.1.4 → 7.1.2**: 重大版本升级，提升构建性能
+- **ESLint 8.56.0 → 9.33.0**: 迁移到新的平面配置格式 (eslint.config.js)
+- **Ant Design 5.15.0 → 5.27.0**: 升级到最新版本，UI组件更稳定
+- **TypeScript 5.2.2 → 5.9.2**: 类型系统优化
+- **mobx 6.8.0 → 6.13.7**: 状态管理库升级
+- **axios 1.3.4 → 1.11.0**: HTTP 客户端升级
+
+### 配置变更
+
+- 迁移 ESLint 配置从 `.eslintrc.cjs` 到 `eslint.config.js`
+- 更新 Vite 配置以适配 7.x 版本
+- 修复正则表达式语法 (vite.config.ts)
+- 添加全局类型定义支持
+
+### 兼容性处理
+
+- 解决 React 19 类型兼容性问题
+- 更新 React Router 7.8 配置
+- 修复 ESLint 9.x 全局变量定义
 
 ## 项目简介
 

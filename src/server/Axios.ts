@@ -87,7 +87,7 @@ export class VAxios {
       const { headers: { ignoreCancelToken } = { ignoreCancelToken: false } } = config
       !ignoreCancelToken && axiosCanceler.addPending(config)
       if (requestInterceptors && isFunction(requestInterceptors)) {
-        // eslint-disable-next-line no-param-reassign
+
         config = requestInterceptors(config) as InternalAxiosRequestConfig<any>
       }
       return config
@@ -102,7 +102,7 @@ export class VAxios {
     this.axiosInstance.interceptors.response.use((res: AxiosResponse<any>) => {
       res && axiosCanceler.removePending(res.config)
       if (responseInterceptors && isFunction(responseInterceptors)) {
-        // eslint-disable-next-line no-param-reassign
+
         res = responseInterceptors(res)
       }
       return res

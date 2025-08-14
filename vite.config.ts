@@ -1,6 +1,6 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
-import eslintPlugin from 'vite-plugin-eslint'
+
 import { viteMockServe } from 'vite-plugin-mock'
 
 import path from 'path'
@@ -12,13 +12,11 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       react(),
-      eslintPlugin({
-        include: ['src/**/*.js', 'src/**/*.ts', 'src/**/*.tsx', 'src/*.js', 'src/*.ts', 'src/*.tsx']
-      }),
       viteMockServe({
-        // default
-        localEnabled: mode === 'mock',
-        mockPath: './config/mock'
+        mockPath: './config/mock',
+        enable: mode === 'mock',
+        watchFiles: true,
+        logger: true
       })
     ],
     resolve: {
@@ -57,7 +55,7 @@ export default defineConfig(({ mode }) => {
             '/api/': {
               target: env.VITE_API_TARGET,
               changeOrigin: true,
-              rewrite: (p: string) => p.replace('^/', '')
+              rewrite: (p: string) => p.replace(/^\//, '')
             }
           }
         : undefined
