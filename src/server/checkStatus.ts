@@ -1,4 +1,6 @@
-export function checkStatus(status: number, msg: string, message: any): void {
+import { message } from 'antd'
+
+export function checkStatus(status: number, msg: string): void {
   switch (status) {
     case 400:
       message.error(`${msg}`)

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 import type {
   AxiosRequestConfig,
   AxiosInstance,
@@ -16,49 +15,29 @@ import type { RequestOptions, CreateAxiosOptions, Result } from './types'
 export * from './axiosTransform'
 
 /**
- * @description:  axios模块
+ * @description: Axios封装类，提供统一的HTTP请求接口
  */
 export class VAxios {
   private axiosInstance: AxiosInstance
-  private options: CreateAxiosOptions
+  private readonly options: CreateAxiosOptions
 
   constructor(options: CreateAxiosOptions) {
     this.options = options
-
     this.axiosInstance = axios.create(options)
     this.setupInterceptors()
   }
 
   /**
-   * @description:  创建axios实例
+   * @description: 获取axios实例
    */
-  private createAxios(config: CreateAxiosOptions): void {
-    this.axiosInstance = axios.create(config)
-  }
-
-  private getTransform() {
-    const { transform } = this.options
-    return transform
-  }
-
   getAxios(): AxiosInstance {
     return this.axiosInstance
   }
 
   /**
-   * @description: 重新配置axios
+   * @description: 设置请求头
    */
-  configAxios(config: CreateAxiosOptions) {
-    if (!this.axiosInstance) {
-      return
-    }
-    this.createAxios(config)
-  }
-
-  /**
-   * @description: 设置通用header
-   */
-  setHeader(headers: any): void {
+  setHeader(headers: Record<string, string>): void {
     if (!this.axiosInstance) {
       return
     }
@@ -66,13 +45,14 @@ export class VAxios {
   }
 
   /**
-   * @description: 拦截器配置
+   * @description: 配置拦截器
    */
-  private setupInterceptors() {
-    const transform = this.getTransform()
+  private setupInterceptors(): void {
+    const transform = this.options.transform
     if (!transform) {
       return
     }
+
     const {
       requestInterceptors,
       requestInterceptorsCatch,
@@ -82,102 +62,73 @@ export class VAxios {
 
     const axiosCanceler = new AxiosCanceler()
 
-    // 请求拦截器配置处理
-    this.axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig<any>) => {
-      const { headers: { ignoreCancelToken } = { ignoreCancelToken: false } } = config
-      !ignoreCancelToken && axiosCanceler.addPending(config)
-      if (requestInterceptors && isFunction(requestInterceptors)) {
+    // 请求拦截器
+    this.axiosInstance.interceptors.request.use(
+      (config: InternalAxiosRequestConfig) => {
+        // 处理请求取消
+        const ignoreCancelToken = config.headers?.ignoreCancelToken
+        if (!ignoreCancelToken) {
+          axiosCanceler.addPending(config)
+        }
 
-        config = requestInterceptors(config) as InternalAxiosRequestConfig<any>
-      }
-      return config
-    }, undefined)
+        // 执行自定义请求拦截器
+        if (requestInterceptors && isFunction(requestInterceptors)) {
+          config = requestInterceptors(config) as InternalAxiosRequestConfig
+        }
+        return config
+      },
+      requestInterceptorsCatch
+    )
 
-    // 请求拦截器错误捕获
-    requestInterceptorsCatch &&
-      isFunction(requestInterceptorsCatch) &&
-      this.axiosInstance.interceptors.request.use(undefined, requestInterceptorsCatch)
+    // 响应拦截器
+    this.axiosInstance.interceptors.response.use(
+      (response: AxiosResponse) => {
+        // 移除pending请求
+        axiosCanceler.removePending(response.config)
 
-    // 响应结果拦截器处理
-    this.axiosInstance.interceptors.response.use((res: AxiosResponse<any>) => {
-      res && axiosCanceler.removePending(res.config)
-      if (responseInterceptors && isFunction(responseInterceptors)) {
-
-        res = responseInterceptors(res)
-      }
-      return res
-    }, undefined)
-
-    // 响应结果拦截器错误捕获
-    responseInterceptorsCatch &&
-      isFunction(responseInterceptorsCatch) &&
-      this.axiosInstance.interceptors.response.use(undefined, responseInterceptorsCatch)
+        // 执行自定义响应拦截器
+        if (responseInterceptors && isFunction(responseInterceptors)) {
+          response = responseInterceptors(response)
+        }
+        return response
+      },
+      responseInterceptorsCatch
+    )
   }
-  //
-  // /**
-  //  * @description:  文件上传
-  //  */
-  // uploadFiles(config: AxiosRequestConfig, params: File[]) {
-  //   const formData = new FormData();
-  //
-  //   Object.keys(params).forEach((key) => {
-  //     formData.append(key, params[key as any]);
-  //   });
-  //
-  //   console.log(config)
-  //
-  //
-  //   const url = `${process.env.REACT_APP_BASE_URL}${config.url}`
-  //
-  //   return this.axiosInstance.post(url,formData,{
-  //     headers: {
-  //       'Content-type': ContentTypeEnum.FORM_DATA,
-  //     }
-  //   })
-  // }
 
   /**
-   * @description:   请求方法
+   * @description: 统一请求方法
    */
-  request<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
-    let conf: AxiosRequestConfig = deepClone(config)
-    const transform = this.getTransform()
+  async request<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+    let requestConfig = deepClone(config)
+    const transform = this.options.transform
+    const requestOptions = { ...this.options.requestOptions, ...options }
 
-    const { requestOptions } = this.options
-
-    const opt: RequestOptions = Object.assign({}, requestOptions, options)
-
-    const { beforeRequestHook, requestCatch, transformRequestData } = transform || {}
-    if (beforeRequestHook && isFunction(beforeRequestHook)) {
-      conf = beforeRequestHook(conf, opt)
+    // 执行请求前钩子
+    if (transform?.beforeRequestHook && isFunction(transform.beforeRequestHook)) {
+      requestConfig = transform.beforeRequestHook(requestConfig, requestOptions)
     }
-    return new Promise((resolve, reject) => {
-      this.axiosInstance
-        .request<any, AxiosResponse<Result>>(conf)
-        .then((res: AxiosResponse<Result>) => {
-          // 请求是否被取消
-          const isCancel = axios.isCancel(res)
-          if (
-            transformRequestData &&
-            isFunction(transformRequestData) &&
-            !isCancel &&
-            !conf.responseType
-          ) {
-            const ret = transformRequestData(res, opt)
-            // ret !== undefined ? resolve(ret) : reject(new Error('request error!'));
-            return resolve(ret)
-          }
-          resolve(res?.data as unknown as Promise<T>)
 
-          reject(res as unknown as Promise<T>)
-        })
-        .catch((e: Error) => {
-          if (requestCatch && isFunction(requestCatch)) {
-            reject(requestCatch(e))
-            return
-          }
-          reject(e)
-        })
-    })
+    try {
+      const response = await this.axiosInstance.request<Result>(requestConfig)
+
+      // 执行数据转换
+      if (
+        transform?.transformRequestData &&
+        isFunction(transform.transformRequestData) &&
+        !axios.isCancel(response) &&
+        !requestConfig.responseType
+      ) {
+        return transform.transformRequestData(response, requestOptions)
+      }
+
+      return response.data as T
+    } catch (error) {
+      // 执行请求错误处理
+      if (transform?.requestCatch && isFunction(transform.requestCatch)) {
+        return transform.requestCatch(error as Error)
+      }
+      throw error
+    }
   }
 }

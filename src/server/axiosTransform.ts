@@ -2,7 +2,7 @@
 /**
  * 数据处理类，可以根据项目自行配置
  */
-import type { AxiosRequestConfig, AxiosResponse } from 'axios'
+import type { AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import type { RequestOptions, Result } from './types'
 
 export abstract class AxiosTransform {
@@ -25,7 +25,7 @@ export abstract class AxiosTransform {
   /**
    * @description: 请求之前的拦截器
    */
-  requestInterceptors?: (config: AxiosRequestConfig) => AxiosRequestConfig
+  requestInterceptors?: (config: InternalAxiosRequestConfig) => InternalAxiosRequestConfig
 
   /**
    * @description: 请求之后的拦截器

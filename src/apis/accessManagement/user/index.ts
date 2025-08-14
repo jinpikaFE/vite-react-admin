@@ -2,7 +2,7 @@ import http from '@/server'
 
 /** 获取当前登录用户信息 */
 export async function getCurrentUserInfo() {
-  return http.request<any>({
+  return http.request<User.UserEntity>({
     url: '/api/v1/getinfo',
     method: 'get'
   })
