@@ -1,4 +1,4 @@
-import { useRouteError } from 'react-router-dom'
+import { useRouteError } from 'react-router'
 
 const ErrorPage = () => {
   // 使用 useRouteError 取得路由錯誤資訊

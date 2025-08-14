@@ -1,6 +1,6 @@
 import { Button, Result } from 'antd'
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import type { NotFoundPropsType } from './type'
 
 const NotFound: React.FC<NotFoundPropsType> = ({

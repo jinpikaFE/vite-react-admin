@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router'
 import { StepBackwardOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import { storeCount } from '@/store/count'

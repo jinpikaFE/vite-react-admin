@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import BasicLayout from './layout/BasicLayout'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 import { useAsyncEffect } from 'ahooks'
 import { getIpInfo } from './apis'
 import { storeMonitor } from './store/monitor'
 import { WebSee } from './utils/webSee'
+import Loading from './components/loading'
 
 const App = () => {
   const [isHandled, setIsHandled] = useState(false)
@@ -85,13 +86,15 @@ const App = () => {
   }, [location])
 
   return (
-    <div
-      style={{
-        height: '100vh'
-      }}
-    >
-      <BasicLayout />
-    </div>
+    <Suspense fallback={<Loading />}>
+      <div
+        style={{
+          height: '100vh'
+        }}
+      >
+        <BasicLayout />
+      </div>
+    </Suspense>
   )
 }
 

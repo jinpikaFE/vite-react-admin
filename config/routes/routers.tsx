@@ -9,102 +9,117 @@ import Login from '@/pages/Login'
 import Test from '@/pages/Test'
 import TestChild from '@/pages/Test/TestChild'
 import { HomeFilled, LockOutlined, SmileFilled } from '@ant-design/icons'
-import { Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router'
+
+/**
+ * 路由日志中间件
+ * @param {{ request: Request }} ctx - 上下文对象，包含 request
+ * @param {() => Promise<void>} next - 下一个中间件函数
+ */
+async function loggingMiddleware(ctx: { request: Request }, next: () => Promise<void>) {
+  const url = new URL(ctx.request.url)
+  console.log(`Starting navigation: ${url.pathname}${url.search}`)
+  const start = performance.now()
+  await next()
+  const duration = performance.now() - start
+  console.log(`Navigation completed in ${duration}ms`)
+}
 
 export const routers = [
   {
     path: '/',
-    /** 重定向 */
-    element: <Navigate replace to="/home" />
-  },
-  {
-    path: '/',
+    unstable_middleware: [loggingMiddleware],
     /** 承载布局 */
-    element: <App />,
+    Component: App,
     errorElement: <ErrorPage />,
     icon: <SmileFilled />,
     children: [
+      /** 首页重定向 */
+      {
+        index: true,
+        element: <Navigate replace to="home" />
+      },
       /** 布局下路由，页面路由在该children配置 */
       {
-        path: '/home',
+        path: 'home',
         name: '首页',
         icon: <HomeFilled />,
-        element: <Home />,
+        Component: Home,
         permissionObj: true
       },
       {
-        path: '/frist',
+        path: 'frist',
         name: '嵌套路由',
         icon: <SmileFilled />,
         permissionObj: true,
         children: [
           {
-            path: '/frist/oneOne',
+            path: 'oneOne',
             name: '一级-1',
-            element: <Test />,
+            Component: Test,
             permissionObj: true,
             children: [
               {
-                path: '/frist/oneOne/:id',
+                path: ':id',
                 name: '一级-1-二级',
                 permissionObj: true,
-                element: <TestChild />
+                Component: TestChild
               }
             ]
           },
           {
-            path: '/frist/oneTwo',
+            path: 'oneTwo',
             name: '一级-2',
             permissionObj: true,
-            element: <Test />
+            Component: Test
           },
           {
-            path: '/frist/hideInMenu',
+            path: 'hideInMenu',
             name: 'hideInMenu',
             permissionObj: true,
             hideInMenu: true,
-            element: <TestChild />
+            Component: TestChild
           }
         ]
       },
       {
-        path: '/accessManagement',
+        path: 'accessManagement',
         name: '权限管理',
         icon: <LockOutlined />,
         permissionObj: true,
         children: [
           {
-            path: '/accessManagement',
+            index: true,
             /** 重定向 */
-            element: <Navigate replace to="/accessManagement/userManagement" />
+            element: <Navigate replace to="userManagement" />
           },
           {
-            path: '/accessManagement/userManagement',
+            path: 'userManagement',
             name: '用户管理',
             permissionObj: true,
-            element: <UserManagement />
+            Component: UserManagement
           },
           {
-            path: '/accessManagement/roleManagement',
+            path: 'roleManagement',
             name: '角色管理',
             permissionObj: true,
-            element: <RoleManangement />
+            Component: RoleManangement
           }
         ]
       },
       {
-        path: '/layoutNone',
+        path: 'layoutNone',
         name: '布局隐藏',
         hideInMenu: true,
         hideLayout: true,
-        element: <TestChild />
+        Component: TestChild
       }
     ]
   },
   {
     path: '/login',
     name: '登录',
-    element: <Login />
+    Component: Login
   },
-  { path: '*', element: <NotFoundPage /> }
+  { path: '*', Component: NotFoundPage }
 ] as RouteType[]

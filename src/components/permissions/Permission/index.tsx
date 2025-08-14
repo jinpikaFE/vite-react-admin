@@ -1,7 +1,7 @@
 import NotFound from '@/components/NotFound'
 import { storage } from '@/utils/Storage'
 import { Button, message } from 'antd'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router'
 import { useContext, useState } from 'react'
 import { useAsyncEffect } from 'ahooks'
 import { GlobalUserInfo } from '@/layout/BasicLayout'

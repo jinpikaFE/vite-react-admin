@@ -5,7 +5,7 @@ import { RouteType, router } from '@config/routes'
 import { useAsyncEffect } from 'ahooks'
 import { Dropdown, MenuProps } from 'antd'
 import { useEffect, useState } from 'react'
-import { Outlet, matchRoutes, useLocation, useNavigate } from 'react-router-dom'
+import { Outlet, matchRoutes, useLocation, useNavigate } from 'react-router'
 import defaultProps from '@/_defaultProps'
 import Settings from '@config/defaultSettings'
 import { observer } from 'mobx-react'
@@ -30,9 +30,9 @@ const BasicLayout: React.FC = props => {
 
   /** 处理菜单权限隐藏菜单 */
   const reduceRouter = (routers: RouteType[]): RouteType[] => {
-    const authMenus = storeGlobalUser?.userInfo?.menus
-      ?.filter(item => item?.type === ComponTypeEnum.MENU || item?.type === ComponTypeEnum.PAGE)
-      ?.map(item => item?.title)
+    // const authMenus = storeGlobalUser?.userInfo?.menus
+    //   ?.filter(item => item?.type === ComponTypeEnum.MENU || item?.type === ComponTypeEnum.PAGE)
+    //   ?.map(item => item?.title)
 
     return routers?.map(item => {
       if (item?.children) {
@@ -40,13 +40,11 @@ const BasicLayout: React.FC = props => {
         return {
           ...extra,
           routes: reduceRouter(item?.children),
-          hideInMenu:
-            item?.hideInMenu || !item?.children?.find(citem => authMenus?.includes(citem?.name))
         }
       }
       return {
         ...item,
-        hideInMenu: item?.hideInMenu || !authMenus?.includes(item?.name)
+        hideInMenu: item?.hideInMenu
       }
     }) as any
   }
@@ -83,14 +81,14 @@ const BasicLayout: React.FC = props => {
       {showLayout ? (
         <ProLayout
           {...defaultProps}
-          route={reduceRouter(router?.routes)?.[1]}
+          route={reduceRouter(router?.routes)?.[0]}
           location={{
             pathname
           }}
           avatarProps={{
-            src: storeGlobalUser.userInfo?.icon,
+            src: storeGlobalUser.userInfo?.avatar,
             size: 'small',
-            title: storeGlobalUser.userInfo?.username,
+            title: storeGlobalUser.userInfo?.userName,
             render: (_, defaultDom) => {
               return <Dropdown menu={{ items }}>{defaultDom}</Dropdown>
             }

@@ -15,7 +15,7 @@
 | 技术                             | 官网                              | 描述             |
 | -------------------------------- | --------------------------------- | ---------------- |
 | Vite 5.X                         | https://cn.vitejs.dev/            | 基础脚手架       |
-| React Router 6.X                 | https://reactrouter.com/en/main   | react 路由管理   |
+| React Router 7.8                 | https://reactrouter.com/en/main   | react 路由管理   |
 | ant-design 5.X                   | https://ant.design/index-cn       | ui 组件          |
 | @ant-design/pro-components 2.4.0 | https://procomponents.ant.design/ | 中后台高阶组件   |
 | mobx 6.8.0                       | https://mobx.js.org/README.html   | 轻量级状态管理   |
