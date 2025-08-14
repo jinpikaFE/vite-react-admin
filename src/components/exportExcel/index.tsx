@@ -103,16 +103,16 @@ const ExcelTable: FC<IExcelTable> = forwardRef((props, formRefMy: any) => {
         columns={columns}
         formRef={formRef as any}
         request={async (params = {}, sort) => {
-          const { current: pageNum, pageSize, ...otherParams } = params
-          const res = await requestFn({ pageNum, pageSize, ...otherParams }, sort)
-          console.log(res)
+          const { current: pageIndex, pageSize, ...otherParams } = params
+          const res = await requestFn({ pageIndex, pageSize, ...otherParams }, sort)
+          console.log(res, 'res')
 
-          if (res?.code === 200) {
+          if (res) {
             return {
-              total: res?.total,
+              total: res?.count,
               data: res?.list,
               success: true,
-              page: res?.pageNum
+              page: res?.pageIndex
             }
           }
           return {

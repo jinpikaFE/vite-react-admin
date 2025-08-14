@@ -160,7 +160,7 @@ export default [
         code: 200,
         message: '操作成功',
         data: {
-          pageNum: 1,
+          pageIndex: 1,
           pageSize: 20,
           totalPage: 1,
           total: 4,
@@ -295,7 +295,7 @@ export default [
         code: 200,
         message: '操作成功',
         data: {
-          pageNum: 1,
+          pageIndex: 1,
           pageSize: 20,
           totalPage: 1,
           total: 3,
@@ -1487,7 +1487,7 @@ export default [
         code: 200,
         message: '操作成功',
         data: {
-          pageNum: 1,
+          pageIndex: 1,
           pageSize: 20,
           totalPage: 1,
           total: 6,

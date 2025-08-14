@@ -1,5 +1,11 @@
 import { storeGlobalUser } from '@/store/globalUser'
-import { addUser, delUser, editUser, getUserList } from '@/apis/accessManagement/user'
+import {
+  addUser,
+  delUser,
+  editUser,
+  getUserList,
+  updateUserStatus
+} from '@/apis/accessManagement/user'
 import ExcelTable from '@/components/exportExcel'
 import {
   ActionType,
@@ -22,7 +28,7 @@ const UserManagement: React.FC = () => {
   const actionRef = useRef<ActionType>(null)
   const modalFormRef = useRef<ProFormInstance>(null)
 
-  const onSubmit = async (record?: Resource.ResourceCategoryEntity) => {
+  const onSubmit = async (record?: User.UserEntity) => {
     const val = await modalFormRef?.current?.validateFields()
     const resVal = {
       ...val,
@@ -32,9 +38,9 @@ const UserManagement: React.FC = () => {
       // 编辑
       const res = await editUser({
         ...resVal,
-        id: record?.id
+        userId: record?.userId
       })
-      if (res?.code === 200) {
+      if (res) {
         message.success('编辑成功')
         actionRef?.current?.reload()
         return Promise.resolve()
@@ -43,7 +49,7 @@ const UserManagement: React.FC = () => {
     }
     // 新建
     const res = await addUser({ ...resVal })
-    if (res?.code === 200) {
+    if (res) {
       message.success('新建成功')
       actionRef?.current?.reload()
       return Promise.resolve()
@@ -64,10 +70,10 @@ const UserManagement: React.FC = () => {
           submitter={false}
           layout="horizontal"
           initialValues={{
-            status: 1,
+            status: '2',
             ...record,
-            icon: record?.icon ? [record?.icon] : undefined,
-            roleIds: record?.roles?.map(item => item?.id)
+            avatar: record?.avatar ? [record?.avatar] : undefined,
+            roleIds: record?.roles
           }}
           formRef={modalFormRef}
         >
@@ -80,7 +86,7 @@ const UserManagement: React.FC = () => {
           <FormUploadNew
             formItemProps={{
               label: '头像',
-              name: 'icon'
+              name: 'avatar'
             }}
             required
             uploadProps={
@@ -108,10 +114,10 @@ const UserManagement: React.FC = () => {
             rules={[{ required: true, message: '请选择' }]}
             request={async () => {
               const res = await getRoleList({
-                pageNum: 1,
+                pageIndex: 1,
                 pageSize: 9999
               })
-              if (res?.code === 200) {
+              if (res) {
                 return res?.list?.map((r: any) => ({
                   label: r?.name,
                   value: r?.id
@@ -120,15 +126,15 @@ const UserManagement: React.FC = () => {
               return []
             }}
           />
-          <ProFormTextArea label="备注" name="note" rules={[{ required: true }]} />
+          <ProFormTextArea label="备注" name="remark" />
           <ProFormRadio.Group
             label="是否启用"
             name="status"
             rules={[{ required: true }]}
             valueEnum={
               new Map([
-                [1, '是'],
-                [0, '否']
+                ['2', '是'],
+                ['1', '否']
               ])
             }
           />
@@ -141,15 +147,11 @@ const UserManagement: React.FC = () => {
       columns={[
         {
           title: '账号/姓名',
-          dataIndex: 'keyword',
+          dataIndex: 'username',
           hideInTable: true
         },
         /** search */
-        {
-          title: '序号',
-          dataIndex: 'id',
-          hideInSearch: true
-        },
+
         {
           title: '用户名',
           dataIndex: 'username',
@@ -162,7 +164,7 @@ const UserManagement: React.FC = () => {
         },
         {
           title: '头像',
-          dataIndex: 'icon',
+          dataIndex: 'avatar',
           hideInSearch: true,
           valueType: 'avatar'
         },
@@ -171,21 +173,16 @@ const UserManagement: React.FC = () => {
           dataIndex: 'email',
           hideInSearch: true
         },
-        {
-          title: '登录时间',
-          dataIndex: 'loginTime',
-          hideInSearch: true,
-          valueType: 'dateTime'
-        },
+
         {
           title: '更新时间',
-          dataIndex: 'updateTime',
+          dataIndex: 'updatedAt',
           hideInSearch: true,
           valueType: 'dateTime'
         },
         {
           title: '备注',
-          dataIndex: 'note',
+          dataIndex: 'remark',
           hideInSearch: true
         },
         {
@@ -195,18 +192,16 @@ const UserManagement: React.FC = () => {
           render(dom, entity) {
             return (
               <Switch
-                disabled={entity?.username === storeGlobalUser?.userInfo?.username}
-                checked={Boolean(entity?.status)}
+                disabled={entity?.username === storeGlobalUser?.userInfo?.userName}
+                checked={entity?.status === '2'}
                 onChange={async val => {
-                  const res = await editUser({
-                    id: entity.id,
-                    status: +val
+                  const res = await updateUserStatus({
+                    userId: entity.userId,
+                    status: val ? '2' : '1'
                   })
-                  if (res?.code === 200) {
-                    message.success('修改成功')
-                  } else {
-                    message.error('修改失败')
-                  }
+
+                  message.success('修改成功')
+
                   actionRef?.current?.reload()
                 }}
               />
@@ -222,18 +217,18 @@ const UserManagement: React.FC = () => {
               key="edit"
               type="link"
               onClick={() => showModal(record)}
-              disabled={record?.username === storeGlobalUser?.userInfo?.username}
+              disabled={record?.username === storeGlobalUser?.userInfo?.userName}
             >
               编辑
             </Button>,
             <Popconfirm
-              disabled={record?.username === storeGlobalUser?.userInfo?.username}
+              disabled={record?.username === storeGlobalUser?.userInfo?.userName}
               key="delete"
               placement="topRight"
               title="确定要删除吗?"
               onConfirm={async () => {
-                const res = await delUser({ id: record?.id })
-                if (res?.code === 200) {
+                const res = await delUser({ userId: record?.userId })
+                if (res) {
                   message.success('删除成功')
                   actionRef?.current?.reloadAndRest?.()
                   return Promise.resolve()
@@ -248,7 +243,7 @@ const UserManagement: React.FC = () => {
                 type="link"
                 danger
                 key="delete"
-                disabled={record?.username === storeGlobalUser?.userInfo?.username}
+                disabled={record?.userName === storeGlobalUser?.userInfo?.userName}
               >
                 删除
               </Button>
@@ -269,6 +264,7 @@ const UserManagement: React.FC = () => {
           添加
         </PunkEffectButton2>
       ]}
+      rowKey="userId"
     />
   )
 }

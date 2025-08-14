@@ -37,7 +37,7 @@ const RoleManangement: React.FC = () => {
         ...relVal,
         id: record?.id
       })
-      if (res?.code === 200) {
+      if (res) {
         message.success('编辑成功')
         actionRef?.current?.reload()
         return Promise.resolve()
@@ -46,7 +46,7 @@ const RoleManangement: React.FC = () => {
     }
     // 新建
     const res = await addRole({ ...relVal })
-    if (res?.code === 200) {
+    if (res) {
       message.success('新建成功')
       actionRef?.current?.reload()
       return Promise.resolve()
@@ -104,7 +104,7 @@ const RoleManangement: React.FC = () => {
             rules={[{ required: true, message: '请选择' }]}
             request={async () => {
               // const res = await getResourceCategoryList()
-              // if (res?.code === 200) {
+              // if (res) {
               //   return res?.map((r: any) => ({
               //     ...r,
               //     id: `categoryId${r?.id}`,
@@ -130,7 +130,7 @@ const RoleManangement: React.FC = () => {
             rules={[{ required: true, message: '请选择' }]}
             request={async () => {
               // const res = await getComponTree()
-              // if (res?.code === 200) {
+              // if (res) {
               //   return res
               // }
               return []
@@ -177,7 +177,7 @@ const RoleManangement: React.FC = () => {
                     id: entity.id,
                     status: +val
                   })
-                  if (res?.code === 200) {
+                  if (res) {
                     message.success('修改成功')
                   } else {
                     message.error('修改失败')
@@ -208,7 +208,7 @@ const RoleManangement: React.FC = () => {
               title="确定要删除吗?"
               onConfirm={async () => {
                 const res = await delRole({ ids: record?.id })
-                if (res?.code === 200) {
+                if (res) {
                   message.success('删除成功')
                   actionRef?.current?.reloadAndRest?.()
                   return Promise.resolve()

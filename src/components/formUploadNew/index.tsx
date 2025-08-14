@@ -76,13 +76,14 @@ const FormUploadNew: FC<TFormUpload> = props => {
       info.onSuccess()
       return
     }
-    const res = await uploadFile(formData)
-    if (res?.code === 200) {
+    try {
+      const res = await uploadFile(formData)
       file.file_link = res?.url
       info.onSuccess()
-    } else {
+    } catch (error) {
       info.onError('上传失败')
     }
+
     setUploading(false)
   }
 

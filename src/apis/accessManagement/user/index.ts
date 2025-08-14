@@ -18,7 +18,7 @@ export async function getMenuList() {
 
 export async function getUserList(params: User.UserListParams) {
   return http.request({
-    url: '/api/v1/admin/list',
+    url: '/api/v1/sys-user',
     method: 'get',
     params
   })
@@ -44,5 +44,14 @@ export async function delUser(data: Pick<User.UserEntity, 'userId'>) {
   return http.request({
     url: `/api/v1/admin/delete/${data?.userId}`,
     method: 'post'
+  })
+}
+
+/** 更新用户状态 */
+export async function updateUserStatus(data: Pick<User.UserEntity, 'userId' | 'status'>) {
+  return http.request({
+    url: '/api/v1/user/status',
+    method: 'put',
+    data
   })
 }

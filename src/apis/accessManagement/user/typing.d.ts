@@ -19,11 +19,19 @@ declare namespace User {
    userId: number
    /** 用户名 */
    userName: string
+   status: '1' | '2' // 1 启用 2 禁用
+   /** 性别 */
+   sex: '1' | '2' // 1 男 2 女
+   /** 手机号 */
+   phone: string
+   /** 邮箱 */
+   email: string
+   /** 备注 */
   }
 
   type UserListParams = {
     /** 关键词 */
-    keyword?: string
+    username?: string
   } & Global.PageParams
 
   type RoleMenuEntity = Menu.MenuEntity & {

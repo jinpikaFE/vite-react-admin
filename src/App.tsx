@@ -5,6 +5,7 @@ import { useAsyncEffect } from 'ahooks'
 import { storeMonitor } from './store/monitor'
 import { WebSee } from './utils/webSee'
 import Loading from './components/loading'
+import { observer } from 'mobx-react'
 
 const App = () => {
   const [isHandled, setIsHandled] = useState(false)
@@ -18,7 +19,7 @@ const App = () => {
   /** 获取ip 记录uv */
   useAsyncEffect(async () => {
     // const res = await getIpInfo()
-    // if (res?.code === 200) {
+    // if (res) {
     //   storeMonitor.setUvInfo({
     //     ip: res?.ip,
     //     startTime: new Date().getTime(),

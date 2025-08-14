@@ -7,7 +7,7 @@ declare namespace Global {
     total?: number
   }
   type PageParams = {
-    pageNum: number
+    pageIndex: number
     pageSize: number
   }
 }
