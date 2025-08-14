@@ -14,3 +14,10 @@ export async function getCaptcha() {
     method: 'get'
   })
 }
+
+export async function logout() {
+  return http.request({
+    url: '/api/v1/logout',
+    method: 'post'
+  })
+}

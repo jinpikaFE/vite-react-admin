@@ -18,11 +18,11 @@ import { Navigate } from 'react-router'
  */
 async function loggingMiddleware(ctx: { request: Request }, next: () => Promise<void>) {
   const url = new URL(ctx.request.url)
-  console.log(`Starting navigation: ${url.pathname}${url.search}`)
+  console.log(`开始跳转: ${url.pathname}${url.search}`)
   const start = performance.now()
   await next()
   const duration = performance.now() - start
-  console.log(`Navigation completed in ${duration}ms`)
+  console.log(`跳转完成: ${duration}ms`)
 }
 
 export const routers = [
@@ -104,6 +104,12 @@ export const routers = [
             name: '角色管理',
             permissionObj: true,
             Component: RoleManangement
+          },
+          {
+            path: 'layoutNone',
+            name: '布局隐藏',
+            hideLayout: true,
+            Component: TestChild
           }
         ]
       },
