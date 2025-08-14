@@ -19,8 +19,8 @@ import { PlusOutlined } from '@ant-design/icons'
 import PunkEffectButton2 from '@/components/ButtonDy/PunkEffectButton2'
 
 const UserManagement: React.FC = () => {
-  const actionRef = useRef<ActionType>()
-  const modalFormRef = useRef<ProFormInstance>()
+  const actionRef = useRef<ActionType>(null)
+  const modalFormRef = useRef<ProFormInstance>(null)
 
   const onSubmit = async (record?: Resource.ResourceCategoryEntity) => {
     const val = await modalFormRef?.current?.validateFields()
@@ -112,7 +112,7 @@ const UserManagement: React.FC = () => {
                 pageSize: 9999
               })
               if (res?.code === 200) {
-                return res?.data?.list?.map((r: any) => ({
+                return res?.list?.map((r: any) => ({
                   label: r?.name,
                   value: r?.id
                 }))

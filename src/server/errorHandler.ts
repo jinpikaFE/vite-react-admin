@@ -64,7 +64,7 @@ export class ErrorHandler {
   /**
    * @description: 处理401未授权错误
    */
-  private static handleUnauthorized(errorMessage: string): Promise<never> {
+  static handleUnauthorized(errorMessage: string): Promise<never> {
     storage.clear()
 
     notification.error({

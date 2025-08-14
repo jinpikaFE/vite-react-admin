@@ -22,8 +22,8 @@ import { Button, Cascader, Modal, Popconfirm, Switch, TreeSelect, message } from
 import { useRef } from 'react'
 
 const RoleManangement: React.FC = () => {
-  const actionRef = useRef<ActionType>()
-  const modalFormRef = useRef<ProFormInstance>()
+  const actionRef = useRef<ActionType>(null)
+  const modalFormRef = useRef<ProFormInstance>(null)
 
   const onSubmit = async (record?: Role.RoleEntity) => {
     const val = await modalFormRef?.current?.validateFields()
@@ -105,7 +105,7 @@ const RoleManangement: React.FC = () => {
             request={async () => {
               // const res = await getResourceCategoryList()
               // if (res?.code === 200) {
-              //   return res?.data?.map((r: any) => ({
+              //   return res?.map((r: any) => ({
               //     ...r,
               //     id: `categoryId${r?.id}`,
               //     disabled: !(r?.resources?.length > 0)
@@ -131,7 +131,7 @@ const RoleManangement: React.FC = () => {
             request={async () => {
               // const res = await getComponTree()
               // if (res?.code === 200) {
-              //   return res?.data
+              //   return res
               // }
               return []
             }}

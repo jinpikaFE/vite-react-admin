@@ -1,11 +1,16 @@
 import http from '@/server'
 
 export async function login(data?: Login.LoginEntity) {
-  return http.request<Login.LoginResponse>({
-    url: '/api/v1/login',
-    method: 'post',
-    data
-  })
+  return http.request<Login.LoginResponse>(
+    {
+      url: '/api/v1/login',
+      method: 'post',
+      data
+    },
+    {
+      isTransformResponse: false
+    }
+  )
 }
 
 export async function getCaptcha() {

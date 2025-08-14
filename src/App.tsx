@@ -20,10 +20,10 @@ const App = () => {
     // const res = await getIpInfo()
     // if (res?.code === 200) {
     //   storeMonitor.setUvInfo({
-    //     ip: res?.data?.ip,
+    //     ip: res?.ip,
     //     startTime: new Date().getTime(),
-    //     area: `${res?.data?.countryName || ''}${res?.data?.provinceName || ''}${
-    //       res?.data?.cityName || ''
+    //     area: `${res?.countryName || ''}${res?.provinceName || ''}${
+    //       res?.cityName || ''
     //     }`
     //   })
     // }

@@ -3,6 +3,7 @@ import { Modal, message } from 'antd'
 import { ResultEnum } from '@/utils/enums/httpEnum'
 import { storage } from '@/utils/Storage'
 import type { RequestOptions, Result } from './types'
+import { ErrorHandler } from './errorHandler'
 
 /**
  * @description: 响应数据处理器
@@ -75,13 +76,15 @@ export class ResponseHandler {
   private static handleResponseStatus(code: number, msg: string, data: Result): any {
     switch (code) {
       case ResultEnum.SUCCESS:
-        return data
+        return data?.data
 
       case ResultEnum.TIMEOUT:
         return ResponseHandler.handleTimeout(msg)
 
       case ResultEnum.MSGERROR:
         return ResponseHandler.handleError(msg)
+      case 401:
+        return ErrorHandler.handleUnauthorized(msg)
 
       default:
         if (code >= 400 && code < 500) {

@@ -1,4 +1,3 @@
-import { RouteType } from '.'
 import NotFoundPage from '@/404'
 import App from '@/App'
 import ErrorPage from '@/ErrorPage'
@@ -9,7 +8,10 @@ import Login from '@/pages/Login'
 import Test from '@/pages/Test'
 import TestChild from '@/pages/Test/TestChild'
 import { HomeFilled, LockOutlined, SmileFilled } from '@ant-design/icons'
-import { Navigate } from 'react-router'
+import { Navigate, redirect } from 'react-router'
+import { RouteType } from '.'
+import { storage } from '@/utils/Storage'
+import { message } from 'antd'
 
 /**
  * 路由日志中间件
@@ -25,10 +27,29 @@ async function loggingMiddleware(ctx: { request: Request }, next: () => Promise<
   console.log(`跳转完成: ${duration}ms`)
 }
 
+// async function permissionMiddleware(
+//   ctx: { request: Request; context: any },
+//   next: () => Promise<void>
+// ) {
+//   const token = storage.get('token')
+//   if (!token) {
+//     message.error('请先登录')
+//     throw redirect('/login')
+//   }
+//   console.log(ctx,'ctx')
+// }
+
+const authLoader = async (ctx: { request: Request }) => {
+  const url = new URL(ctx.request.url)
+ console.log(url.pathname);
+ 
+}
+
 export const routers = [
   {
     path: '/',
     unstable_middleware: [loggingMiddleware],
+    loader: authLoader,
     /** 承载布局 */
     Component: App,
     errorElement: <ErrorPage />,
@@ -37,32 +58,32 @@ export const routers = [
       /** 首页重定向 */
       {
         index: true,
-        element: <Navigate replace to="home" />
+        element: <Navigate replace to="home" />,
+        redirect: 'home'
       },
       /** 布局下路由，页面路由在该children配置 */
       {
         path: 'home',
         name: '首页',
         icon: <HomeFilled />,
-        Component: Home,
-        permissionObj: true
+        Component: Home
       },
       {
         path: 'frist',
         name: '嵌套路由',
         icon: <SmileFilled />,
-        permissionObj: true,
+
         children: [
           {
             path: 'oneOne',
             name: '一级-1',
             Component: Test,
-            permissionObj: true,
+
             children: [
               {
                 path: ':id',
                 name: '一级-1-二级',
-                permissionObj: true,
+
                 Component: TestChild
               }
             ]
@@ -70,13 +91,11 @@ export const routers = [
           {
             path: 'oneTwo',
             name: '一级-2',
-            permissionObj: true,
             Component: Test
           },
           {
             path: 'hideInMenu',
             name: 'hideInMenu',
-            permissionObj: true,
             hideInMenu: true,
             Component: TestChild
           }
@@ -86,7 +105,7 @@ export const routers = [
         path: 'accessManagement',
         name: '权限管理',
         icon: <LockOutlined />,
-        permissionObj: true,
+
         children: [
           {
             index: true,
@@ -94,15 +113,14 @@ export const routers = [
             element: <Navigate replace to="userManagement" />
           },
           {
+            index: true,
             path: 'userManagement',
             name: '用户管理',
-            permissionObj: true,
             Component: UserManagement
           },
           {
             path: 'roleManagement',
             name: '角色管理',
-            permissionObj: true,
             Component: RoleManangement
           },
           {

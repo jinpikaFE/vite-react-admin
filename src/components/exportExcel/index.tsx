@@ -109,10 +109,10 @@ const ExcelTable: FC<IExcelTable> = forwardRef((props, formRefMy: any) => {
 
           if (res?.code === 200) {
             return {
-              total: res?.data?.total,
-              data: res?.data?.list,
+              total: res?.total,
+              data: res?.list,
               success: true,
-              page: res?.data?.pageNum
+              page: res?.pageNum
             }
           }
           return {
