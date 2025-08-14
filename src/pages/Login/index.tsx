@@ -66,33 +66,33 @@ const Login = () => {
 
           /** 跳转有权限的第一个菜单 */
           await storeGlobalUser.getUserDetail()
-          const flattenRoutes: (routes: RouteType[]) => RouteType[] = (routes: RouteType[]) => {
-            const flattenedRoutes: RouteType[] = []
-            function traverse(routes: RouteType[]) {
-              routes.forEach(route => {
-                flattenedRoutes.push(route)
-                if (route.children) {
-                  traverse(route.children)
-                }
-              })
-            }
+          // const flattenRoutes: (routes: RouteType[]) => RouteType[] = (routes: RouteType[]) => {
+          //   const flattenedRoutes: RouteType[] = []
+          //   function traverse(routes: RouteType[]) {
+          //     routes.forEach(route => {
+          //       flattenedRoutes.push(route)
+          //       if (route.children) {
+          //         traverse(route.children)
+          //       }
+          //     })
+          //   }
 
-            traverse(routes)
+          //   traverse(routes)
 
-            return flattenedRoutes
-          }
-          const resRoutes = flattenRoutes(routers)
-          const findPath =
-            resRoutes?.[
-              resRoutes?.findIndex(
-                item =>
-                  item?.name ===
-                  storeGlobalUser?.userInfo?.menus?.filter(
-                    citem => citem?.type === ComponTypeEnum.MENU
-                  )?.[0]?.title
-              )
-            ]?.path
-          navigate(findPath || '/')
+          //   return flattenedRoutes
+          // }
+          // const resRoutes = flattenRoutes(routers)
+          // const findPath =
+          //   resRoutes?.[
+          //     resRoutes?.findIndex(
+          //       item =>
+          //         item?.name ===
+          //         storeGlobalUser?.userInfo?.menus?.filter(
+          //           citem => citem?.type === ComponTypeEnum.MENU
+          //         )?.[0]?.title
+          //     )
+          //   ]?.path
+          navigate('/')
         }}
         activityConfig={{
           style: {

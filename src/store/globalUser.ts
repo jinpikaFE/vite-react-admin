@@ -1,9 +1,10 @@
-import { getCurrentUserInfo } from '@/apis/accessManagement/user'
+import { getCurrentUserInfo, getMenuList } from '@/apis/accessManagement/user'
 import { WebSee } from '@/utils/webSee'
 import { makeAutoObservable } from 'mobx'
 
 class GlobalUser {
   userInfo: Partial<User.UserEntity> = {}
+  userRoleMenu: User.RoleMenuEntity[] = []
   constructor() {
     makeAutoObservable(this)
   }
@@ -12,10 +13,16 @@ class GlobalUser {
     const res = await getCurrentUserInfo()
     this.userInfo = res?.data
     new WebSee(res?.data?.username)
+    await this.getUserRoleMenu()
   }
 
   setUserInfo(user: Partial<User.UserEntity>) {
     this.userInfo = user
+  }
+
+  async getUserRoleMenu() {
+    const res = await getMenuList()
+    this.userRoleMenu = res
   }
 }
 

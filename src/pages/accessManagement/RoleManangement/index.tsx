@@ -1,5 +1,4 @@
-import { getComponTree } from '@/apis/accessManagement/compon'
-import { getResourceCategoryList } from '@/apis/accessManagement/resource'
+
 import {
   addRole,
   delRole,
@@ -26,7 +25,7 @@ const RoleManangement: React.FC = () => {
   const actionRef = useRef<ActionType>()
   const modalFormRef = useRef<ProFormInstance>()
 
-  const onSubmit = async (record?: Resource.ResourceCategoryEntity) => {
+  const onSubmit = async (record?: Role.RoleEntity) => {
     const val = await modalFormRef?.current?.validateFields()
     const relVal = {
       ...val
@@ -104,14 +103,14 @@ const RoleManangement: React.FC = () => {
             }}
             rules={[{ required: true, message: '请选择' }]}
             request={async () => {
-              const res = await getResourceCategoryList()
-              if (res?.code === 200) {
-                return res?.data?.map((r: any) => ({
-                  ...r,
-                  id: `categoryId${r?.id}`,
-                  disabled: !(r?.resources?.length > 0)
-                }))
-              }
+              // const res = await getResourceCategoryList()
+              // if (res?.code === 200) {
+              //   return res?.data?.map((r: any) => ({
+              //     ...r,
+              //     id: `categoryId${r?.id}`,
+              //     disabled: !(r?.resources?.length > 0)
+              //   }))
+              // }
               return []
             }}
           />
@@ -130,10 +129,10 @@ const RoleManangement: React.FC = () => {
             }}
             rules={[{ required: true, message: '请选择' }]}
             request={async () => {
-              const res = await getComponTree()
-              if (res?.code === 200) {
-                return res?.data
-              }
+              // const res = await getComponTree()
+              // if (res?.code === 200) {
+              //   return res?.data
+              // }
               return []
             }}
           />

@@ -8,6 +8,14 @@ export async function getCurrentUserInfo() {
   })
 }
 
+/**根据登录角色名称获取菜单列表数据（左菜单使用） */
+export async function getMenuList() {
+  return http.request<User.RoleMenuEntity[]>({
+    url: '/api/v1/menurole',
+    method: 'get'
+  })
+}
+
 export async function getUserList(params: User.UserListParams) {
   return http.request({
     url: '/api/v1/admin/list',
@@ -26,15 +34,15 @@ export async function addUser(data: User.UserEntity) {
 
 export async function editUser(data: Partial<User.UserEntity>) {
   return http.request({
-    url: `/api/v1/admin/update/${data?.id}`,
+    url: `/api/v1/admin/update/${data?.userId}`,
     method: 'post',
     data
   })
 }
 
-export async function delUser(data: Pick<User.UserEntity, 'id'>) {
+export async function delUser(data: Pick<User.UserEntity, 'userId'>) {
   return http.request({
-    url: `/api/v1/admin/delete/${data?.id}`,
+    url: `/api/v1/admin/delete/${data?.userId}`,
     method: 'post'
   })
 }

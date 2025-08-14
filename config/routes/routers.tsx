@@ -1,11 +1,7 @@
 import { RouteType } from '.'
 import NotFoundPage from '@/404'
 import App from '@/App'
-import Permission from '@/components/permissions/Permission'
 import ErrorPage from '@/ErrorPage'
-import ComponManagement from '@/pages/accessManagement/ComponManagement'
-import ResourceManangement from '@/pages/accessManagement/ResourceManangement'
-import Resource from '@/pages/accessManagement/ResourceManangement/Resource'
 import RoleManangement from '@/pages/accessManagement/RoleManangement'
 import UserManagement from '@/pages/accessManagement/UserManagement'
 import Home from '@/pages/Home'
@@ -93,40 +89,6 @@ export const routers = [
             name: '角色管理',
             permissionObj: true,
             element: <RoleManangement />
-          },
-          {
-            path: '/accessManagement/componentManagement',
-            name: '组件管理',
-            permissionObj: true,
-            element: <ComponManagement />
-          },
-          {
-            path: '/accessManagement/resourceManagement',
-            name: '资源管理',
-            permissionObj: true,
-            children: [
-              {
-                path: '/accessManagement/resourceManagement',
-                /** 重定向 */
-                element: (
-                  <Navigate replace to="/accessManagement/resourceManagement/resourceCategory" />
-                )
-              },
-              {
-                path: '/accessManagement/resourceManagement/resourceCategory',
-                name: '资源分类',
-                permissionObj: true,
-                element: <ResourceManangement />,
-                hideInMenu: true
-              },
-              {
-                path: '/accessManagement/resourceManagement/resourceCategory/:resourceCategoryId/resource',
-                name: '资源列表',
-                permissionObj: true,
-                element: <Resource />,
-                hideInMenu: true
-              }
-            ]
           }
         ]
       },
