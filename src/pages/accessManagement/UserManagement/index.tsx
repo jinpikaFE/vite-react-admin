@@ -118,9 +118,9 @@ const UserManagement: React.FC = () => {
                 pageSize: 9999
               })
               if (res) {
-                return res?.list?.map((r: any) => ({
-                  label: r?.name,
-                  value: r?.id
+                return res?.list?.map((r: Role.RoleEntity) => ({
+                  label: r?.roleName,
+                  value: r?.roleId
                 }))
               }
               return []

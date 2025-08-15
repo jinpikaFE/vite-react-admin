@@ -9,4 +9,12 @@ declare namespace Common {
     /** 更新时间 */
     updatedAt?: string
   }
+
+  type UploadFileResponse = {
+    size: number
+    path: string
+    full_path: string
+    name: string
+    type: string
+  }
 }

@@ -10,11 +10,18 @@ export async function getData(data?: { url: string; check_token: string }) {
   })
 }
 
-export async function uploadFile(data?: any) {
-  return http.request({
-    url: '/api/v1/cos/upload',
+export async function uploadFile(
+  data?: any,
+  params?: {
+    type?: string // @Param type query string true "type" (1：单图，2：多图, 3：base64图片)
+    source?: string // @Param source query string true "source" (1：本地，2：阿里云，3：七牛云，4：腾讯云COS)
+  }
+) {
+  return http.request<Common.UploadFileResponse>({
+    url: '/api/v1/public/uploadFile',
     method: 'post',
     data,
+    params,
     headers: { 'Content-Type': 'multipart/form-data' }
   })
 }

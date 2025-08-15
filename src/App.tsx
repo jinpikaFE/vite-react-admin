@@ -1,11 +1,10 @@
-import { Suspense, useEffect, useState } from 'react'
-import BasicLayout from './layout/BasicLayout'
-import { useLocation } from 'react-router'
 import { useAsyncEffect } from 'ahooks'
+import { Suspense, useEffect, useState } from 'react'
+import { useLocation } from 'react-router'
+import Loading from './components/loading'
+import BasicLayout from './layout/BasicLayout'
 import { storeMonitor } from './store/monitor'
 import { WebSee } from './utils/webSee'
-import Loading from './components/loading'
-import { observer } from 'mobx-react'
 
 const App = () => {
   const [isHandled, setIsHandled] = useState(false)

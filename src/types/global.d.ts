@@ -3,10 +3,18 @@ declare namespace Global {
     success?: boolean
     data: T
     message: string
+    msg?: string
+    count?: number
     code: number
-    total?: number
   }
   type PageParams = {
+    pageIndex: number
+    pageSize: number
+  }
+
+  type PageResponse<T = any> = {
+    list: T[]
+    count: number
     pageIndex: number
     pageSize: number
   }
