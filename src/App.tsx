@@ -12,6 +12,7 @@ const App = () => {
   const [pvStartTime, setPvStartTime] = useState<number>()
 
   useEffect(() => {
+    console.log('test1')
     new WebSee(import.meta.env.VITE_APP_NAME)
   }, [])
 
