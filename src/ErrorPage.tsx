@@ -5,6 +5,8 @@ const ErrorPage = () => {
   const error: any = useRouteError()
   console.error(error)
 
+  console.log('换一个文件提交')
+
   return (
     <div id="error-page">
       {/* 把 error 資料顯示在你的 jsx 上 */}

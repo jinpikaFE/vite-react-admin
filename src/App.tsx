@@ -12,6 +12,9 @@ const App = () => {
   const [pvStartTime, setPvStartTime] = useState<number>()
 
   useEffect(() => {
+    console.log('test1')
+    console.log("看看是否还会推到上一个PR")
+    console.log('test new pr')
     new WebSee(import.meta.env.VITE_APP_NAME)
   }, [])
 
