@@ -1,24 +1,24 @@
-
 import {
   addRole,
   delRole,
   editRole,
   editRoleStatus,
-  getRoleList
+  getRoleList,
+  getRoleMenuTreeSelect
 } from '@/apis/accessManagement/role'
 import PunkEffectButton2 from '@/components/ButtonDy/PunkEffectButton2'
 import ExcelTable from '@/components/exportExcel'
 import {
   ActionType,
   ProForm,
-  ProFormCascader,
+  ProFormDigit,
   ProFormInstance,
   ProFormRadio,
   ProFormText,
   ProFormTextArea,
   ProFormTreeSelect
 } from '@ant-design/pro-components'
-import { Button, Cascader, Modal, Popconfirm, Switch, TreeSelect, message } from 'antd'
+import { Button, Modal, Popconfirm, Switch, TreeSelect, message } from 'antd'
 import { useRef } from 'react'
 
 const RoleManangement: React.FC = () => {
@@ -35,27 +35,22 @@ const RoleManangement: React.FC = () => {
       // 编辑
       const res = await editRole({
         ...relVal,
-        id: record?.id
+        roleId: record?.roleId
       })
-      if (res) {
-        message.success('编辑成功')
-        actionRef?.current?.reload()
-        return Promise.resolve()
-      }
-      return Promise.reject()
-    }
-    // 新建
-    const res = await addRole({ ...relVal })
-    if (res) {
-      message.success('新建成功')
+      message.success('编辑成功')
       actionRef?.current?.reload()
       return Promise.resolve()
     }
-    return Promise.reject()
+    // 新建
+    const res = await addRole({ ...relVal })
+    message.success('新建成功')
+    actionRef?.current?.reload()
+    return Promise.resolve()
   }
+
   const showModal = (record?: Role.RoleEntity) => {
     Modal.confirm({
-      title: record ? '编辑' : '添加',
+      title: record ? '编辑角色' : '添加角色',
       onOk: async () => onSubmit(record),
       okText: '确定',
       cancelText: '取消',
@@ -67,72 +62,61 @@ const RoleManangement: React.FC = () => {
           submitter={false}
           layout="horizontal"
           initialValues={{
-            status: 1,
+            status: '2',
             ...record,
-            menus: record?.menus?.map(item => item?.id),
-            resources: record?.resources?.map(item => item?.id)
+            menuIds: record?.sysMenu?.map(menu => menu.menuId) || []
           }}
           formRef={modalFormRef}
         >
-          <ProFormText label="角色名称" name="name" rules={[{ required: true }]} />
-          <ProFormTextArea label="描述" name="description" rules={[{ required: true }]} />
+          <ProFormText
+            label="角色名称"
+            name="roleName"
+            rules={[{ required: true, message: '请输入角色名称' }]}
+          />
+          <ProFormText
+            label="角色标识"
+            name="roleKey"
+            rules={[{ required: true, message: '请输入角色标识' }]}
+          />
+          <ProFormDigit
+            min={0}
+            precision={0}
+            label="角色排序"
+            name="roleSort"
+            rules={[{ required: true, message: '请输入角色排序' }]}
+          />
+          <ProFormTextArea label="备注" name="remark" rules={[{ required: false }]} />
           <ProFormRadio.Group
-            label="是否启用"
+            label="角色状态"
             name="status"
-            rules={[{ required: true }]}
+            rules={[{ required: true, message: '请选择角色状态' }]}
             valueEnum={
               new Map([
-                [1, '是'],
-                [0, '否']
+                ['2', '启用'],
+                ['1', '禁用']
               ])
             }
           />
           <ProFormTreeSelect
-            label="分配资源"
-            name="resources"
+            label="分配菜单"
+            name="menuIds"
             allowClear
             fieldProps={{
               multiple: true,
               showCheckedStrategy: TreeSelect.SHOW_CHILD,
               fieldNames: {
-                label: 'name',
+                label: 'label',
                 value: 'id',
-                children: 'resources'
+                children: 'children'
               },
               treeCheckable: true
             }}
-            rules={[{ required: true, message: '请选择' }]}
+            rules={[{ required: true, message: '请选择菜单' }]}
             request={async () => {
-              // const res = await getResourceCategoryList()
-              // if (res) {
-              //   return res?.map((r: any) => ({
-              //     ...r,
-              //     id: `categoryId${r?.id}`,
-              //     disabled: !(r?.resources?.length > 0)
-              //   }))
-              // }
-              return []
-            }}
-          />
-          <ProFormTreeSelect
-            label="分配组件"
-            name="menus"
-            allowClear
-            fieldProps={{
-              multiple: true,
-              showCheckedStrategy: TreeSelect.SHOW_CHILD,
-              fieldNames: {
-                label: 'title',
-                value: 'id'
-              },
-              treeCheckable: true
-            }}
-            rules={[{ required: true, message: '请选择' }]}
-            request={async () => {
-              // const res = await getComponTree()
-              // if (res) {
-              //   return res
-              // }
+              const res = await getRoleMenuTreeSelect(0)
+              if (res?.menus) {
+                return res.menus
+              }
               return []
             }}
           />
@@ -140,42 +124,67 @@ const RoleManangement: React.FC = () => {
       )
     })
   }
+
   return (
     <ExcelTable
       columns={[
         {
           title: '角色名称',
-          dataIndex: 'keyword',
+          dataIndex: 'roleName',
           hideInTable: true
+        },
+        {
+          title: '角色标识',
+          dataIndex: 'roleKey',
+          hideInTable: true
+        },
+        {
+          title: '状态',
+          dataIndex: 'status',
+          hideInTable: true,
+          valueEnum: {
+            '1': '禁用',
+            '2': '启用'
+          }
         },
         /** search */
         {
           title: '序号',
-          dataIndex: 'id',
+          dataIndex: 'roleId',
           hideInSearch: true
         },
         {
           title: '角色名称',
-          dataIndex: 'name',
+          dataIndex: 'roleName',
           hideInSearch: true
         },
         {
-          title: '描述',
-          dataIndex: 'description',
+          title: '角色标识',
+          dataIndex: 'roleKey',
           hideInSearch: true
         },
         {
-          title: '是否显示',
+          title: '角色排序',
+          dataIndex: 'roleSort',
+          hideInSearch: true
+        },
+        {
+          title: '备注',
+          dataIndex: 'remark',
+          hideInSearch: true
+        },
+        {
+          title: '角色状态',
           dataIndex: 'status',
           hideInSearch: true,
           render(dom, entity) {
             return (
               <Switch
-                checked={Boolean(entity?.status)}
+                checked={entity?.status === '2'}
                 onChange={async val => {
                   const res = await editRoleStatus({
-                    id: entity.id,
-                    status: +val
+                    roleId: entity.roleId,
+                    status: val ? '2' : '1'
                   })
                   if (res) {
                     message.success('修改成功')
@@ -190,7 +199,7 @@ const RoleManangement: React.FC = () => {
         },
         {
           title: '创建时间',
-          dataIndex: 'createTime',
+          dataIndex: 'createdAt',
           hideInSearch: true,
           valueType: 'dateTime'
         },
@@ -207,7 +216,7 @@ const RoleManangement: React.FC = () => {
               placement="topRight"
               title="确定要删除吗?"
               onConfirm={async () => {
-                const res = await delRole({ ids: record?.id })
+                const res = await delRole({ ids: [record?.roleId] })
                 if (res) {
                   message.success('删除成功')
                   actionRef?.current?.reloadAndRest?.()

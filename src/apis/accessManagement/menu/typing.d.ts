@@ -33,16 +33,58 @@ declare namespace Menu {
     /** 是否外链 */
     isFrame?: string
     /** 关联系统API */
-    sysApi?: any
+    sysApi?: any[]
     /** 关联API列表 */
-    apis?: any
+    apis?: number[]
     /** 数据权限范围 */
     dataScope?: string
     /** 额外参数 */
     params?: string
     /** 角色ID */
-    RoleId?: number
+    roleId?: number
     /** 是否选中 */
     is_select?: boolean
+    /** 子菜单 */
+    children?: MenuEntity[]
   } & Common.CommonEntity
+
+  type MenuListParams = {
+    /** 页码 */
+    pageIndex?: number
+    /** 每页大小 */
+    pageSize?: number
+    /** 菜单名称 */
+    menuName?: string
+    /** 菜单标题 */
+    title?: string
+    /** 菜单类型 */
+    menuType?: string
+    /** 父级菜单ID */
+    parentId?: number
+    /** 是否可见 */
+    visible?: string
+    /** 排序字段 */
+    sort?: string
+  }
+
+  type MenuLabel = {
+    /** 菜单ID */
+    id: number
+    /** 菜单标题 */
+    label: string
+    /** 子菜单 */
+    children?: MenuLabel[]
+  }
+
+  /** 菜单角色关联 */
+  type MenuRole = MenuEntity & {
+    /** 是否选中 */
+    is_select: boolean
+  }
+
+  /** 菜单删除请求参数 */
+  type MenuDeleteReq = {
+    /** 菜单ID列表 */
+    ids: number[]
+  }
 }

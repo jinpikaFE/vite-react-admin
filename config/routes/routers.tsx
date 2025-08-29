@@ -3,6 +3,7 @@ import App from '@/App'
 import ErrorPage from '@/ErrorPage'
 import RoleManangement from '@/pages/accessManagement/RoleManangement'
 import UserManagement from '@/pages/accessManagement/UserManagement'
+import MenuManagement from '@/pages/accessManagement/MenuManagement'
 import Home from '@/pages/Home'
 import Login from '@/pages/Login'
 import Test from '@/pages/Test'
@@ -12,6 +13,7 @@ import { Navigate, redirect } from 'react-router'
 import { RouteType } from '.'
 import { storage } from '@/utils/Storage'
 import { message } from 'antd'
+import DeptManagement from '@/pages/accessManagement/DeptManagement'
 
 /**
  * 路由日志中间件
@@ -122,6 +124,16 @@ export const routers = [
             path: 'roleManagement',
             name: '角色管理',
             Component: RoleManangement
+          },
+          {
+            path: 'deptManagement',
+            name: '部门管理',
+            Component: DeptManagement
+          },
+          {
+            path: 'menuManagement',
+            name: '菜单管理',
+            Component: MenuManagement
           },
           {
             path: 'layoutNone',

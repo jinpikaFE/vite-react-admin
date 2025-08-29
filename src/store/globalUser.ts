@@ -12,7 +12,7 @@ class GlobalUser {
   async getUserDetail() {
     const res = await getCurrentUserInfo()
     this.userInfo = res
-    new WebSee(res?.userName)
+    new WebSee(res?.username)
     await this.getUserRoleMenu()
   }
 

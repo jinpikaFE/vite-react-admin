@@ -29,7 +29,7 @@ const BasicLayout: React.FC = props => {
 
   useEffect(() => {
     setPathname(window.location.pathname)
-  }, [])
+  }, [window.location.pathname])
 
   useAsyncEffect(async () => {
     if (pathname !== '/login') {

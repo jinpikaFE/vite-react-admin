@@ -28,7 +28,8 @@ export default [
         Monitor: 'readonly',
         Compon: 'readonly',
         StoreMonitor: 'readonly',
-        BlobPart: 'readonly'
+        BlobPart: 'readonly',
+        Dept: 'readonly'
       },
       parser: typescriptParser,
       parserOptions: {
@@ -99,7 +100,8 @@ export default [
       quotes: ['warn', 'single', 'avoid-escape'], // 要求统一使用单引号符号
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
-      '@typescript-eslint/explicit-module-boundary-types': 'off'
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
+      '@typescript-eslint/no-undef': 'off' // 关闭 TypeScript 的 no-undef 检查，让 TypeScript 编译器处理
     },
     settings: {
       react: {

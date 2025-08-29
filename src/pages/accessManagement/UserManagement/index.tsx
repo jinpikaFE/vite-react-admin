@@ -6,6 +6,7 @@ import {
   getUserList,
   updateUserStatus
 } from '@/apis/accessManagement/user'
+import { getDeptTree } from '@/apis/accessManagement/dept'
 import ExcelTable from '@/components/exportExcel'
 import {
   ActionType,
@@ -16,8 +17,8 @@ import {
   ProFormText,
   ProFormTextArea
 } from '@ant-design/pro-components'
-import { Button, Modal, Popconfirm, Switch, message } from 'antd'
-import { useRef } from 'react'
+import { Button, Modal, Popconfirm, Switch, message, Tree, Card, Row, Col, TreeProps } from 'antd'
+import { useRef, useState, useEffect } from 'react'
 import { observer } from 'mobx-react'
 import { getRoleList } from '@/apis/accessManagement/role'
 import FormUploadNew from '@/components/formUploadNew'
@@ -27,6 +28,38 @@ import PunkEffectButton2 from '@/components/ButtonDy/PunkEffectButton2'
 const UserManagement: React.FC = () => {
   const actionRef = useRef<ActionType>(null)
   const modalFormRef = useRef<ProFormInstance>(null)
+  const [deptTree, setDeptTree] = useState<Dept.DeptLabel[]>([])
+  const [selectedDeptId, setSelectedDeptId] = useState<number | undefined>()
+
+  // 获取部门树数据
+  const fetchDeptTree = async () => {
+    try {
+      const res = await getDeptTree()
+      if (res) {
+        setDeptTree(res)
+      }
+    } catch (error) {
+      console.error('获取部门树失败:', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchDeptTree()
+  }, [])
+
+  // 部门树选择处理
+  const handleDeptSelect = (selectedKeys: React.Key[]) => {
+    const deptId = selectedKeys.length > 0 ? Number(selectedKeys[0]) : undefined
+    setSelectedDeptId(deptId)
+    // 重新加载用户列表
+    actionRef?.current?.reload()
+  }
+
+  // 处理"全部"选项点击
+  const handleAllClick = () => {
+    setSelectedDeptId(undefined)
+    actionRef?.current?.reload()
+  }
 
   const onSubmit = async (record?: User.UserEntity) => {
     const val = await modalFormRef?.current?.validateFields()
@@ -40,22 +73,17 @@ const UserManagement: React.FC = () => {
         ...resVal,
         userId: record?.userId
       })
-      if (res) {
-        message.success('编辑成功')
-        actionRef?.current?.reload()
-        return Promise.resolve()
-      }
-      return Promise.reject()
-    }
-    // 新建
-    const res = await addUser({ ...resVal })
-    if (res) {
-      message.success('新建成功')
+      message.success('编辑成功')
       actionRef?.current?.reload()
       return Promise.resolve()
     }
-    return Promise.reject()
+    // 新建
+    const res = await addUser({ ...resVal })
+    message.success('新建成功')
+    actionRef?.current?.reload()
+    return Promise.resolve()
   }
+
   const showModal = (record?: User.UserEntity) => {
     Modal.confirm({
       title: record ? '编辑' : '添加',
@@ -73,7 +101,7 @@ const UserManagement: React.FC = () => {
             status: '2',
             ...record,
             avatar: record?.avatar ? [record?.avatar] : undefined,
-            roleIds: record?.roles
+            roleIds: record?.roleIds || []
           }}
           formRef={modalFormRef}
         >
@@ -142,130 +170,162 @@ const UserManagement: React.FC = () => {
       )
     })
   }
+
   return (
-    <ExcelTable
-      columns={[
-        {
-          title: '账号/姓名',
-          dataIndex: 'username',
-          hideInTable: true
-        },
-        /** search */
+    <Row gutter={16}>
+      {/* 左侧部门树 */}
+      <Col span={6}>
+        <Card title="部门管理" size="small" style={{ height: 'calc(100vh - 200px)' }}>
+          {/* 全部选项 */}
+          <div
+            style={{
+              padding: '8px 12px',
+              cursor: 'pointer',
+              backgroundColor: selectedDeptId === undefined ? '#e6f7ff' : 'transparent',
+              border: '1px solid #d9d9d9',
+              borderRadius: '6px',
+              marginBottom: '8px',
+              fontWeight: selectedDeptId === undefined ? 'bold' : 'normal'
+            }}
+            onClick={handleAllClick}
+          >
+            全部
+          </div>
+          <Tree
+            treeData={deptTree as unknown as TreeProps['treeData']}
+            fieldNames={{ title: 'label', key: 'id', children: 'children' }}
+            onSelect={handleDeptSelect}
+            selectedKeys={selectedDeptId ? [selectedDeptId] : []}
+            defaultExpandAll
+            showLine
+            showIcon
+          />
+        </Card>
+      </Col>
 
-        {
-          title: '用户名',
-          dataIndex: 'username',
-          hideInSearch: true
-        },
-        {
-          title: '昵称',
-          dataIndex: 'nickName',
-          hideInSearch: true
-        },
-        {
-          title: '头像',
-          dataIndex: 'avatar',
-          hideInSearch: true,
-          valueType: 'avatar'
-        },
-        {
-          title: '邮箱',
-          dataIndex: 'email',
-          hideInSearch: true
-        },
-
-        {
-          title: '更新时间',
-          dataIndex: 'updatedAt',
-          hideInSearch: true,
-          valueType: 'dateTime'
-        },
-        {
-          title: '备注',
-          dataIndex: 'remark',
-          hideInSearch: true
-        },
-        {
-          title: '是否启用',
-          dataIndex: 'status',
-          hideInSearch: true,
-          render(dom, entity) {
-            return (
-              <Switch
-                disabled={entity?.username === storeGlobalUser?.userInfo?.userName}
-                checked={entity?.status === '2'}
-                onChange={async val => {
-                  const res = await updateUserStatus({
-                    userId: entity.userId,
-                    status: val ? '2' : '1'
-                  })
-
-                  message.success('修改成功')
-
-                  actionRef?.current?.reload()
-                }}
-              />
-            )
-          }
-        },
-        {
-          title: '操作',
-          key: 'option',
-          valueType: 'option',
-          render: (_, record) => [
-            <Button
-              key="edit"
-              type="link"
-              onClick={() => showModal(record)}
-              disabled={record?.username === storeGlobalUser?.userInfo?.userName}
-            >
-              编辑
-            </Button>,
-            <Popconfirm
-              disabled={record?.username === storeGlobalUser?.userInfo?.userName}
-              key="delete"
-              placement="topRight"
-              title="确定要删除吗?"
-              onConfirm={async () => {
-                const res = await delUser({ userId: record?.userId })
-                if (res) {
-                  message.success('删除成功')
-                  actionRef?.current?.reloadAndRest?.()
-                  return Promise.resolve()
-                }
-                return Promise.reject()
-              }}
-              okText="确定"
-              okType="danger"
-              cancelText="取消"
-            >
-              <Button
-                type="link"
-                danger
-                key="delete"
-                disabled={record?.userName === storeGlobalUser?.userInfo?.userName}
-              >
-                删除
-              </Button>
-            </Popconfirm>
-          ]
-        }
-      ]}
-      requestFn={async params => {
-        const data = await getUserList({
-          ...params
-        })
-        return data
-      }}
-      actionRef={actionRef}
-      rowSelection={false}
-      toolBarRenderFn={() => [
-        <PunkEffectButton2 key="add" onClick={() => showModal()}>
-          添加
-        </PunkEffectButton2>
-      ]}
-      rowKey="userId"
-    />
+      {/* 右侧用户列表 */}
+      <Col span={18}>
+        <ExcelTable
+          columns={[
+            {
+              title: '账号/姓名',
+              dataIndex: 'username',
+              hideInTable: true
+            },
+            {
+              title: '用户名',
+              dataIndex: 'username',
+              hideInSearch: true
+            },
+            {
+              title: '昵称',
+              dataIndex: 'nickName',
+              hideInSearch: true
+            },
+            {
+              title: '头像',
+              dataIndex: 'avatar',
+              hideInSearch: true,
+              valueType: 'avatar'
+            },
+            {
+              title: '邮箱',
+              dataIndex: 'email',
+              hideInSearch: true
+            },
+            {
+              title: '更新时间',
+              dataIndex: 'updatedAt',
+              hideInSearch: true,
+              valueType: 'dateTime'
+            },
+            {
+              title: '备注',
+              dataIndex: 'remark',
+              hideInSearch: true
+            },
+            {
+              title: '是否启用',
+              dataIndex: 'status',
+              hideInSearch: true,
+              render(dom, entity) {
+                return (
+                  <Switch
+                    disabled={entity?.username === storeGlobalUser?.userInfo?.username}
+                    checked={entity?.status === '2'}
+                    onChange={async val => {
+                      const res = await updateUserStatus({
+                        userId: entity.userId,
+                        status: val ? '2' : '1'
+                      })
+                      message.success('修改成功')
+                      actionRef?.current?.reload()
+                    }}
+                  />
+                )
+              }
+            },
+            {
+              title: '操作',
+              key: 'option',
+              valueType: 'option',
+              render: (_, record) => [
+                <Button
+                  key="edit"
+                  type="link"
+                  onClick={() => showModal(record)}
+                  disabled={record?.username === storeGlobalUser?.userInfo?.username}
+                >
+                  编辑
+                </Button>,
+                <Popconfirm
+                  disabled={record?.username === storeGlobalUser?.userInfo?.username}
+                  key="delete"
+                  placement="topRight"
+                  title="确定要删除吗?"
+                  onConfirm={async () => {
+                    const res = await delUser({ userId: record?.userId })
+                    if (res) {
+                      message.success('删除成功')
+                      actionRef?.current?.reloadAndRest?.()
+                      return Promise.resolve()
+                    }
+                    return Promise.reject()
+                  }}
+                  okText="确定"
+                  okType="danger"
+                  cancelText="取消"
+                >
+                  <Button
+                    type="link"
+                    danger
+                    key="delete"
+                    disabled={record?.username === storeGlobalUser?.userInfo?.username}
+                  >
+                    删除
+                  </Button>
+                </Popconfirm>
+              ]
+            }
+          ]}
+          requestFn={async params => {
+            const data = await getUserList({
+              ...params,
+              deptId: selectedDeptId // 添加部门筛选参数
+            })
+            return data
+          }}
+          actionRef={actionRef}
+          rowSelection={false}
+          toolBarRenderFn={() => [
+            <PunkEffectButton2 key="add" onClick={() => showModal()}>
+              添加
+            </PunkEffectButton2>
+          ]}
+          rowKey="userId"
+        />
+      </Col>
+    </Row>
   )
 }
 
