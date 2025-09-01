@@ -35,6 +35,38 @@ declare namespace User {
    createdAt: string
    /** 更新时间 */
    updatedAt: string
+   /** 部门信息 */
+   dept?: Dept.DeptEntity
+  }
+
+  /** 新增用户请求参数 */
+  type UserInsertReq = {
+    username: string
+    nickName: string
+    email: string
+    password: string
+    avatar?: string
+    roleIds: number[]
+    remark?: string
+    status: '1' | '2'
+    deptId?: number
+    phone?: string
+    sex?: '1' | '2'
+  }
+
+  /** 编辑用户请求参数 */
+  type UserUpdateReq = {
+    userId: number
+    username?: string
+    nickName?: string
+    email?: string
+    avatar?: string
+    roleIds?: number[]
+    remark?: string
+    status?: '1' | '2'
+    deptId?: number
+    phone?: string
+    sex?: '1' | '2'
   }
 
   type UserListParams = {

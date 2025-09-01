@@ -208,10 +208,16 @@ const RoleManangement: React.FC = () => {
           key: 'option',
           valueType: 'option',
           render: (_, record) => [
-            <Button key="edit" type="link" onClick={() => showModal(record)}>
+            <Button
+              disabled={record?.roleKey === 'admin'}
+              key="edit"
+              type="link"
+              onClick={() => showModal(record)}
+            >
               编辑
             </Button>,
             <Popconfirm
+              disabled={record?.roleKey === 'admin'}
               key="delete"
               placement="topRight"
               title="确定要删除吗?"
@@ -228,7 +234,7 @@ const RoleManangement: React.FC = () => {
               okType="danger"
               cancelText="取消"
             >
-              <Button type="link" danger key="delete">
+              <Button disabled={record?.roleKey === 'admin'} type="link" danger key="delete">
                 删除
               </Button>
             </Popconfirm>

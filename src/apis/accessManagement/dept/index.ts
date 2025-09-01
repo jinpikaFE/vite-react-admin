@@ -52,3 +52,4 @@ export async function delDept(deptId: number) {
     data: { ids: [deptId] }
   })
 }
+

@@ -15,7 +15,8 @@ import {
   ProFormRadio,
   ProFormSelect,
   ProFormText,
-  ProFormTextArea
+  ProFormTextArea,
+  ProFormTreeSelect
 } from '@ant-design/pro-components'
 import { Button, Modal, Popconfirm, Switch, message, Tree, Card, Row, Col, TreeProps } from 'antd'
 import { useRef, useState, useEffect } from 'react'
@@ -63,10 +64,19 @@ const UserManagement: React.FC = () => {
 
   const onSubmit = async (record?: User.UserEntity) => {
     const val = await modalFormRef?.current?.validateFields()
+    
+    // 角色ID去重处理
+    let roleIds = val?.roleIds || []
+    if (Array.isArray(roleIds)) {
+      roleIds = [...new Set(roleIds)] // 去重
+    }
+    
     const resVal = {
       ...val,
-      icon: val?.icon?.[0]
+      roleIds,
+      avatar: val?.avatar?.[0] || val?.avatar || ''
     }
+    
     if (record) {
       // 编辑
       const res = await editUser({
@@ -86,7 +96,7 @@ const UserManagement: React.FC = () => {
 
   const showModal = (record?: User.UserEntity) => {
     Modal.confirm({
-      title: record ? '编辑' : '添加',
+      title: record ? '编辑用户' : '添加用户',
       onOk: async () => onSubmit(record),
       okText: '确定',
       cancelText: '取消',
@@ -99,6 +109,7 @@ const UserManagement: React.FC = () => {
           layout="horizontal"
           initialValues={{
             status: '2',
+            sex: '1',
             ...record,
             avatar: record?.avatar ? [record?.avatar] : undefined,
             roleIds: record?.roleIds || []
@@ -107,16 +118,43 @@ const UserManagement: React.FC = () => {
         >
           <ProFormText label="账号" name="username" rules={[{ required: true }]} />
           <ProFormText label="姓名" name="nickName" rules={[{ required: true }]} />
-          <ProFormText label="邮箱" name="email" rules={[{ required: true }]} />
+          <ProFormText label="邮箱" name="email" rules={[{ required: true }, { type: 'email', message: '请输入正确的邮箱格式' }]} />
+          <ProFormText label="手机号" name="phone" rules={[{ required: true }]} />
+          <ProFormSelect
+            label="性别"
+            name="sex"
+            valueEnum={
+              new Map([
+                ['1', '男'],
+                ['2', '女']
+              ])
+            }
+          />
           {!record && (
             <ProFormText.Password label="密码" name="password" rules={[{ required: true }]} />
           )}
+          <ProFormTreeSelect
+            label="部门"
+            name="deptId"
+            allowClear
+            rules={[{ required: true, message: '请选择部门' }]}
+            fieldProps={{
+              fieldNames: {
+                label: 'label',
+                value: 'id',
+                children: 'children'
+              },
+              treeData: deptTree as any,
+              placeholder: '请选择部门',
+              treeDefaultExpandAll: true
+            }}
+          />
           <FormUploadNew
             formItemProps={{
               label: '头像',
               name: 'avatar'
             }}
-            required
+            required={false}
             uploadProps={
               {
                 accept: '.bmp,.jpg,.png,.jpeg',
@@ -232,6 +270,25 @@ const UserManagement: React.FC = () => {
               title: '邮箱',
               dataIndex: 'email',
               hideInSearch: true
+            },
+            {
+              title: '手机号',
+              dataIndex: 'phone',
+              hideInSearch: true
+            },
+            {
+              title: '部门',
+              dataIndex: ['dept', 'deptName'],
+              hideInSearch: true
+            },
+            {
+              title: '性别',
+              dataIndex: 'sex',
+              hideInSearch: true,
+              valueEnum: {
+                '1': '男',
+                '2': '女'
+              }
             },
             {
               title: '更新时间',
