@@ -241,6 +241,7 @@ const RoleManangement: React.FC = () => {
           ]
         }
       ]}
+      rowKey="roleId"
       requestFn={async params => {
         const data = await getRoleList({
           ...params

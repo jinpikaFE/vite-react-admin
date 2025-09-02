@@ -7,6 +7,8 @@ export type RouteType = {
   hideLayout?: boolean
   /** 在菜单栏是否显示 */
   hideInMenu?: boolean
+  /** 菜单名称（用于权限控制） */
+  menuName?: string
 
   children?: RouteType[]
 } & Partial<MenuDataItem> &

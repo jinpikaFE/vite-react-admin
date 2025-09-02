@@ -246,4 +246,6 @@ const DeptManagement: React.FC = () => {
   )
 }
 
-export default observer(DeptManagement)
+const ObserverDeptManagement = observer(DeptManagement)
+
+export default ObserverDeptManagement

@@ -25,6 +25,7 @@ import { useRef, useState } from 'react'
 import { observer } from 'mobx-react'
 import PunkEffectButton2 from '@/components/ButtonDy/PunkEffectButton2'
 import { Icon } from '@iconify/react'
+import { MenuTypeEnum, MenuTypeEnumMap } from '@/apis/accessManagement/menu/menu.enum'
 
 const MenuManagement: React.FC = () => {
   const actionRef = useRef<ActionType>(null)
@@ -69,7 +70,7 @@ const MenuManagement: React.FC = () => {
           initialValues={{
             visible: '0',
             sort: 0,
-            menuType: 'C',
+            menuType: MenuTypeEnum.MENU,
             parentId: 0,
             ...record
           }}
@@ -119,13 +120,7 @@ const MenuManagement: React.FC = () => {
             label="菜单类型"
             name="menuType"
             rules={[{ required: true, message: '请选择菜单类型' }]}
-            valueEnum={
-              new Map([
-                ['M', '目录'],
-                ['C', '菜单'],
-                ['F', '按钮']
-              ])
-            }
+            options={Object.values(MenuTypeEnumMap)}
           />
           <ProFormText label="权限标识" name="permission" placeholder="请输入权限标识" />
           <ProFormDigit
@@ -187,14 +182,12 @@ const MenuManagement: React.FC = () => {
   }
 
   // 菜单类型标签渲染
-  const renderMenuType = (menuType: string) => {
-    const typeMap = {
-      M: { text: '目录', color: 'blue' },
-      C: { text: '菜单', color: 'green' },
-      F: { text: '按钮', color: 'orange' }
-    }
-    const type = typeMap[menuType as keyof typeof typeMap]
-    return type ? <Tag color={type.color}>{type.text}</Tag> : menuType
+  const renderMenuType = (menuType: MenuTypeEnum) => {
+    return menuType ? (
+      <Tag color={MenuTypeEnumMap[menuType].color}>{MenuTypeEnumMap[menuType].label}</Tag>
+    ) : (
+      '-'
+    )
   }
 
   return (
@@ -237,7 +230,8 @@ const MenuManagement: React.FC = () => {
             dataIndex: 'menuType',
             width: 80,
             hideInSearch: true,
-            render: (dom: any, entity: Menu.MenuEntity) => renderMenuType(entity.menuType)
+            render: (dom: any, entity: Menu.MenuEntity) =>
+              renderMenuType(entity.menuType as MenuTypeEnum)
           },
           {
             title: '权限标识',

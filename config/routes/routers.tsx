@@ -14,6 +14,7 @@ import { RouteType } from '.'
 import { storage } from '@/utils/Storage'
 import { message } from 'antd'
 import DeptManagement from '@/pages/accessManagement/DeptManagement'
+import { MENU_NAMES } from '@/constants/menuNames'
 
 /**
  * 路由日志中间件
@@ -43,8 +44,7 @@ async function loggingMiddleware(ctx: { request: Request }, next: () => Promise<
 
 const authLoader = async (ctx: { request: Request }) => {
   const url = new URL(ctx.request.url)
- console.log(url.pathname);
- 
+  console.log(url.pathname)
 }
 
 export const routers = [
@@ -67,25 +67,28 @@ export const routers = [
       {
         path: 'home',
         name: '首页',
+        menuName: MENU_NAMES.HOME,
         icon: <HomeFilled />,
         Component: Home
       },
       {
         path: 'frist',
         name: '嵌套路由',
+        menuName: MENU_NAMES.FIRST,
         icon: <SmileFilled />,
 
         children: [
           {
             path: 'oneOne',
             name: '一级-1',
+            menuName: MENU_NAMES.FIRST_ONE,
             Component: Test,
 
             children: [
               {
                 path: ':id',
                 name: '一级-1-二级',
-
+                menuName: MENU_NAMES.FIRST_ONE_CHILD,
                 Component: TestChild
               }
             ]
@@ -93,11 +96,13 @@ export const routers = [
           {
             path: 'oneTwo',
             name: '一级-2',
+            menuName: MENU_NAMES.FIRST_TWO,
             Component: Test
           },
           {
             path: 'hideInMenu',
             name: 'hideInMenu',
+            menuName: MENU_NAMES.HIDE_IN_MENU,
             hideInMenu: true,
             Component: TestChild
           }
@@ -106,6 +111,7 @@ export const routers = [
       {
         path: 'accessManagement',
         name: '权限管理',
+        menuName: MENU_NAMES.ACCESS_MANAGEMENT,
         icon: <LockOutlined />,
 
         children: [
@@ -118,26 +124,31 @@ export const routers = [
             index: true,
             path: 'userManagement',
             name: '用户管理',
+            menuName: MENU_NAMES.USER_MANAGEMENT,
             Component: UserManagement
           },
           {
             path: 'roleManagement',
             name: '角色管理',
+            menuName: MENU_NAMES.ROLE_MANAGEMENT,
             Component: RoleManangement
           },
           {
             path: 'deptManagement',
             name: '部门管理',
+            menuName: MENU_NAMES.DEPT_MANAGEMENT,
             Component: DeptManagement
           },
           {
             path: 'menuManagement',
             name: '菜单管理',
+            menuName: MENU_NAMES.MENU_MANAGEMENT,
             Component: MenuManagement
           },
           {
             path: 'layoutNone',
             name: '布局隐藏',
+            menuName: MENU_NAMES.LAYOUT_NONE,
             hideLayout: true,
             Component: TestChild
           }
@@ -146,6 +157,7 @@ export const routers = [
       {
         path: 'layoutNone',
         name: '布局隐藏',
+        menuName: MENU_NAMES.LAYOUT_NONE_GLOBAL,
         hideInMenu: true,
         hideLayout: true,
         Component: TestChild
@@ -155,6 +167,7 @@ export const routers = [
   {
     path: '/login',
     name: '登录',
+    menuName: MENU_NAMES.LOGIN,
     Component: Login
   },
   { path: '*', Component: NotFoundPage }
