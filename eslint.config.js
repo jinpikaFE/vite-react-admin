@@ -55,10 +55,7 @@ export default [
       'react/prop-types': 'off',
       'react/display-name': 'off',
       ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true }
-      ],
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       semi: ['warn', 'never'], // 禁止尾部使用分号
       'no-debugger': 'warn', // 禁止出现debugger
       'no-duplicate-case': 'warn', // 禁止出现重复case
@@ -101,7 +98,8 @@ export default [
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-undef': 'off' // 关闭 TypeScript 的 no-undef 检查，让 TypeScript 编译器处理
+      '@typescript-eslint/no-undef': 'off', // 关闭 TypeScript 的 no-undef 检查，让 TypeScript 编译器处理
+      'no-undef': 'off'
     },
     settings: {
       react: {

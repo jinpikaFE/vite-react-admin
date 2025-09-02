@@ -5,7 +5,7 @@ import {
   ProFormDigit,
   ProFormInstance,
   ProFormRadio,
-  ProFormSelect,
+  ProFormTreeSelect,
   ProFormText,
   ProFormTextArea,
   ProTable
@@ -58,19 +58,29 @@ const DeptManagement: React.FC = () => {
           }}
           formRef={modalFormRef}
         >
-          <ProFormSelect
+          <ProFormTreeSelect
             label="上级部门"
             name="parentId"
             allowClear
+            fieldProps={{
+              fieldNames: {
+                label: 'label',
+                value: 'id',
+                children: 'children'
+              },
+              treeDefaultExpandAll: true
+            }}
             request={async () => {
               const res = await getDeptTree()
-              if (res) {
-                return res?.map((dept: Dept.DeptLabel) => ({
-                  label: dept.label,
-                  value: dept.id
-                }))
-              }
-              return []
+
+              const children = res
+              return [
+                {
+                  label: '主类目',
+                  id: 0,
+                  children
+                }
+              ]
             }}
           />
           <ProFormText

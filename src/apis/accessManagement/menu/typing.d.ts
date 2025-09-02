@@ -87,4 +87,26 @@ declare namespace Menu {
     /** 菜单ID列表 */
     ids: number[]
   }
+
+  /** API实体 */
+  type ApiEntity = {
+    /** API ID */
+    id: number
+    /** API标题 */
+    title: string
+    /** API路径 */
+    path: string
+    /** 请求方法 */
+    action: string
+    /** API类型 */
+    type: string
+    /** 处理函数 */
+    handle: string
+  }
+
+  /** 分配API请求参数 */
+  type AssignApisReq = {
+    /** API ID数组 */
+    apis: number[]
+  }
 }

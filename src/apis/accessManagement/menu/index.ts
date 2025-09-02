@@ -88,3 +88,12 @@ export async function getMenusByRoleIds(roleIds: number[]) {
   })
 }
 
+/** 分配API到菜单 */
+export async function assignApisToMenu(menuId: number, data: Menu.AssignApisReq) {
+  return http.request({
+    url: `/api/v1/menu/${menuId}/assign-apis`,
+    method: 'put',
+    data
+  })
+}
+
