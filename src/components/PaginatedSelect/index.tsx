@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react'
-import { ProFormSelect } from '@ant-design/pro-components'
+import { ProFormSelect, ProFormSelectProps } from '@ant-design/pro-components'
 import { debounce } from 'lodash'
 
 interface PaginatedSelectProps {
@@ -9,23 +9,11 @@ interface PaginatedSelectProps {
   pageSize?: number
   /** 搜索防抖延迟时间(ms) */
   debounceTime?: number
-  /** 自定义选项渲染 */
-  optionRender?: (item: any) => any
-  /** 标签 */
-  label?: string
-  /** 字段名 */
-  name?: string
-  /** 模式 */
-  mode?: 'multiple' | 'tags'
-  /** 占位符 */
-  placeholder?: string
-  /** 提示信息 */
-  tooltip?: string
-  /** 是否必填 */
-  required?: boolean
 }
 
-const PaginatedSelect: React.FC<PaginatedSelectProps> = props => {
+const PaginatedSelect: React.FC<
+  PaginatedSelectProps & Omit<ProFormSelectProps, 'request'>
+> = props => {
   const {
     request,
     pageSize = 20,

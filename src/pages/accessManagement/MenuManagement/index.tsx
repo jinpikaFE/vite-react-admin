@@ -19,11 +19,12 @@ import {
   ProFormTreeSelect,
   ProTable
 } from '@ant-design/pro-components'
-import PaginatedSelect from '@/components/PaginatedSelect'
+import { IconSelector, PaginatedSelect } from '@/components'
 import { Button, Modal, Popconfirm, Switch, message, Tag } from 'antd'
 import { useRef, useState } from 'react'
 import { observer } from 'mobx-react'
 import PunkEffectButton2 from '@/components/ButtonDy/PunkEffectButton2'
+import { Icon } from '@iconify/react'
 
 const MenuManagement: React.FC = () => {
   const actionRef = useRef<ActionType>(null)
@@ -109,7 +110,9 @@ const MenuManagement: React.FC = () => {
             rules={[{ required: true, message: '请输入菜单标题' }]}
             placeholder="请输入中文显示名称"
           />
-          <ProFormText label="菜单图标" name="icon" placeholder="请输入图标名称" />
+          <ProForm.Item label="菜单图标" name="icon">
+            <IconSelector placeholder="请选择图标" />
+          </ProForm.Item>
           <ProFormText label="路由路径" name="path" placeholder="请输入路由路径" />
           <ProFormText label="组件路径" name="component" placeholder="请输入组件路径" />
           <ProFormSelect
@@ -213,7 +216,9 @@ const MenuManagement: React.FC = () => {
             dataIndex: 'icon',
             width: 80,
             hideInSearch: true,
-            valueType: 'image'
+            render: (dom: any, entity: Menu.MenuEntity) => {
+              return entity?.icon ? <Icon icon={entity.icon} /> : '-'
+            }
           },
           {
             title: '路由路径',
