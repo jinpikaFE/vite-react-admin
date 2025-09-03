@@ -5,6 +5,7 @@ import { logout } from '@/apis/login'
 import { storage } from '@/utils/Storage'
 import { RouteType } from '@config/routes'
 import { routers } from '@config/routes/routers'
+import { MenuTypeEnum } from '@/apis/systemManagement/menu/menu.enum'
 
 class GlobalUser {
   userInfo: Partial<User.UserEntity> = {}
@@ -29,6 +30,8 @@ class GlobalUser {
       const menuItem = storeGlobalUser.accessibleFlatMenu?.find(
         (menu: any) => menu.menuName === item.menuName
       )
+
+      // console.log(menuItem, 'menuItem', item)
 
       return {
         ...menuItem,
@@ -63,7 +66,7 @@ class GlobalUser {
 
     const extractPaths = (menus: User.RoleMenuEntity[]) => {
       menus.forEach(menu => {
-        if (menu.path && menu.menuType !== 'F') {
+        if (menu.menuType !== MenuTypeEnum.BUTTON) {
           // 不是按钮类型的菜单
           this.accessibleMenuNames.add(menu.menuName)
           this.accessibleFlatMenu.push(menu)

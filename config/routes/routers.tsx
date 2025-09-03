@@ -136,20 +136,13 @@ export const routers = [
             name: '菜单管理',
             menuName: MENU_NAMES.SYS_MENU_MANAGEMENT,
             Component: SysMenuManage
-          },
-          {
-            path: 'layoutNone',
-            name: '布局隐藏',
-            menuName: MENU_NAMES.LAYOUT_NONE,
-            hideLayout: true,
-            Component: TestChild
           }
         ]
       },
       {
         path: 'layoutNone',
         name: '布局隐藏',
-        menuName: MENU_NAMES.LAYOUT_NONE_GLOBAL,
+        menuName: MENU_NAMES.LAYOUT_NONE,
         Component: TestChild
       }
     ]

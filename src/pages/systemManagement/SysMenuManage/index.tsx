@@ -69,6 +69,7 @@ const SysMenuManage: React.FC = () => {
           layout="horizontal"
           initialValues={{
             hideInMenu: '0',
+            hideLayout: '0',
             sort: 0,
             menuType: MenuTypeEnum.MENU,
             parentId: 0,

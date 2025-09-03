@@ -24,8 +24,7 @@ export const MENU_NAMES = {
   SYS_MENU_MANAGEMENT: 'SysMenuManage',
 
   // 布局隐藏
-  LAYOUT_NONE: 'LayoutNone',
-  LAYOUT_NONE_GLOBAL: 'LayoutNoneGlobal'
+  LAYOUT_NONE: 'LayoutNone'
 } as const
 
 /**
@@ -49,8 +48,7 @@ export const MENU_NAME_LABELS: Record<MenuNameType, string> = {
   [MENU_NAMES.SYS_ROLE_MANAGEMENT]: '角色管理',
   [MENU_NAMES.SYS_DEPT_MANAGEMENT]: '部门管理',
   [MENU_NAMES.SYS_MENU_MANAGEMENT]: '菜单管理',
-  [MENU_NAMES.LAYOUT_NONE]: '布局隐藏',
-  [MENU_NAMES.LAYOUT_NONE_GLOBAL]: '全局布局隐藏'
+  [MENU_NAMES.LAYOUT_NONE]: '布局隐藏'
 }
 
 /**

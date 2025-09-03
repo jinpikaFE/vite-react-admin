@@ -5,6 +5,7 @@ import { PageContainer, ProLayout } from '@ant-design/pro-components'
 import Settings from '@config/defaultSettings'
 import { RouteType } from '@config/routes'
 import { routers } from '@config/routes/routers'
+import { Icon } from '@iconify/react'
 import { useAsyncEffect } from 'ahooks'
 import { Dropdown, MenuProps } from 'antd'
 import { observer } from 'mobx-react'
@@ -19,7 +20,9 @@ const BasicLayout: React.FC = props => {
   const navigate = useNavigate()
   const location = useLocation()
   const matchRouteArr = matchRoutes(storeGlobalUser.relRouters, location)
+  console.log(matchRouteArr, 'matchRouteArr', storeGlobalUser.relRouters)
   const matchRoute = matchRouteArr?.[matchRouteArr?.length - 1]?.route
+  console.log(matchRoute, 'matchRoute')
   const hideLayout = !!matchRoute?.hideLayout
 
   useEffect(() => {
@@ -80,8 +83,6 @@ const BasicLayout: React.FC = props => {
   }
 
   const getFilterRoutes = async () => {
-    console.log(matchRoute, 'matchRoute')
-
     // 如果是超级管理员，直接返回原始路由
     if (storeGlobalUser.isSuperAdmin()) {
       setFilteredRoutes(storeGlobalUser.relRouters)
@@ -145,6 +146,13 @@ const BasicLayout: React.FC = props => {
             >
               <div>© 2023 Made with love</div>
               <div>by JPK</div>
+            </div>
+          )
+        }}
+        menuItemRender={(item, defaultDom) => {
+          return (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <Icon icon={item.icon as string} /> {defaultDom}
             </div>
           )
         }}
