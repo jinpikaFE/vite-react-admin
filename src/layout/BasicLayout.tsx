@@ -1,8 +1,6 @@
 import defaultProps from '@/_defaultProps'
-import { logout } from '@/apis/login'
 import Permission from '@/components/Permission'
 import { storeGlobalUser } from '@/store/globalUser'
-import { storage } from '@/utils/Storage'
 import { PageContainer, ProLayout } from '@ant-design/pro-components'
 import Settings from '@config/defaultSettings'
 import { RouteType } from '@config/routes'
@@ -20,10 +18,8 @@ const BasicLayout: React.FC = props => {
   const [filteredRoutes, setFilteredRoutes] = useState<RouteType[]>(routers)
   const navigate = useNavigate()
   const location = useLocation()
-  const matchRouteArr = matchRoutes(routers, location)
+  const matchRouteArr = matchRoutes(storeGlobalUser.relRouters, location)
   const matchRoute = matchRouteArr?.[matchRouteArr?.length - 1]?.route
-  console.log(matchRoute, 'matchRoute')
-
   const hideLayout = !!matchRoute?.hideLayout
 
   useEffect(() => {
@@ -84,17 +80,17 @@ const BasicLayout: React.FC = props => {
   }
 
   const getFilterRoutes = async () => {
+    console.log(matchRoute, 'matchRoute')
+
     // 如果是超级管理员，直接返回原始路由
-    if (
-      storeGlobalUser.userInfo.roles?.includes('admin') ||
-      storeGlobalUser.userInfo.roles?.includes('super_admin')
-    ) {
-      setFilteredRoutes(routers)
+    if (storeGlobalUser.isSuperAdmin()) {
+      setFilteredRoutes(storeGlobalUser.relRouters)
       return
     }
 
     // 普通用户进行递归权限过滤
-    const filteredRoutes = filterRoutesRecursively(routers)
+    const filteredRoutes = filterRoutesRecursively(storeGlobalUser.relRouters)
+    console.log(filteredRoutes, 'filteredRoutes')
     setFilteredRoutes(filteredRoutes)
   }
 
@@ -113,6 +109,14 @@ const BasicLayout: React.FC = props => {
       )
     }
   ]
+
+  const renderPremissionOutlet = () => {
+    return (
+      <Permission menuName={matchRoute?.menuName}>
+        <Outlet />
+      </Permission>
+    )
+  }
 
   return (
     <GlobalUserInfo.Provider value={storeGlobalUser.userInfo}>
@@ -153,15 +157,9 @@ const BasicLayout: React.FC = props => {
         {...Settings}
       >
         {hideLayout ? (
-          <Permission menuName={matchRoute?.menuName}>
-            <Outlet />
-          </Permission>
+          renderPremissionOutlet()
         ) : (
-          <PageContainer>
-            <Permission menuName={matchRoute?.menuName}>
-              <Outlet />
-            </Permission>
-          </PageContainer>
+          <PageContainer>{renderPremissionOutlet()}</PageContainer>
         )}
       </ProLayout>
     </GlobalUserInfo.Provider>

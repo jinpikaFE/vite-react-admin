@@ -5,7 +5,7 @@ import {
   editRoleStatus,
   getRoleList,
   getRoleMenuTreeSelect
-} from '@/apis/accessManagement/role'
+} from '@/apis/systemManagement/role'
 import PunkEffectButton2 from '@/components/ButtonDy/PunkEffectButton2'
 import ExcelTable from '@/components/exportExcel'
 import {
@@ -19,9 +19,10 @@ import {
   ProFormTreeSelect
 } from '@ant-design/pro-components'
 import { Button, Modal, Popconfirm, Switch, TreeSelect, message } from 'antd'
+import { observer } from 'mobx-react'
 import { useRef } from 'react'
 
-const RoleManangement: React.FC = () => {
+const SysRoleManage: React.FC = () => {
   const actionRef = useRef<ActionType>(null)
   const modalFormRef = useRef<ProFormInstance>(null)
 
@@ -259,4 +260,6 @@ const RoleManangement: React.FC = () => {
   )
 }
 
-export default RoleManangement
+const ObserverSysRoleManage = observer(SysRoleManage)
+
+export default ObserverSysRoleManage

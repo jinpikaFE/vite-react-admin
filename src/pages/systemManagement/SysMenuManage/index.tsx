@@ -5,8 +5,8 @@ import {
   getMenuList,
   getMenuTree,
   assignApisToMenu
-} from '@/apis/accessManagement/menu'
-import { getApiList } from '@/apis/accessManagement/api'
+} from '@/apis/systemManagement/menu'
+import { getApiList } from '@/apis/systemManagement/api'
 import {
   ActionType,
   ProForm,
@@ -25,9 +25,9 @@ import { useRef, useState } from 'react'
 import { observer } from 'mobx-react'
 import PunkEffectButton2 from '@/components/ButtonDy/PunkEffectButton2'
 import { Icon } from '@iconify/react'
-import { MenuTypeEnum, MenuTypeEnumMap } from '@/apis/accessManagement/menu/menu.enum'
+import { MenuTypeEnum, MenuTypeEnumMap } from '@/apis/systemManagement/menu/menu.enum'
 
-const MenuManagement: React.FC = () => {
+const SysMenuManage: React.FC = () => {
   const actionRef = useRef<ActionType>(null)
   const modalFormRef = useRef<ProFormInstance>(null)
   const assignApisFormRef = useRef<ProFormInstance>(null)
@@ -68,7 +68,7 @@ const MenuManagement: React.FC = () => {
           submitter={false}
           layout="horizontal"
           initialValues={{
-            visible: '0',
+            hideInMenu: '0',
             sort: 0,
             menuType: MenuTypeEnum.MENU,
             parentId: 0,
@@ -132,7 +132,7 @@ const MenuManagement: React.FC = () => {
           />
           <ProFormRadio.Group
             label="是否显示"
-            name="visible"
+            name="hideInMenu"
             rules={[{ required: true }]}
             valueEnum={
               new Map([
@@ -142,6 +142,16 @@ const MenuManagement: React.FC = () => {
             }
           />
           <ProFormRadio.Group
+            label="是否隐藏布局"
+            name="hideLayout"
+            valueEnum={
+              new Map([
+                ['0', '显示'],
+                ['1', '隐藏']
+              ])
+            }
+          />
+          {/* <ProFormRadio.Group
             label="是否缓存"
             name="noCache"
             valueEnum={
@@ -150,7 +160,7 @@ const MenuManagement: React.FC = () => {
                 [true, '不缓存']
               ])
             }
-          />
+          /> */}
           <ProFormTextArea label="备注" name="remark" />
         </ProForm>
       )
@@ -247,16 +257,16 @@ const MenuManagement: React.FC = () => {
           },
           {
             title: '是否显示',
-            dataIndex: 'visible',
+            dataIndex: 'hideInMenu',
             width: 80,
             hideInSearch: true,
             render: (dom: any, entity: Menu.MenuEntity) => {
               return (
                 <Switch
-                  checked={entity?.visible === '0'}
+                  checked={entity?.hideInMenu === '0'}
                   onChange={async (val: boolean) => {
                     const res = await editMenu(entity.menuId, {
-                      visible: val ? '0' : '1'
+                      hideInMenu: val ? '0' : '1'
                     })
                     if (res) {
                       message.success('修改成功')
@@ -382,4 +392,6 @@ const MenuManagement: React.FC = () => {
   )
 }
 
-export default observer(MenuManagement)
+const ObserverSysMenuManage = observer(SysMenuManage)
+
+export default ObserverSysMenuManage

@@ -1,20 +1,17 @@
 import NotFoundPage from '@/404'
 import App from '@/App'
+import { MENU_NAMES } from '@/constants/menuNames'
 import ErrorPage from '@/ErrorPage'
-import RoleManangement from '@/pages/accessManagement/RoleManangement'
-import UserManagement from '@/pages/accessManagement/UserManagement'
-import MenuManagement from '@/pages/accessManagement/MenuManagement'
 import Home from '@/pages/Home'
 import Login from '@/pages/Login'
+import SysDeptManage from '@/pages/systemManagement/SysDeptManage'
+import SysMenuManage from '@/pages/systemManagement/SysMenuManage'
+import SysRoleManage from '@/pages/systemManagement/SysRoleManage'
+import SysUserManage from '@/pages/systemManagement/SysUserManage'
 import Test from '@/pages/Test'
 import TestChild from '@/pages/Test/TestChild'
-import { HomeFilled, LockOutlined, SmileFilled } from '@ant-design/icons'
-import { Navigate, redirect } from 'react-router'
+import { Navigate } from 'react-router'
 import { RouteType } from '.'
-import { storage } from '@/utils/Storage'
-import { message } from 'antd'
-import DeptManagement from '@/pages/accessManagement/DeptManagement'
-import { MENU_NAMES } from '@/constants/menuNames'
 
 /**
  * 路由日志中间件
@@ -55,7 +52,6 @@ export const routers = [
     /** 承载布局 */
     Component: App,
     errorElement: <ErrorPage />,
-    icon: <SmileFilled />,
     children: [
       /** 首页重定向 */
       {
@@ -68,16 +64,17 @@ export const routers = [
         path: 'home',
         name: '首页',
         menuName: MENU_NAMES.HOME,
-        icon: <HomeFilled />,
         Component: Home
       },
       {
         path: 'frist',
         name: '嵌套路由',
         menuName: MENU_NAMES.FIRST,
-        icon: <SmileFilled />,
-
         children: [
+          {
+            index: true,
+            element: <Navigate replace to="oneOne" />
+          },
           {
             path: 'oneOne',
             name: '一级-1',
@@ -85,6 +82,10 @@ export const routers = [
             Component: Test,
 
             children: [
+              {
+                index: true,
+                element: <Navigate replace to="3" />
+              },
               {
                 path: ':id',
                 name: '一级-1-二级',
@@ -98,52 +99,43 @@ export const routers = [
             name: '一级-2',
             menuName: MENU_NAMES.FIRST_TWO,
             Component: Test
-          },
-          {
-            path: 'hideInMenu',
-            name: 'hideInMenu',
-            menuName: MENU_NAMES.HIDE_IN_MENU,
-            hideInMenu: true,
-            Component: TestChild
           }
         ]
       },
       {
-        path: 'accessManagement',
-        name: '权限管理',
-        menuName: MENU_NAMES.ACCESS_MANAGEMENT,
-        icon: <LockOutlined />,
-
+        path: 'systemManagement',
+        name: '系统管理',
+        menuName: MENU_NAMES.SYSTEM_MANAGEMENT,
         children: [
           {
             index: true,
-            /** 重定向 */
-            element: <Navigate replace to="userManagement" />
+            /** 重定向 不要加menuName */
+            element: <Navigate replace to="sysUserManage" />
           },
           {
             index: true,
-            path: 'userManagement',
+            path: 'sysUserManage',
             name: '用户管理',
-            menuName: MENU_NAMES.USER_MANAGEMENT,
-            Component: UserManagement
+            menuName: MENU_NAMES.SYS_USER_MANAGEMENT,
+            Component: SysUserManage
           },
           {
-            path: 'roleManagement',
+            path: 'sysRoleManage',
             name: '角色管理',
-            menuName: MENU_NAMES.ROLE_MANAGEMENT,
-            Component: RoleManangement
+            menuName: MENU_NAMES.SYS_ROLE_MANAGEMENT,
+            Component: SysRoleManage
           },
           {
-            path: 'deptManagement',
+            path: 'sysDeptManage',
             name: '部门管理',
-            menuName: MENU_NAMES.DEPT_MANAGEMENT,
-            Component: DeptManagement
+            menuName: MENU_NAMES.SYS_DEPT_MANAGEMENT,
+            Component: SysDeptManage
           },
           {
-            path: 'menuManagement',
+            path: 'sysMenuManage',
             name: '菜单管理',
-            menuName: MENU_NAMES.MENU_MANAGEMENT,
-            Component: MenuManagement
+            menuName: MENU_NAMES.SYS_MENU_MANAGEMENT,
+            Component: SysMenuManage
           },
           {
             path: 'layoutNone',
@@ -158,8 +150,6 @@ export const routers = [
         path: 'layoutNone',
         name: '布局隐藏',
         menuName: MENU_NAMES.LAYOUT_NONE_GLOBAL,
-        hideInMenu: true,
-        hideLayout: true,
         Component: TestChild
       }
     ]

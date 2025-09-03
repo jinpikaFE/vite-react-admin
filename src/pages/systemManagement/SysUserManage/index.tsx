@@ -5,8 +5,8 @@ import {
   editUser,
   getUserList,
   updateUserStatus
-} from '@/apis/accessManagement/user'
-import { getDeptTree } from '@/apis/accessManagement/dept'
+} from '@/apis/systemManagement/user'
+import { getDeptTree } from '@/apis/systemManagement/dept'
 import ExcelTable from '@/components/exportExcel'
 import {
   ActionType,
@@ -21,12 +21,12 @@ import {
 import { Button, Modal, Popconfirm, Switch, message, Tree, Card, Row, Col, TreeProps } from 'antd'
 import { useRef, useState, useEffect } from 'react'
 import { observer } from 'mobx-react'
-import { getRoleList } from '@/apis/accessManagement/role'
+import { getRoleList } from '@/apis/systemManagement/role'
 import FormUploadNew from '@/components/formUploadNew'
 import { PlusOutlined } from '@ant-design/icons'
 import PunkEffectButton2 from '@/components/ButtonDy/PunkEffectButton2'
 
-const UserManagement: React.FC = () => {
+const SysUserManage: React.FC = () => {
   const actionRef = useRef<ActionType>(null)
   const modalFormRef = useRef<ProFormInstance>(null)
   const [deptTree, setDeptTree] = useState<Dept.DeptLabel[]>([])
@@ -64,19 +64,19 @@ const UserManagement: React.FC = () => {
 
   const onSubmit = async (record?: User.UserEntity) => {
     const val = await modalFormRef?.current?.validateFields()
-    
+
     // 角色ID去重处理
     let roleIds = val?.roleIds || []
     if (Array.isArray(roleIds)) {
       roleIds = [...new Set(roleIds)] // 去重
     }
-    
+
     const resVal = {
       ...val,
       roleIds,
       avatar: val?.avatar?.[0] || val?.avatar || ''
     }
-    
+
     if (record) {
       // 编辑
       const res = await editUser({
@@ -118,7 +118,11 @@ const UserManagement: React.FC = () => {
         >
           <ProFormText label="账号" name="username" rules={[{ required: true }]} />
           <ProFormText label="姓名" name="nickName" rules={[{ required: true }]} />
-          <ProFormText label="邮箱" name="email" rules={[{ required: true }, { type: 'email', message: '请输入正确的邮箱格式' }]} />
+          <ProFormText
+            label="邮箱"
+            name="email"
+            rules={[{ required: true }, { type: 'email', message: '请输入正确的邮箱格式' }]}
+          />
           <ProFormText label="手机号" name="phone" rules={[{ required: true }]} />
           <ProFormSelect
             label="性别"
@@ -386,4 +390,6 @@ const UserManagement: React.FC = () => {
   )
 }
 
-export default observer(UserManagement)
+const ObserverSysUserManage = observer(SysUserManage)
+
+export default ObserverSysUserManage

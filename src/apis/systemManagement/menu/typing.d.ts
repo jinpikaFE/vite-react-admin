@@ -29,7 +29,9 @@ declare namespace Menu {
     /** 排序号 */
     sort?: number
     /** 是否可见（0: 显示, 1: 隐藏） */
-    visible?: string
+    hideInMenu?: string
+    /** 是否隐藏布局 （0: 显示, 1: 隐藏） */
+    hideLayout?: string
     /** 是否外链 */
     isFrame?: string
     /** 关联系统API */

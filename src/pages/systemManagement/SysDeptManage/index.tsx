@@ -1,4 +1,4 @@
-import { addDept, delDept, editDept, getDeptList, getDeptTree } from '@/apis/accessManagement/dept'
+import { addDept, delDept, editDept, getDeptList, getDeptTree } from '@/apis/systemManagement/dept'
 import {
   ActionType,
   ProForm,
@@ -15,7 +15,7 @@ import { useRef } from 'react'
 import { observer } from 'mobx-react'
 import PunkEffectButton2 from '@/components/ButtonDy/PunkEffectButton2'
 
-const DeptManagement: React.FC = () => {
+const SysDeptManage: React.FC = () => {
   const actionRef = useRef<ActionType>(null)
   const modalFormRef = useRef<ProFormInstance>(null)
 
@@ -246,6 +246,6 @@ const DeptManagement: React.FC = () => {
   )
 }
 
-const ObserverDeptManagement = observer(DeptManagement)
+const ObserverSysDeptManage = observer(SysDeptManage)
 
-export default ObserverDeptManagement
+export default ObserverSysDeptManage

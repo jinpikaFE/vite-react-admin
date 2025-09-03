@@ -1,14 +1,18 @@
-import { getCurrentUserInfo, getMenuList } from '@/apis/accessManagement/user'
+import { getCurrentUserInfo, getMenuList } from '@/apis/systemManagement/user'
 import { WebSee } from '@/utils/webSee'
 import { makeAutoObservable } from 'mobx'
 import { logout } from '@/apis/login'
 import { storage } from '@/utils/Storage'
+import { RouteType } from '@config/routes'
+import { routers } from '@config/routes/routers'
 
 class GlobalUser {
   userInfo: Partial<User.UserEntity> = {}
   userRoleMenu: User.RoleMenuEntity[] = []
   // 缓存用户可访问的路径
   accessibleMenuNames: Set<string> = new Set()
+  accessibleFlatMenu: Menu.MenuEntity[] = []
+  relRouters: (RouteType & Menu.MenuEntity)[] = []
   constructor() {
     makeAutoObservable(this)
   }
@@ -18,6 +22,23 @@ class GlobalUser {
     this.userInfo = res
     new WebSee(res?.username)
     await this.getUserRoleMenu()
+  }
+
+  private getMergeRouters = (routerArr: any) => {
+    return routerArr?.map((item: any) => {
+      const menuItem = storeGlobalUser.accessibleFlatMenu?.find(
+        (menu: any) => menu.menuName === item.menuName
+      )
+
+      return {
+        ...menuItem,
+        ...item,
+        icon: menuItem?.icon,
+        hideInMenu: !storeGlobalUser.isSuperAdmin() && menuItem?.hideInMenu === '1',
+        hideLayout: menuItem?.hideLayout === '1',
+        children: this.getMergeRouters(item.children)
+      }
+    })
   }
 
   setUserInfo(user: Partial<User.UserEntity>) {
@@ -30,6 +51,7 @@ class GlobalUser {
     // 更新可访问路径缓存
     this.updateAccessiblePaths()
     console.log(this.accessibleMenuNames, 'this.accessibleMenuNames,')
+    this.relRouters = this.getMergeRouters(routers)
   }
 
   /**
@@ -37,12 +59,14 @@ class GlobalUser {
    */
   private updateAccessiblePaths() {
     this.accessibleMenuNames.clear()
+    this.accessibleFlatMenu = []
 
     const extractPaths = (menus: User.RoleMenuEntity[]) => {
       menus.forEach(menu => {
         if (menu.path && menu.menuType !== 'F') {
           // 不是按钮类型的菜单
           this.accessibleMenuNames.add(menu.menuName)
+          this.accessibleFlatMenu.push(menu)
         }
         if (menu.children) {
           extractPaths(menu.children)
@@ -102,7 +126,7 @@ class GlobalUser {
    * 判断是否为超级管理员
    * @returns 是否为超级管理员
    */
-  private isSuperAdmin(): boolean {
+  isSuperAdmin(): boolean {
     return (
       this.userInfo.roles?.includes('admin') ||
       this.userInfo.roles?.includes('super_admin') ||
@@ -134,6 +158,7 @@ class GlobalUser {
     this.userInfo = {}
     this.userRoleMenu = []
     this.accessibleMenuNames.clear()
+    this.accessibleFlatMenu = []
   }
 
   async globalLogout() {
