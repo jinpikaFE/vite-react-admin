@@ -207,18 +207,16 @@ const SysMenuManage: React.FC = () => {
         columns={[
           {
             title: '菜单名称',
-            dataIndex: 'menuName',
-            width: 120
+            dataIndex: 'menuName'
           },
           {
             title: '菜单标题',
-            dataIndex: 'title',
-            width: 120
+            dataIndex: 'title'
           },
           {
             title: '图标',
             dataIndex: 'icon',
-            width: 80,
+
             hideInSearch: true,
             render: (dom: any, entity: Menu.MenuEntity) => {
               return entity?.icon ? <Icon icon={entity.icon} /> : '-'
@@ -227,19 +225,15 @@ const SysMenuManage: React.FC = () => {
           {
             title: '路由路径',
             dataIndex: 'path',
-            width: 120,
-            hideInSearch: true
+
+            hideInSearch: true,
+            ellipsis: true
           },
-          {
-            title: '组件路径',
-            dataIndex: 'component',
-            width: 150,
-            hideInSearch: true
-          },
+
           {
             title: '菜单类型',
             dataIndex: 'menuType',
-            width: 80,
+
             hideInSearch: true,
             render: (dom: any, entity: Menu.MenuEntity) =>
               renderMenuType(entity.menuType as MenuTypeEnum)
@@ -247,7 +241,7 @@ const SysMenuManage: React.FC = () => {
           {
             title: '权限标识',
             dataIndex: 'permission',
-            width: 120,
+
             hideInSearch: true
           },
           {
@@ -279,9 +273,20 @@ const SysMenuManage: React.FC = () => {
             }
           },
           {
+            title: '是否隐藏布局',
+            dataIndex: 'hideLayout',
+
+            hideInSearch: true,
+            valueEnum: new Map([
+              ['0', '显示'],
+              ['1', '隐藏']
+            ])
+          },
+
+          {
             title: '更新时间',
             dataIndex: 'updatedAt',
-            width: 120,
+
             hideInSearch: true,
             valueType: 'dateTime'
           },
@@ -289,7 +294,7 @@ const SysMenuManage: React.FC = () => {
             title: '操作',
             key: 'option',
             valueType: 'option',
-            width: 180,
+            width: 160,
             render: (_: any, record: Menu.MenuEntity) => [
               <Button key="assign" type="link" onClick={() => showAssignApisModal(record)}>
                 分配API

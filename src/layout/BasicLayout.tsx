@@ -151,8 +151,10 @@ const BasicLayout: React.FC = props => {
         }}
         menuItemRender={(item, defaultDom) => {
           return (
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Icon icon={item.icon as string} /> {defaultDom}
+            <div className='flex items-center' onClick={() => {
+              navigate(item.path as string)
+            }}>
+              <Icon icon={item.icon as string} className='mr-[10px] block' /> {item?.name}
             </div>
           )
         }}

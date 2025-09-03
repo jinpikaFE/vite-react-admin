@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+/// <reference types="unocss/vite" />
 
 interface ImportMetaEnv {
   readonly VITE_MODE: string

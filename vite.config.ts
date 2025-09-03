@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
+import UnoCSS from 'unocss/vite'
 
 import { viteMockServe } from 'vite-plugin-mock'
 
@@ -11,6 +12,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [
+      UnoCSS(),
       react(),
       viteMockServe({
         mockPath: './config/mock',

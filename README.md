@@ -26,6 +26,7 @@
 | stylelint                        | -                                 | css 代码规范     |
 | husky                            | -                                 | git commit 检验  |
 | lint-staged                      | -                                 | git commit 检验  |
+| unocss                            | -                                | 原子化 CSS   |
 
 ## 最新升级记录 (2025年8月)
 
@@ -38,6 +39,7 @@
 - **TypeScript 5.2.2 → 5.9.2**: 类型系统优化
 - **mobx 6.8.0 → 6.13.7**: 状态管理库升级
 - **axios 1.3.4 → 1.11.0**: HTTP 客户端升级
+- 添加 **unocss**
 
 ### 配置变更
 
