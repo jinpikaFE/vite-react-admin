@@ -1,5 +1,4 @@
-import { login, getCaptcha } from '@/apis/login'
-import { ComponTypeEnum } from '@/layout/BasicLayout'
+import { getCaptcha, login } from '@/apis/login'
 import { storeGlobalUser } from '@/store/globalUser'
 import { storage } from '@/utils/Storage'
 import {
@@ -17,8 +16,6 @@ import {
   ProFormCheckbox,
   ProFormText
 } from '@ant-design/pro-components'
-import { RouteType } from '@config/routes'
-import { routers } from '@config/routes/routers'
 import { Button, Divider, message, Space, Tabs } from 'antd'
 import type { CSSProperties } from 'react'
 import { useEffect, useState } from 'react'
@@ -66,32 +63,7 @@ const Login = () => {
 
           /** 跳转有权限的第一个菜单 */
           await storeGlobalUser.getUserDetail()
-          // const flattenRoutes: (routes: RouteType[]) => RouteType[] = (routes: RouteType[]) => {
-          //   const flattenedRoutes: RouteType[] = []
-          //   function traverse(routes: RouteType[]) {
-          //     routes.forEach(route => {
-          //       flattenedRoutes.push(route)
-          //       if (route.children) {
-          //         traverse(route.children)
-          //       }
-          //     })
-          //   }
 
-          //   traverse(routes)
-
-          //   return flattenedRoutes
-          // }
-          // const resRoutes = flattenRoutes(routers)
-          // const findPath =
-          //   resRoutes?.[
-          //     resRoutes?.findIndex(
-          //       item =>
-          //         item?.name ===
-          //         storeGlobalUser?.userInfo?.menus?.filter(
-          //           citem => citem?.type === ComponTypeEnum.MENU
-          //         )?.[0]?.title
-          //     )
-          //   ]?.path
           navigate('/')
         }}
         activityConfig={{

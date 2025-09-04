@@ -25,9 +25,7 @@ const ForbiddenPage: React.FC = () => {
           <Button type="primary" onClick={handleBackHome}>
             返回首页
           </Button>
-          <Button onClick={handleGoBack}>
-            返回上一页
-          </Button>
+          <Button onClick={handleGoBack}>返回上一页</Button>
         </div>
       }
     />

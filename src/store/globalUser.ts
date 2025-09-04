@@ -99,6 +99,12 @@ class GlobalUser {
     return false
   }
 
+  getFristHasPermissRoute() {
+    return this.accessibleFlatMenu?.find(
+      item => item?.menuType === MenuTypeEnum.MENU && item?.hideInMenu === '0'
+    )
+  }
+
   /**
    * 检查用户是否有按钮权限
    * @param permission 权限标识

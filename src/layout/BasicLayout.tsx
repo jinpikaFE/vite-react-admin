@@ -20,7 +20,6 @@ const BasicLayout: React.FC = props => {
   const navigate = useNavigate()
   const location = useLocation()
   const matchRouteArr = matchRoutes(storeGlobalUser.relRouters, location)
-  console.log(matchRouteArr, 'matchRouteArr', storeGlobalUser.relRouters)
   const matchRoute = matchRouteArr?.[matchRouteArr?.length - 1]?.route
   console.log(matchRoute, 'matchRoute')
   const hideLayout = !!matchRoute?.hideLayout
@@ -151,10 +150,13 @@ const BasicLayout: React.FC = props => {
         }}
         menuItemRender={(item, defaultDom) => {
           return (
-            <div className='flex items-center' onClick={() => {
-              navigate(item.path as string)
-            }}>
-              <Icon icon={item.icon as string} className='mr-[10px] block' /> {item?.name}
+            <div
+              className="flex items-center"
+              onClick={() => {
+                navigate(item.path as string)
+              }}
+            >
+              <Icon icon={item.icon as string} className="mr-[10px] block" /> {item?.name}
             </div>
           )
         }}

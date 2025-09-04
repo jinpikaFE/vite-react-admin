@@ -2,6 +2,7 @@ import axios from 'axios'
 import { Modal, message, notification } from 'antd'
 import { storage } from '@/utils/Storage'
 import { checkStatus } from './checkStatus'
+import { router } from '@config/routes'
 
 /**
  * @description: 错误处理器
@@ -74,7 +75,7 @@ export class ErrorHandler {
 
     // 跳转到登录页
     setTimeout(() => {
-      window.location.href = '/login'
+      router.navigate('/login', { replace: true })
     }, 1000)
 
     return Promise.reject(new Error('未授权访问'))

@@ -1,8 +1,10 @@
 import { storeGlobalUser } from '@/store/globalUser'
-import { observer } from 'mobx-react'
-import NotFound from '../NotFound'
+import { router } from '@config/routes'
 import { Button } from 'antd'
+import { observer } from 'mobx-react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
+import NotFound from '../NotFound'
 
 type PermissionProps = {
   children: React.ReactNode
@@ -11,6 +13,15 @@ type PermissionProps = {
 
 const Permission: React.FC<PermissionProps> = ({ children, menuName }) => {
   const navigate = useNavigate()
+
+  useEffect(() => {
+    console.log(
+      storeGlobalUser.getFristHasPermissRoute(),
+      'storeGlobalUser.getFristHasPermissRoute()'
+    )
+
+    router.navigate(storeGlobalUser.getFristHasPermissRoute()?.path || '/', { replace: true })
+  }, [storeGlobalUser.accessibleFlatMenu])
 
   const handleReLogin = () => {
     storeGlobalUser.globalLogout()
