@@ -62,6 +62,9 @@ export default defineConfig(({ mode }) => {
           }
         : undefined
     },
+    esbuild: {
+      drop: mode === 'production' ? ['console'] : []
+    },
     build: {
       // 打包出map文件
       sourcemap: true
