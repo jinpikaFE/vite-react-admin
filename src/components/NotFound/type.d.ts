@@ -1,9 +1,8 @@
-import type { ResultStatusType } from 'antd/lib/result'
-import type React from 'react'
+import { ResultStatusType } from "antd/lib/result";
 
 export type NotFoundPropsType = {
-  status?: ResultStatusType
-  title?: string
-  subTitle?: string
-  extra?: React.ReactDOM | React.JSXElementConstructor
+  status?: ResultStatusType;
+  title?: string;
+  subTitle?: string;
+  extra?: React.ReactDOM
 }

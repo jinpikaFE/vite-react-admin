@@ -1,7 +1,7 @@
-import { Button, Result } from 'antd'
-import React from 'react'
-import { Link } from 'react-router'
-import type { NotFoundPropsType } from './type'
+import { Button, Result } from 'antd';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { NotFoundPropsType } from './type';
 
 const NotFound: React.FC<NotFoundPropsType> = ({
   status = '404',
@@ -9,15 +9,15 @@ const NotFound: React.FC<NotFoundPropsType> = ({
   subTitle = '对不起！您访问的页面不存在',
   extra = (
     <Button type="primary">
-      <Link to="/">返回首页</Link>
+      <Link to="/home">返回首页</Link>
     </Button>
-  )
+  ),
 }) => {
   return (
     <>
       <Result status={status} title={title} subTitle={subTitle} extra={extra} />
     </>
-  )
-}
+  );
+};
 
-export default NotFound
+export default NotFound;

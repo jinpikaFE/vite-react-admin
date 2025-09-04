@@ -1,5 +1,12 @@
-const Home: React.FC = () => {
-  return <>welcome</>
-}
+import ProCard from '@ant-design/pro-card';
+import React from 'react';
 
-export default Home
+const Home: React.FC = () => {
+  return (
+    <>
+      <ProCard>Home</ProCard>
+    </>
+  );
+};
+
+export default Home;

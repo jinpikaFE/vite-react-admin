@@ -1,0 +1,28 @@
+/**
+ * 弹性布局
+ * @param justify 水平布局参数 flex-start | flex-end | center | space-between | space-around;
+ * @param align 垂直布局参数 flex-start | flex-end | center | baseline | stretch;
+ * @param direction 决定主轴的方向 row | row-reverse | column | column-reverse
+ * @param wrap 是否换行 nowrap | wrap | wrap-reverse
+ */
+.flex(@justify: unset, @align: unset,@direction: unset,@wrap: unset) {
+  display: flex;
+  flex-direction: @direction;
+  flex-wrap: @wrap;
+  align-items: @align;
+  justify-content: @justify;
+}
+
+/**
+ * 弹性布局项目属性
+ * @param order 排序
+ * @param flex_param （flex-grow, flex-shrink 和 flex-basis的简写） flex-grow属性定义项目的放大比例，默认为0 
+ flex-shrink属性定义了项目的缩小比例，默认为1
+ auto (1 1 auto) 和 none (0 0 auto);
+ * @param align_self 垂直布局参数 auto | flex-start | flex-end | center | baseline | stretch;
+ */
+.fles-item(@order: unset, @flex_param: unset, @align_self: unset) {
+  flex: @flex_param;
+  align-self: @align_self;
+  order: @order;
+}

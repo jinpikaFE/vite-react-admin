@@ -1,7 +1,10 @@
 **/*.svg
 package.json
+.umi
+.umi-production
 /dist
 .dockerignore
+.DS_Store
 .eslintignore
 *.png
 *.toml

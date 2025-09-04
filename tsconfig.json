@@ -1,21 +1,21 @@
 {
   "compilerOptions": {
+    "experimentalDecorators": true,
     "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "experimentalDecorators": true,
     "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "react",
     "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"],
@@ -23,6 +23,5 @@
       "@config/*": ["./config/*"]
     }
   },
-  // "include": ["src"],
-  "exclude": ["node_modules", "build", "dist", "scripts", "webpack", "jest"]
+  "include": ["./src", "config"]
 }
