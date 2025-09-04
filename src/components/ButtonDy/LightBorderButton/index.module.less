@@ -1,0 +1,56 @@
+.container {
+  .buttonBox {
+    position: relative;
+    display: inline;
+
+    svg {
+      position: absolute;
+      top: -11px;
+      left: -4px;
+      width: calc(100% + 8px);
+      height: calc(100% + 23px);
+      opacity: 0;
+      pointer-events: none;
+
+      .line1 {
+        filter: url('#glow');
+        stroke-dasharray: 100;
+        stroke-dashoffset: 0;
+      }
+
+      .line2 {
+        filter: url('#glow');
+        stroke-dasharray: 100;
+        stroke-dashoffset: 500;
+      }
+    }
+
+    &:hover {
+      svg {
+        opacity: 1;
+        transition: opacity 0.4s;
+        transition-delay: 0.1s;
+
+        .line1 {
+          animation: spark1 3s linear infinite;
+        }
+        
+        .line2 {
+          animation: spark2 3s linear infinite;
+        }
+      }
+    }
+  }
+
+  @keyframes spark1 {
+    100% {
+      stroke-dashoffset: -1000;
+    }
+  }
+
+  @keyframes spark2 {
+    100% {
+      stroke-dashoffset: -500;
+    }
+  }
+}

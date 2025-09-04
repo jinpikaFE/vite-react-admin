@@ -1,0 +1,101 @@
+.container {
+  @buttonColor: #e94be8;
+
+  @move1: inset(50% 50% 50% 50%);
+
+  @move2: inset(31% 0 40% 0);
+
+  @move3: inset(39% 0 15% 0);
+
+  @move4: inset(45% 0 40% 0);
+
+  @move5: inset(45% 0 6% 0);
+
+  @move6: inset(14% 0 61% 0);
+
+  button {
+    &::after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      box-sizing: border-box;
+      width: 100%;
+      height: 100%;
+      font-size: 24px;
+      background-color: transparent;
+      content: '|||||';
+      clip-path: @move1;
+    }
+
+    &:hover {
+      border: 1px solid @buttonColor;
+      box-shadow: 0 10px 10px -10px @buttonColor;
+
+      &::after {
+        text-shadow: 10 10px 10px black;
+        text-shadow: -1px -1px 0 @buttonColor, 3px 3px 0 #e94be8;
+        background-color: transparent;
+        border: 1px solid @buttonColor;
+        animation: glitch 1s;
+        animation-timing-function: steps(2, end);
+      }
+    }
+  }
+
+  @keyframes glitch {
+    0% {
+      transform: translate(0, -10px);
+      clip-path: @move1;
+    }
+
+    10% {
+      transform: translate(-10px, 10px);
+      clip-path: @move2;
+    }
+
+    20% {
+      transform: translate(10px, 0);
+      clip-path: @move3;
+    }
+
+    30% {
+      transform: translate(-10px, 10px);
+      clip-path: @move4;
+    }
+
+    40% {
+      transform: translate(10px, -10px);
+      clip-path: @move5;
+    }
+
+    50% {
+      transform: translate(-10px, 10px);
+      clip-path: @move6;
+    }
+
+    60% {
+      transform: translate(10px, -10px);
+      clip-path: @move1;
+    }
+
+    70% {
+      transform: translate(-10px, 10px);
+      clip-path: @move3;
+    }
+
+    80% {
+      transform: translate(10px, -10px);
+      clip-path: @move2;
+    }
+
+    90% {
+      transform: translate(-10px, 10px);
+      clip-path: @move4;
+    }
+    
+    100% {
+      transform: translate(0);
+      clip-path: @move1;
+    }
+  }
+}
