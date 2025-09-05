@@ -9,9 +9,7 @@ const ForbiddenPage: React.FC = () => {
   const navigate = useNavigate()
 
   const handleBackHome = () => {
-    navigate(storeGlobalUser.getFristHasPermissRoute()?.path || '/', {
-      replace: true
-    })
+    storeGlobalUser.onGoPermissionRoute()
   }
 
   const handleReLogin = () => {

@@ -65,13 +65,7 @@ const Login = () => {
           /** 跳转有权限的第一个菜单 */
           await storeGlobalUser.getUserDetail()
 
-          if (storeGlobalUser?.isSuperAdmin()) {
-            router.navigate('/', { replace: true })
-          } else {
-            router.navigate(storeGlobalUser.getFristHasPermissRoute()?.path || '/', {
-              replace: true
-            })
-          }
+          storeGlobalUser.onGoPermissionRoute()
         }}
         activityConfig={{
           style: {

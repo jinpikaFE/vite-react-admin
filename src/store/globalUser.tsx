@@ -3,7 +3,7 @@ import { WebSee } from '@/utils/webSee'
 import { makeAutoObservable } from 'mobx'
 import { logout } from '@/apis/login'
 import { storage } from '@/utils/Storage'
-import { RouteType } from '@config/routes'
+import { router, RouteType } from '@config/routes'
 import { routers } from '@config/routes/routers'
 import { MenuTypeEnum } from '@/apis/systemManagement/menu/menu.enum'
 import { Icon } from '@iconify/react'
@@ -98,6 +98,18 @@ class GlobalUser {
     }
 
     return false
+  }
+
+  onGoPermissionRoute() {
+    if (this.isSuperAdmin()) {
+      router.navigate('/', {
+        replace: true
+      })
+      return
+    }
+    router.navigate(this.getFristHasPermissRoute()?.path || '/', {
+      replace: true
+    })
   }
 
   getFristHasPermissRoute() {
