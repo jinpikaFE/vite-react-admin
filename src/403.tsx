@@ -1,5 +1,6 @@
 import { Button, Result } from 'antd'
 import { useNavigate } from 'react-router'
+import { storeGlobalUser } from './store/globalUser'
 
 /**
  * 403 权限不足页面
@@ -8,11 +9,13 @@ const ForbiddenPage: React.FC = () => {
   const navigate = useNavigate()
 
   const handleBackHome = () => {
-    navigate('/home')
+    navigate(storeGlobalUser.getFristHasPermissRoute()?.path || '/', {
+      replace: true
+    })
   }
 
-  const handleGoBack = () => {
-    navigate(-1)
+  const handleReLogin = () => {
+    navigate('/login', { replace: true })
   }
 
   return (
@@ -25,7 +28,7 @@ const ForbiddenPage: React.FC = () => {
           <Button type="primary" onClick={handleBackHome}>
             返回首页
           </Button>
-          <Button onClick={handleGoBack}>返回上一页</Button>
+          <Button onClick={handleReLogin}>重新登录</Button>
         </div>
       }
     />

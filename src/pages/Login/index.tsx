@@ -16,6 +16,7 @@ import {
   ProFormCheckbox,
   ProFormText
 } from '@ant-design/pro-components'
+import { router } from '@config/routes'
 import { Button, Divider, message, Space, Tabs } from 'antd'
 import type { CSSProperties } from 'react'
 import { useEffect, useState } from 'react'
@@ -64,7 +65,13 @@ const Login = () => {
           /** 跳转有权限的第一个菜单 */
           await storeGlobalUser.getUserDetail()
 
-          navigate('/')
+          if (storeGlobalUser?.isSuperAdmin()) {
+            router.navigate('/', { replace: true })
+          } else {
+            router.navigate(storeGlobalUser.getFristHasPermissRoute()?.path || '/', {
+              replace: true
+            })
+          }
         }}
         activityConfig={{
           style: {
@@ -173,7 +180,7 @@ const Login = () => {
                 size: 'large',
                 prefix: <UserOutlined className={'prefixIcon'} />
               }}
-              placeholder={'用户名: admin'}
+              placeholder={'用户名: user'}
               rules={[
                 {
                   required: true,

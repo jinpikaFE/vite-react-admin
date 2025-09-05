@@ -101,7 +101,7 @@ const BasicLayout: React.FC = props => {
         <div
           onClick={async () => {
             storeGlobalUser.globalLogout()
-            navigate('login', { replace: true })
+            navigate('/login', { replace: true })
           }}
         >
           退出登录
@@ -148,18 +148,18 @@ const BasicLayout: React.FC = props => {
             </div>
           )
         }}
-        menuItemRender={(item, defaultDom) => {
-          return (
-            <div
-              className="flex items-center"
-              onClick={() => {
-                navigate(item.path as string)
-              }}
-            >
-              <Icon icon={item.icon as string} className="mr-[10px] block" /> {item?.name}
-            </div>
-          )
-        }}
+        // menuItemRender={(item, defaultDom) => {
+        //   return (
+        //     <div
+        //       className="flex items-center"
+        //       onClick={() => {
+        //         navigate(item.path as string)
+        //       }}
+        //     >
+        //       <Icon icon={item.icon as string} className="mr-[10px] block" /> {item?.name}
+        //     </div>
+        //   )
+        // }}
         title="管理后台"
         menuProps={{
           onClick: ({ key }) => {

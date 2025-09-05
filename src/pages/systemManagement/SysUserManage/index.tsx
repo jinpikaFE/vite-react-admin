@@ -278,7 +278,8 @@ const SysUserManage: React.FC = () => {
             {
               title: '手机号',
               dataIndex: 'phone',
-              hideInSearch: true
+              hideInSearch: true,
+              ellipsis: true
             },
             {
               title: '部门',
@@ -330,6 +331,7 @@ const SysUserManage: React.FC = () => {
               title: '操作',
               key: 'option',
               valueType: 'option',
+              fixed: 'right',
               render: (_, record) => [
                 <Button
                   key="edit"

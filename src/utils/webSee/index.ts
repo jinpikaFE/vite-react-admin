@@ -4,9 +4,9 @@ import recordscreen from '@websee/recordscreen'
 
 export class WebSee {
   constructor(userId: string) {
-    if (import.meta.env.VITE_MODE === 'production') {
-      this.init(userId)
-    }
+    // if (import.meta.env.VITE_MODE === 'production') {
+    //   this.init(userId)
+    // }
   }
 
   init(userId: string) {

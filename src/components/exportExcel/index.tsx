@@ -165,6 +165,9 @@ const ExcelTable: FC<IExcelTable> = forwardRef((props, formRefMy: any) => {
           showSizeChanger: true,
           showQuickJumper: true
         }}
+        scroll={{
+          x: 'max-content'
+        }}
         dateFormatter="string"
         toolBarRender={
           toolBarRenderFn || exportExeclReq

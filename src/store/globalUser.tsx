@@ -6,6 +6,7 @@ import { storage } from '@/utils/Storage'
 import { RouteType } from '@config/routes'
 import { routers } from '@config/routes/routers'
 import { MenuTypeEnum } from '@/apis/systemManagement/menu/menu.enum'
+import { Icon } from '@iconify/react'
 
 class GlobalUser {
   userInfo: Partial<User.UserEntity> = {}
@@ -36,7 +37,7 @@ class GlobalUser {
       return {
         ...menuItem,
         ...item,
-        icon: menuItem?.icon,
+        icon: <Icon icon={menuItem?.icon as string} />,
         hideInMenu: !storeGlobalUser.isSuperAdmin() && menuItem?.hideInMenu === '1',
         hideLayout: menuItem?.hideLayout === '1',
         children: this.getMergeRouters(item.children)

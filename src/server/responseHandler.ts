@@ -88,7 +88,7 @@ export class ResponseHandler {
 
       default:
         if (code >= 400 && code < 500) {
-          message.error(msg || '客户端请求错误')
+          // message.error(msg || '客户端请求错误')
           return Promise.reject(new Error(msg || '客户端请求错误'))
         }
         return Promise.reject(new Error(msg || '未知错误'))

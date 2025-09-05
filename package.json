@@ -6,7 +6,10 @@
   "scripts": {
     "start": "vite",
     "start:mock": "vite --mode mock",
+    "start:test": "vite --mode test",
     "start:production": "vite --mode production",
+    "build:dev": "vite build --mode dev",
+    "build:test": "vite build --mode test",
     "build": "vite build",
     "preview": "vite preview",
     "lint:script": "eslint --fix .",

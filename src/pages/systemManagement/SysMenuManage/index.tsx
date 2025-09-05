@@ -295,6 +295,7 @@ const SysMenuManage: React.FC = () => {
             key: 'option',
             valueType: 'option',
             width: 160,
+            fixed: 'right',
             render: (_: any, record: Menu.MenuEntity) => [
               <Button key="assign" type="link" onClick={() => showAssignApisModal(record)}>
                 分配API
@@ -335,6 +336,9 @@ const SysMenuManage: React.FC = () => {
             success: true,
             total: data?.length
           }
+        }}
+        scroll={{
+          x: 'max-content'
         }}
         actionRef={actionRef}
         rowSelection={false}

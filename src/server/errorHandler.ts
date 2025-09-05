@@ -74,9 +74,7 @@ export class ErrorHandler {
     })
 
     // 跳转到登录页
-    setTimeout(() => {
-      router.navigate('/login', { replace: true })
-    }, 1000)
+    router.navigate('/login', { replace: true })
 
     return Promise.reject(new Error('未授权访问'))
   }

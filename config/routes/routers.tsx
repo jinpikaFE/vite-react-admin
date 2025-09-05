@@ -10,7 +10,7 @@ import SysRoleManage from '@/pages/systemManagement/SysRoleManage'
 import SysUserManage from '@/pages/systemManagement/SysUserManage'
 import Test from '@/pages/Test'
 import TestChild from '@/pages/Test/TestChild'
-import { Navigate } from 'react-router'
+import { Navigate, redirect } from 'react-router'
 import { RouteType } from '.'
 
 /**
