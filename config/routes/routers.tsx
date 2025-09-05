@@ -144,7 +144,8 @@ export const routers = [
         name: '布局隐藏',
         menuName: MENU_NAMES.LAYOUT_NONE,
         Component: TestChild
-      }
+      },
+      { path: '*', Component: NotFoundPage }
     ]
   },
   {
