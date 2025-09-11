@@ -19,6 +19,7 @@ export const MENU_NAMES = {
   // 系统管理
   SYSTEM_MANAGEMENT: 'Admin',
   SYS_USER_MANAGEMENT: 'SysUserManage',
+  SYS_USER_MANAGEMENT_COPY: 'SysUserManageCopy',
   SYS_ROLE_MANAGEMENT: 'SysRoleManage',
   SYS_DEPT_MANAGEMENT: 'SysDeptManage',
   SYS_MENU_MANAGEMENT: 'SysMenuManage',
@@ -45,6 +46,7 @@ export const MENU_NAME_LABELS: Record<MenuNameType, string> = {
   [MENU_NAMES.HIDE_IN_MENU]: '隐藏菜单',
   [MENU_NAMES.SYSTEM_MANAGEMENT]: '系统管理',
   [MENU_NAMES.SYS_USER_MANAGEMENT]: '用户管理',
+  [MENU_NAMES.SYS_USER_MANAGEMENT_COPY]: '用户管理(只读)',
   [MENU_NAMES.SYS_ROLE_MANAGEMENT]: '角色管理',
   [MENU_NAMES.SYS_DEPT_MANAGEMENT]: '部门管理',
   [MENU_NAMES.SYS_MENU_MANAGEMENT]: '菜单管理',

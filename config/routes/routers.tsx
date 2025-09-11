@@ -8,6 +8,7 @@ import SysDeptManage from '@/pages/systemManagement/SysDeptManage'
 import SysMenuManage from '@/pages/systemManagement/SysMenuManage'
 import SysRoleManage from '@/pages/systemManagement/SysRoleManage'
 import SysUserManage from '@/pages/systemManagement/SysUserManage'
+import SysUserManageCopy from '@/pages/systemManagement/SysUserManage/copy'
 import Test from '@/pages/Test'
 import TestChild from '@/pages/Test/TestChild'
 import { Navigate, redirect } from 'react-router'
@@ -113,17 +114,23 @@ export const routers = [
             element: <Navigate replace to="sysMenuManage" />
           },
           {
+            index: true,
             path: 'sysMenuManage',
             name: '菜单管理',
             menuName: MENU_NAMES.SYS_MENU_MANAGEMENT,
             Component: SysMenuManage
           },
           {
-            index: true,
             path: 'sysUserManage',
             name: '用户管理',
             menuName: MENU_NAMES.SYS_USER_MANAGEMENT,
             Component: SysUserManage
+          },
+          {
+            path: 'sysUserManageOnly',
+            name: '用户管理(只读)',
+            menuName: MENU_NAMES.SYS_USER_MANAGEMENT_COPY,
+            Component: SysUserManageCopy
           },
           {
             path: 'sysRoleManage',
