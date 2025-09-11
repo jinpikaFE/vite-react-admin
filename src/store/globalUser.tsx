@@ -20,29 +20,38 @@ class GlobalUser {
   }
 
   async getUserDetail() {
-    const res = await getCurrentUserInfo()
-    this.userInfo = res
-    new WebSee(res?.username)
-    await this.getUserRoleMenu()
+    if (storage.get('token')) {
+      const res = await getCurrentUserInfo()
+      this.userInfo = res
+      new WebSee(res?.username)
+      await this.getUserRoleMenu()
+    }
   }
 
   private getMergeRouters = (routerArr: any) => {
-    return routerArr?.map((item: any) => {
-      const menuItem = storeGlobalUser.accessibleFlatMenu?.find(
-        (menu: any) => menu.menuName === item.menuName
-      )
+    return routerArr
+      ?.map((item: any) => {
+        const menuItem = storeGlobalUser.accessibleFlatMenu?.find(
+          (menu: any) => menu.menuName === item.menuName
+        )
 
-      // console.log(menuItem, 'menuItem', item)
+        // console.log(menuItem, 'menuItem', item)
 
-      return {
-        ...menuItem,
-        ...item,
-        icon: <Icon icon={menuItem?.icon as string} />,
-        hideInMenu: !storeGlobalUser.isSuperAdmin() && menuItem?.hideInMenu === '1',
-        hideLayout: menuItem?.hideLayout === '1',
-        children: this.getMergeRouters(item.children)
-      }
-    })
+        return {
+          ...menuItem,
+          ...item,
+          icon: <Icon icon={menuItem?.icon as string} />,
+          hideInMenu: !storeGlobalUser.isSuperAdmin() && menuItem?.hideInMenu === '1',
+          hideLayout: menuItem?.hideLayout === '1',
+          children: this.getMergeRouters(item.children)
+        }
+      })
+      ?.sort((a: any, b: any) => {
+        // 根据 menuItem.sort 字段进行排序，sort 值越小越靠前
+        const sortA = a?.sort ?? Number.MAX_SAFE_INTEGER
+        const sortB = b?.sort ?? Number.MAX_SAFE_INTEGER
+        return sortA - sortB
+      })
   }
 
   setUserInfo(user: Partial<User.UserEntity>) {

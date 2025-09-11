@@ -60,12 +60,15 @@ const Login = () => {
           // 验证码与UUID绑定，增加破解难度
           const res = await login({ ...val, uuid: uuidv4() })
 
-          storage.set('token', res?.token)
+          if (res?.token) {
+            storage.set('token', res?.token)
+            /** 跳转有权限的第一个菜单 */
+            await storeGlobalUser.getUserDetail()
 
-          /** 跳转有权限的第一个菜单 */
-          await storeGlobalUser.getUserDetail()
-
-          storeGlobalUser.onGoPermissionRoute()
+            storeGlobalUser.onGoPermissionRoute()
+          } else {
+            message.error(res?.msg)
+          }
         }}
         activityConfig={{
           style: {

@@ -110,7 +110,13 @@ export const routers = [
           {
             index: true,
             /** 重定向 不要加menuName */
-            element: <Navigate replace to="sysUserManage" />
+            element: <Navigate replace to="sysMenuManage" />
+          },
+          {
+            path: 'sysMenuManage',
+            name: '菜单管理',
+            menuName: MENU_NAMES.SYS_MENU_MANAGEMENT,
+            Component: SysMenuManage
           },
           {
             index: true,
@@ -130,12 +136,6 @@ export const routers = [
             name: '部门管理',
             menuName: MENU_NAMES.SYS_DEPT_MANAGEMENT,
             Component: SysDeptManage
-          },
-          {
-            path: 'sysMenuManage',
-            name: '菜单管理',
-            menuName: MENU_NAMES.SYS_MENU_MANAGEMENT,
-            Component: SysMenuManage
           }
         ]
       },

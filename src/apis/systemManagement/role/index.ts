@@ -27,7 +27,7 @@ export async function addRole(data: Role.RoleEntity) {
 }
 
 /** 编辑角色 */
-export async function editRole(data: Role.RoleEntity) {
+export async function editRole(data: Partial<Role.RoleEntity>) {
   return http.request({
     url: `/api/v1/role/${data?.roleId}`,
     method: 'put',

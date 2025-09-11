@@ -181,9 +181,10 @@ const SysRoleManage: React.FC = () => {
           render(dom, entity) {
             return (
               <Switch
+                disabled={entity?.roleKey === 'admin'}
                 checked={entity?.status === '2'}
                 onChange={async val => {
-                  const res = await editRoleStatus({
+                  const res = await editRole({
                     roleId: entity.roleId,
                     status: val ? '2' : '1'
                   })

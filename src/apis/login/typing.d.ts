@@ -8,5 +8,6 @@ declare namespace Login {
     token: string
     code: string
     expire: string
+    msg?: string
   }
 }
