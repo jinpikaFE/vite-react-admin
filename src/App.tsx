@@ -11,7 +11,10 @@ const App = () => {
   const location = useLocation()
   const [pvStartTime, setPvStartTime] = useState<number>()
 
+  console.log('new fork')
   useEffect(() => {
+    console.log('test1')
+    console.log("看看是否还会推到上一个PR")
     new WebSee(import.meta.env.VITE_APP_NAME)
   }, [])
 
