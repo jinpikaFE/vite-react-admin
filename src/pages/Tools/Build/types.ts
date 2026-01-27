@@ -6,7 +6,8 @@ export type ComponentType =
   | 'Radio'
   | 'DatePicker'
   | 'RangePicker'
-  | 'Switch';
+  | 'Switch'
+  | 'InputNumber';
 
 export interface FormConfig {
   layout: 'horizontal' | 'vertical' | 'inline';
@@ -35,4 +36,5 @@ export const COMPONENT_Library: { type: ComponentType; label: string; icon?: str
   { type: 'DatePicker', label: '日期选择' },
   { type: 'RangePicker', label: '日期范围' },
   { type: 'Switch', label: '开关' },
+  { type: 'InputNumber', label: '数字输入框' },
 ];

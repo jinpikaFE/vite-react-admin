@@ -2,7 +2,7 @@ import React from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { FormElement, FormConfig } from '../types'
-import { Form, Input, Select, Checkbox, Radio, DatePicker, Switch, Button, Card } from 'antd'
+import { Form, Input, Select, Checkbox, Radio, DatePicker, Switch, Button, Card, InputNumber } from 'antd';
 import { DeleteOutlined, DragOutlined } from '@ant-design/icons'
 
 interface SortableElementProps {

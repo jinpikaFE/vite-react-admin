@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Select, Checkbox, Radio, DatePicker, Switch, Button } from 'antd';
+import { Form, Input, Select, Checkbox, Radio, DatePicker, Switch, Button, InputNumber } from 'antd';
 import { FormElement, FormConfig } from '../types';
 
 interface FormRendererProps {
@@ -17,6 +17,7 @@ const ComponentMap: Record<string, React.FC<any>> = {
   DatePicker: DatePicker,
   RangePicker: DatePicker.RangePicker,
   Switch: Switch,
+  InputNumber: InputNumber,
 };
 
 export const FormRenderer: React.FC<FormRendererProps> = ({ schema, config, onSubmit }) => {
