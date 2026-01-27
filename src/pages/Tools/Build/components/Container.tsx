@@ -19,7 +19,7 @@ import {
 } from '@dnd-kit/sortable';
 import { Layout, Button, message, Modal, Row, Col, Typography, Card } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
-import { COMPONENT_Library, ComponentType, FormElement } from '../types';
+import { COMPONENT_Library, ComponentType, FormElement, FormConfig } from '../types';
 import { DraggableItem } from './DraggableItem';
 import { SortableElement } from './SortableElement';
 import { ConfigPanel } from './ConfigPanel';
@@ -30,6 +30,13 @@ const { Content, Sider } = Layout;
 
 export const FormBuilderContainer: React.FC = () => {
   const [elements, setElements] = useState<FormElement[]>([]);
+  const [formConfig, setFormConfig] = useState<FormConfig>({
+    layout: 'vertical',
+    labelAlign: 'right',
+    labelCol: { span: 4 },
+    wrapperCol: { span: 20 },
+    submitText: '提交'
+  });
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [activeDragItem, setActiveDragItem] = useState<any>(null); // For Overlay
   const [previewVisible, setPreviewVisible] = useState(false);
@@ -112,12 +119,16 @@ export const FormBuilderContainer: React.FC = () => {
     );
   };
 
+  const handleConfigUpdate = (updates: Partial<FormConfig>) => {
+    setFormConfig((prev) => ({ ...prev, ...updates }));
+  };
+
   const handleExport = () => {
       Modal.info({
           title: 'Form JSON Schema',
           content: (
               <pre style={{ maxHeight: 400, overflow: 'auto' }}>
-                  {JSON.stringify(elements, null, 2)}
+                  {JSON.stringify({ config: formConfig, elements }, null, 2)}
               </pre>
           ),
           width: 600
@@ -145,7 +156,10 @@ export const FormBuilderContainer: React.FC = () => {
         </Sider>
 
         {/* Center: Canvas */}
-        <Content style={{ padding: 24, background: '#fafafa', overflowY: 'auto' }}>
+        <Content 
+          style={{ padding: 24, background: '#fafafa', overflowY: 'auto' }}
+          onClick={() => setSelectedId(null)}
+        >
             <div className="flex justify-between items-center mb-4">
                  <Typography.Title level={4} style={{margin: 0}}>画布</Typography.Title>
                  <div className="space-x-2">
@@ -159,6 +173,7 @@ export const FormBuilderContainer: React.FC = () => {
             // We can make the whole canvas a droppable zone if needed, 
             // but SortableContext items also act as droppables.
             // We add a wrapper ID for empty state drops.
+            onClick={(e) => e.stopPropagation()} // Prevent deselection when clicking inside canvas
           >
              <SortableContext
                 items={elements.map(e => e.id)}
@@ -173,6 +188,7 @@ export const FormBuilderContainer: React.FC = () => {
                   <SortableElement
                     key={element.id}
                     element={element}
+                    config={formConfig}
                     isSelected={selectedId === element.id}
                     onSelect={setSelectedId}
                     onDelete={handleDelete}
@@ -194,7 +210,12 @@ export const FormBuilderContainer: React.FC = () => {
 
         {/* Right Sidebar: Config */}
         <Sider width={300} theme="light" style={{ borderLeft: '1px solid #f0f0f0' }}>
-          <ConfigPanel selectedElement={selectedElement} onUpdate={handleUpdate} />
+          <ConfigPanel 
+            selectedElement={selectedElement} 
+            formConfig={formConfig}
+            onUpdate={handleUpdate} 
+            onConfigUpdate={handleConfigUpdate}
+          />
         </Sider>
       </Layout>
 
@@ -221,7 +242,7 @@ export const FormBuilderContainer: React.FC = () => {
         footer={null}
         width={800}
       >
-        <FormRenderer schema={elements} />
+        <FormRenderer schema={elements} config={formConfig} />
       </Modal>
     </DndContext>
   );

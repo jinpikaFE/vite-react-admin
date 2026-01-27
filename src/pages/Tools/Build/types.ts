@@ -5,7 +5,16 @@ export type ComponentType =
   | 'Checkbox'
   | 'Radio'
   | 'DatePicker'
+  | 'RangePicker'
   | 'Switch';
+
+export interface FormConfig {
+  layout: 'horizontal' | 'vertical' | 'inline';
+  labelAlign: 'left' | 'right';
+  labelCol: { span: number };
+  wrapperCol: { span: number };
+  submitText: string;
+}
 
 export interface FormElement {
   id: string;
@@ -24,5 +33,6 @@ export const COMPONENT_Library: { type: ComponentType; label: string; icon?: str
   { type: 'Checkbox', label: '复选框' },
   { type: 'Radio', label: '单选框' },
   { type: 'DatePicker', label: '日期选择' },
+  { type: 'RangePicker', label: '日期范围' },
   { type: 'Switch', label: '开关' },
 ];

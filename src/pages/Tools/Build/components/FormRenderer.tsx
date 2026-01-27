@@ -1,9 +1,10 @@
 import React from 'react';
 import { Form, Input, Select, Checkbox, Radio, DatePicker, Switch, Button } from 'antd';
-import { FormElement } from '../types';
+import { FormElement, FormConfig } from '../types';
 
 interface FormRendererProps {
   schema: FormElement[];
+  config?: FormConfig;
   onSubmit?: (values: any) => void;
 }
 
@@ -14,10 +15,11 @@ const ComponentMap: Record<string, React.FC<any>> = {
   Checkbox: Checkbox.Group,
   Radio: Radio.Group,
   DatePicker: DatePicker,
+  RangePicker: DatePicker.RangePicker,
   Switch: Switch,
 };
 
-export const FormRenderer: React.FC<FormRendererProps> = ({ schema, onSubmit }) => {
+export const FormRenderer: React.FC<FormRendererProps> = ({ schema, config, onSubmit }) => {
   const [form] = Form.useForm();
 
   const onFinish = (values: any) => {
@@ -25,8 +27,19 @@ export const FormRenderer: React.FC<FormRendererProps> = ({ schema, onSubmit }) 
     onSubmit?.(values);
   };
 
+  const formLayout = config?.layout || 'vertical';
+  const labelCol = config?.layout === 'horizontal' ? config.labelCol : undefined;
+  const wrapperCol = config?.layout === 'horizontal' ? config.wrapperCol : undefined;
+
   return (
-    <Form form={form} layout="vertical" onFinish={onFinish}>
+    <Form 
+        form={form} 
+        layout={formLayout} 
+        labelAlign={config?.labelAlign}
+        labelCol={labelCol}
+        wrapperCol={wrapperCol}
+        onFinish={onFinish}
+    >
       {schema.map((element) => {
         const Component = ComponentMap[element.type] || Input;
         return (
@@ -42,9 +55,9 @@ export const FormRenderer: React.FC<FormRendererProps> = ({ schema, onSubmit }) 
         );
       })}
       
-      <Form.Item>
+      <Form.Item wrapperCol={config?.layout === 'horizontal' ? { offset: config.labelCol.span, span: config.wrapperCol.span } : undefined}>
         <Button type="primary" htmlType="submit" block>
-          提交
+          {config?.submitText || '提交'}
         </Button>
       </Form.Item>
     </Form>
