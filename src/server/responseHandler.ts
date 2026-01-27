@@ -53,7 +53,9 @@ export class ResponseHandler {
       errorMessageMode
     } = options
 
-    if (!isShowMessage) return
+    if (!isShowMessage) {
+return
+}
 
     if (isSuccess && (successMessageText || isShowSuccessMessage)) {
       message.success(successMessageText || msg || '操作成功！')

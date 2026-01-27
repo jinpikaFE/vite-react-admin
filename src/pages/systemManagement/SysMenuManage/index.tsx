@@ -175,7 +175,9 @@ const SysMenuManage: React.FC = () => {
   }
 
   const handleAssignApis = async () => {
-    if (!currentMenu) return
+    if (!currentMenu) {
+return
+}
 
     try {
       const values = await assignApisFormRef?.current?.validateFields()

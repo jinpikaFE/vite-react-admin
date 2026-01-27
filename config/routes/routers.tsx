@@ -13,6 +13,7 @@ import Test from '@/pages/Test'
 import TestChild from '@/pages/Test/TestChild'
 import { Navigate, redirect } from 'react-router'
 import { RouteType } from '.'
+import Build from '@/pages/Tools/Build'
 
 /**
  * 路由日志中间件
@@ -151,6 +152,25 @@ export const routers = [
         name: '布局隐藏',
         menuName: MENU_NAMES.LAYOUT_NONE,
         Component: TestChild
+      },
+      {
+        path: 'tools',
+        name: '开发工具',
+        menuName: MENU_NAMES.TOOLS,
+        children: [
+          {
+            index: true,
+            /** 重定向 不要加menuName */
+            element: <Navigate replace to="Build" />
+          },
+
+          {
+            path: 'build',
+            name: '表单构建',
+            menuName: MENU_NAMES.BUILD,
+            Component: Build
+          }
+        ]
       },
       { path: '*', Component: NotFoundPage }
     ]
